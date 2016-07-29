@@ -4,10 +4,9 @@
 #include <ctime>
 #include <vector>
 #include <unistd.h>
+#include <ncurses.h>
 
 using std::vector;
-
-const int SIZE = 99;
 
 class Cell
 {
@@ -20,17 +19,32 @@ class Cell
         Cell* get_opposite();
 };
 
-bool is_valid(Cell *parent);
+bool is_valid(Cell *parent, int r, int c);
 
 int main()
 {
+    initscr();
+    int cols, rows;
+    getmaxyx(stdscr, rows, cols);
+    endwin();
+
+    if (cols % 2 == 0)
+        cols -= 3;
+    else
+        cols -= 2;
+
+    if (rows % 2 == 0)
+        rows -= 3;
+    else
+        rows -= 2;
+
     srand(time(NULL));
 
-    char **grid = (char **)malloc(SIZE * sizeof(char *));
-    for (int i = 0; i < SIZE; i++)
+    char **grid = (char **)malloc(rows * sizeof(char *));
+    for (int i = 0; i < rows; i++)
     {
-        grid[i] = (char *)malloc(SIZE * sizeof(char));
-        for (int j = 0; j < SIZE; j++)
+        grid[i] = (char *)malloc(cols * sizeof(char));
+        for (int j = 0; j < cols; j++)
         {
             grid[i][j] = '#';
         }
@@ -47,12 +61,12 @@ int main()
         Cell *n1 = new Cell(Cell(start.row + i, start.col, &start));
         Cell *n2 = new Cell(Cell(start.row, start.col + i, &start));
 
-        if (is_valid(n1))
+        if (is_valid(n1, rows, cols))
             frontier.push_back(n1);
         else
             delete n1;
 
-        if (is_valid(n2))
+        if (is_valid(n2, rows, cols))
             frontier.push_back(n2);
         else
             delete n2;
@@ -73,7 +87,7 @@ int main()
         gc_used = false;
 
 
-        if (is_valid(grandchild) && grid[grandchild->row][grandchild->col] == '#')
+        if (is_valid(grandchild, rows, cols) && grid[grandchild->row][grandchild->col] == '#')
         {
             grid[child->row][child->col] = '.';
             grid[grandchild->row][grandchild->col] = '.';
@@ -83,7 +97,7 @@ int main()
                 Cell *n1 = new Cell(grandchild->row + i, grandchild->col, grandchild);
                 Cell *n2 = new Cell(grandchild->row, grandchild->col + i, grandchild);
 
-                if (is_valid(n1) && grid[n1->row][n1->col] == '#')
+                if (is_valid(n1, rows, cols) && grid[n1->row][n1->col] == '#')
                 {
                     frontier.push_back(n1);
                     gc_used = true;
@@ -93,7 +107,7 @@ int main()
                     delete n1;
                 }
 
-                if (is_valid(n2) && grid[n2->row][n2->col] == '#')
+                if (is_valid(n2, rows, cols) && grid[n2->row][n2->col] == '#')
                 {
                     frontier.push_back(n2);
                     gc_used = true;
@@ -115,29 +129,29 @@ int main()
 
     }
 
-    for (int i = 0; i < SIZE + 2; i++)
+    for (int i = 0; i < cols + 2; i++)
     {
         printf("#");
     }
     printf("\n");
 
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < rows; i++)
     {
         printf("#");
-        for (int j = 0; j < SIZE; j++)
+        for (int j = 0; j < cols; j++)
         {
             printf("%c", grid[i][j]);
         }
         printf("#\n");
     }
 
-    for (int i = 0; i < SIZE + 2; i++)
+    for (int i = 0; i < cols + 2; i++)
     {
         printf("#");
     }
     printf("\n");
 
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < rows; i++)
     {
         free(grid[i]);
     }
@@ -151,9 +165,9 @@ int main()
     return 0;
 }
 
-bool is_valid(Cell* p)
+bool is_valid(Cell* p, int r, int c)
 {
-    return p->row >= 0 && p->row < SIZE && p->col >= 0 && p->col < SIZE;
+    return p->row >= 0 && p->row < r && p->col >= 0 && p->col < c;
 }
 
 Cell::Cell(int row, int col, Cell* parent)
