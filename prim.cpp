@@ -13,8 +13,14 @@ int main()
 {
     int cols, rows;
     initscr();
+
+    start_color();
+    init_pair(1, COLOR_BLACK, COLOR_BLACK);
+    init_pair(2, COLOR_WHITE, COLOR_WHITE);
+    init_pair(3, COLOR_BLUE, COLOR_BLUE);
+    init_pair(4, COLOR_RED, COLOR_RED);
+
     getmaxyx(stdscr, rows, cols);
-    endwin();
     if (cols % 2 == 0)
         cols -= 3;
     else
@@ -57,7 +63,7 @@ int main()
         if (is_valid(r, c, rows, cols) && grid[r][c] == '#')
         {
             grid[child->row][child->col] = '.';
-            grid[r][c] = '.';
+            grid[r][c] = '0';
 
             for (int i = -1; i <= 1; i += 2)
             {
@@ -73,7 +79,31 @@ int main()
                     gc_used = true;
                 }
             }
-            // Animate here
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    if (grid[i][j] == '#')
+                        attron(COLOR_PAIR(1));
+                    else if (grid[i][j] == '.')
+                        attron(COLOR_PAIR(2));
+                    else if (grid[i][j] == 'S')
+                        attron(COLOR_PAIR(3));
+                    else
+                        attron(COLOR_PAIR(4));
+
+                    mvwprintw(stdscr, i + 1, j + 1, " ");
+
+                    attroff(COLOR_PAIR(1));
+                    attroff(COLOR_PAIR(2));
+                    attroff(COLOR_PAIR(3));
+                    attroff(COLOR_PAIR(4));
+                }
+            }
+            usleep(100000);
+            refresh();
+            grid[r][c] = '.';
         }
 
         delete child;
@@ -85,27 +115,27 @@ int main()
 
     }
 
-    for (int i = 0; i < cols + 2; i++)
-    {
-        printf("#");
-    }
-    printf("\n");
+    /* for (int i = 0; i < cols + 2; i++) */
+    /* { */
+    /*     printf("#"); */
+    /* } */
+    /* printf("\n"); */
 
-    for (int i = 0; i < rows; i++)
-    {
-        printf("#");
-        for (int j = 0; j < cols; j++)
-        {
-            printf("%c", grid[i][j]);
-        }
-        printf("#\n");
-    }
+    /* for (int i = 0; i < rows; i++) */
+    /* { */
+    /*     printf("#"); */
+    /*     for (int j = 0; j < cols; j++) */
+    /*     { */
+    /*         printf("%c", grid[i][j]); */
+    /*     } */
+    /*     printf("#\n"); */
+    /* } */
 
-    for (int i = 0; i < cols + 2; i++)
-    {
-        printf("#");
-    }
-    printf("\n");
+    /* for (int i = 0; i < cols + 2; i++) */
+    /* { */
+    /*     printf("#"); */
+    /* } */
+    /* printf("\n"); */
 
     for (int i = 0; i < rows; i++)
     {
@@ -117,6 +147,9 @@ int main()
     {
         delete grandchildren[i];
     }
+
+    getch();
+    endwin();
 
     return 0;
 }
