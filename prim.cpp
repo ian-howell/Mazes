@@ -1,23 +1,10 @@
 #include <cstdio>
-#include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
 #include <unistd.h>
 #include <ncurses.h>
-
-using std::vector;
-
-class Cell
-{
-    public:
-        int row;
-        int col;
-        Cell *parent;
-
-        Cell(int row, int col, Cell *parent);
-        Cell* get_opposite();
-};
+#include "cell.h"
 
 bool is_valid(Cell *parent, int r, int c);
 
@@ -40,10 +27,12 @@ int main()
 
     srand(time(NULL));
 
-    char **grid = (char **)malloc(rows * sizeof(char *));
+    /* char **grid = (char **)malloc(rows * sizeof(char *)); */
+    char **grid = new char*[rows];
     for (int i = 0; i < rows; i++)
     {
-        grid[i] = (char *)malloc(cols * sizeof(char));
+        /* grid[i] = (char *)malloc(cols * sizeof(char)); */
+        grid[i] = new char[cols];
         for (int j = 0; j < cols; j++)
         {
             grid[i][j] = '#';
@@ -53,7 +42,7 @@ int main()
     Cell start(0, 0, NULL);
     grid[start.row][start.col] = 'S';
 
-    vector<Cell *> frontier;
+    std::vector<Cell *> frontier;
 
     // Add the start node's neighbors to the frontier
     for (int i = -1; i <= 1; i += 2)
@@ -74,7 +63,7 @@ int main()
 
     Cell* child;
     Cell* grandchild;
-    vector<Cell *> grandchildren;
+    std::vector<Cell *> grandchildren;
     bool gc_used = false;
 
     while (!frontier.empty())
@@ -153,9 +142,9 @@ int main()
 
     for (int i = 0; i < rows; i++)
     {
-        free(grid[i]);
+        delete [] grid[i];
     }
-    free(grid);
+    delete [] grid;
 
     for (int i = 0; i < (int)grandchildren.size(); i++)
     {
@@ -168,29 +157,4 @@ int main()
 bool is_valid(Cell* p, int r, int c)
 {
     return p->row >= 0 && p->row < r && p->col >= 0 && p->col < c;
-}
-
-Cell::Cell(int row, int col, Cell* parent)
-{
-    this->row = row;
-    this->col = col;
-    this->parent = parent;
-}
-
-Cell* Cell::get_opposite()
-{
-    if (parent->row - row == 0)
-    {
-        if (parent->col - col == -1)
-            return new Cell(row, col + 1, NULL);
-        else
-            return new Cell(row, col - 1, NULL);
-    }
-    else
-    {
-        if (parent->row - row == -1)
-            return new Cell(row + 1, col, NULL);
-        else
-            return new Cell(row - 1, col, NULL);
-    }
 }
