@@ -9,6 +9,8 @@ class Maze
         int cols;
         char** grid;
 
+        bool do_animate;
+
         /**
          * get_dimensions
          *
@@ -41,7 +43,13 @@ class Maze
 
     public:
         Maze();
+        Maze(int row, int col);
         ~Maze();
 
+        int get_rows() const { return rows; }
+        int get_cols() const { return cols; }
+        char** get_grid() const { return grid; }
+
+        void print();
 };
 #endif

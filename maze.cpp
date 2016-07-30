@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <vector>
 #include <unistd.h>
+#include <stdio.h>
 
 #include "cell.h"
 #include "maze.h"
@@ -9,15 +10,26 @@
 Maze::Maze()
 {
     // Initialization
-    initscr();
+    do_animate = true;
     get_dimensions();
     srand(time(NULL));
 
     grid = generate_grid();
 
     cut_maze();
+}
 
-    getch();
+Maze::Maze(int row, int col)
+{
+    do_animate = false;
+    rows = (row % 2) ? row : row - 1;
+    cols = (col % 2) ? col : col - 1;
+
+    srand(time(NULL));
+
+    grid = generate_grid();
+
+    cut_maze();
 }
 
 Maze::~Maze()
@@ -26,9 +38,6 @@ Maze::~Maze()
     for (int i = 0; i < rows; i++)
         delete [] grid[i];
     delete [] grid;
-
-    // Close ncurses
-    endwin();
 }
 
 void Maze::get_dimensions()
@@ -80,8 +89,8 @@ void Maze::cut_maze()
 
         if (is_valid(r, c, rows, cols) && grid[r][c] == '#')
         {
-            grid[child->row][child->col] = '.';
-            grid[r][c] = '0';
+            grid[child->row][child->col] = ' ';
+            grid[r][c] = 'E';
 
             for (int i = -1; i <= 1; i += 2)
             {
@@ -98,15 +107,18 @@ void Maze::cut_maze()
                 }
             }
 
-            animate();
+            if (do_animate)
+                animate();
 
-            grid[r][c] = '.';
+            grid[r][c] = ' ';
         }
 
         delete child;
 
         (!gc_used) ?  delete gc : grandchildren.push_back(gc);
     }
+
+    grid[rows - 1][cols - 1] = 'E';
 
     for (int i = 0; i < (int)grandchildren.size(); i++)
     {
@@ -128,7 +140,7 @@ void Maze::animate()
         {
             if (grid[i][j] == '#')
                 attron(COLOR_PAIR(1));
-            else if (grid[i][j] == '.')
+            else if (grid[i][j] == ' ')
                 attron(COLOR_PAIR(2));
             else if (grid[i][j] == 'S')
                 attron(COLOR_PAIR(3));
@@ -145,4 +157,28 @@ void Maze::animate()
     }
     refresh();
     usleep(1000);
+}
+
+void Maze::print()
+{
+    printf("%d %d\n", cols + 2, rows + 2);
+    for (int i = 0; i < cols + 2; i++)
+    {
+        printf("#");
+    }
+    printf("\n");
+    for (int i = 0; i < rows; i++)
+    {
+        printf("#");
+        for (int j = 0; j < cols; j++)
+        {
+            printf("%c", grid[i][j]);
+        }
+        printf("#\n");
+    }
+    for (int i = 0; i < cols + 2; i++)
+    {
+        printf("#");
+    }
+    printf("\n0 0\n");
 }
