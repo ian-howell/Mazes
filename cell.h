@@ -12,4 +12,6 @@ class Cell
         Cell* get_opposite();
 };
 
+bool is_valid(int r, int c, int max_row, int max_col);
+
 #endif
