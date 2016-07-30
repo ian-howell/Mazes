@@ -6,38 +6,29 @@
 #include <ncurses.h>
 #include "cell.h"
 
-bool is_valid(Cell *parent, int r, int c);
+bool is_valid(int r, int c, int max_row, int max_col);
+char **generate_grid(int rows, int cols);
 
 int main()
 {
-    initscr();
     int cols, rows;
+    initscr();
     getmaxyx(stdscr, rows, cols);
     endwin();
-
     if (cols % 2 == 0)
         cols -= 3;
     else
         cols -= 2;
-
     if (rows % 2 == 0)
         rows -= 3;
     else
         rows -= 2;
 
+    /* rows = cols = 5; */
+
     srand(time(NULL));
 
-    /* char **grid = (char **)malloc(rows * sizeof(char *)); */
-    char **grid = new char*[rows];
-    for (int i = 0; i < rows; i++)
-    {
-        /* grid[i] = (char *)malloc(cols * sizeof(char)); */
-        grid[i] = new char[cols];
-        for (int j = 0; j < cols; j++)
-        {
-            grid[i][j] = '#';
-        }
-    }
+    char **grid = generate_grid(rows, cols);
 
     Cell start(0, 0, NULL);
     grid[start.row][start.col] = 'S';
@@ -45,24 +36,11 @@ int main()
     std::vector<Cell *> frontier;
 
     // Add the start node's neighbors to the frontier
-    for (int i = -1; i <= 1; i += 2)
-    {
-        Cell *n1 = new Cell(Cell(start.row + i, start.col, &start));
-        Cell *n2 = new Cell(Cell(start.row, start.col + i, &start));
-
-        if (is_valid(n1, rows, cols))
-            frontier.push_back(n1);
-        else
-            delete n1;
-
-        if (is_valid(n2, rows, cols))
-            frontier.push_back(n2);
-        else
-            delete n2;
-    }
+    frontier.push_back(new Cell(start.row + 1, start.col, &start));
+    frontier.push_back(new Cell(start.row, start.col + 1, &start));
 
     Cell* child;
-    Cell* grandchild;
+    Cell* gc;
     std::vector<Cell *> grandchildren;
     bool gc_used = false;
 
@@ -72,38 +50,27 @@ int main()
         child = frontier[rand_point];
         frontier.erase(frontier.begin() + rand_point);
 
-        grandchild = child->get_opposite();
-        gc_used = false;
+        gc = child->get_opposite();
+        int r = gc->row;
+        int c = gc->col;
 
-
-        if (is_valid(grandchild, rows, cols) && grid[grandchild->row][grandchild->col] == '#')
+        if (is_valid(r, c, rows, cols) && grid[r][c] == '#')
         {
             grid[child->row][child->col] = '.';
-            grid[grandchild->row][grandchild->col] = '.';
+            grid[r][c] = '.';
 
             for (int i = -1; i <= 1; i += 2)
             {
-                Cell *n1 = new Cell(grandchild->row + i, grandchild->col, grandchild);
-                Cell *n2 = new Cell(grandchild->row, grandchild->col + i, grandchild);
-
-                if (is_valid(n1, rows, cols) && grid[n1->row][n1->col] == '#')
+                if (is_valid(r + i, c, rows, cols))
                 {
-                    frontier.push_back(n1);
+                    frontier.push_back(new Cell(r + i, c, gc));
                     gc_used = true;
                 }
-                else
-                {
-                    delete n1;
-                }
 
-                if (is_valid(n2, rows, cols) && grid[n2->row][n2->col] == '#')
+                if (is_valid(r, c + i, rows, cols))
                 {
-                    frontier.push_back(n2);
+                    frontier.push_back(new Cell(r, c + i, gc));
                     gc_used = true;
-                }
-                else
-                {
-                    delete n2;
                 }
             }
             // Animate here
@@ -112,9 +79,9 @@ int main()
         delete child;
 
         if (!gc_used)
-            delete grandchild;
+            delete gc;
         else
-            grandchildren.push_back(grandchild);
+            grandchildren.push_back(gc);
 
     }
 
@@ -154,7 +121,21 @@ int main()
     return 0;
 }
 
-bool is_valid(Cell* p, int r, int c)
+bool is_valid(int r, int c, int max_row, int max_col)
 {
-    return p->row >= 0 && p->row < r && p->col >= 0 && p->col < c;
+    return r >= 0 && r < max_row && c >= 0 && c < max_col;
+}
+
+char **generate_grid(int rows, int cols)
+{
+    char **grid = new char*[rows];
+    for (int i = 0; i < rows; i++)
+    {
+        grid[i] = new char[cols];
+        for (int j = 0; j < cols; j++)
+        {
+            grid[i][j] = '#';
+        }
+    }
+    return grid;
 }
