@@ -83,7 +83,7 @@ void Maze::cut_maze()
         child = frontier[rand_point];
         frontier.erase(frontier.begin() + rand_point);
 
-        gc = child->get_opposite();
+        gc = child->get_child();
         int r = gc->row;
         int c = gc->col;
 
@@ -156,7 +156,7 @@ void Maze::animate()
         }
     }
     refresh();
-    usleep(1000);
+    usleep(100000);
 }
 
 void Maze::print()

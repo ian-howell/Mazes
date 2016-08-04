@@ -8,22 +8,9 @@ Cell::Cell(int row, int col, Cell* parent)
     this->parent = parent;
 }
 
-Cell* Cell::get_opposite()
+Cell* Cell::get_child()
 {
-    if (parent->row - row == 0)
-    {
-        if (parent->col - col == -1)
-            return new Cell(row, col + 1, NULL);
-        else
-            return new Cell(row, col - 1, NULL);
-    }
-    else
-    {
-        if (parent->row - row == -1)
-            return new Cell(row + 1, col, NULL);
-        else
-            return new Cell(row - 1, col, NULL);
-    }
+    return new Cell((row << 1) - parent->row, (col << 1) - parent->col, NULL);
 }
 
 bool is_valid(int r, int c, int max_row, int max_col)

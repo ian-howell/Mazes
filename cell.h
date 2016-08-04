@@ -9,7 +9,7 @@ class Cell
         Cell *parent;
 
         Cell(int row, int col, Cell *parent);
-        Cell* get_opposite();
+        Cell* get_child();
 };
 
 bool is_valid(int r, int c, int max_row, int max_col);
