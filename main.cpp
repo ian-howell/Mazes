@@ -3,6 +3,7 @@
 #include <ncurses.h>
 #include <cstdlib>
 #include "maze.h"
+#include "solver.h"
 
 void usage(const char* prgname);
 
@@ -48,11 +49,24 @@ int main(int argc, char** argv)
     if (animate_flag)
         getch();
 
-    endwin();
-
-    setvbuf(stdout, NULL, _IONBF, 0);
 
     if (print_unsolved)
+    {
+        endwin();
+        maze->print();
+        initscr();
+    }
+
+
+    Solver* solver = new Solver(animate_flag);
+    solver->solve(maze);
+
+    if (animate_flag)
+        getch();
+
+    endwin();
+
+    if (print_solved)
         maze->print();
 
     delete maze;
