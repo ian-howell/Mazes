@@ -152,7 +152,6 @@ void Maze::animate()
 
 void Maze::print()
 {
-    printf("%d %d\n", cols + 2, rows + 2);
     for (int i = 0; i < cols + 2; i++)
     {
         printf("#");
@@ -171,5 +170,5 @@ void Maze::print()
     {
         printf("#");
     }
-    printf("\n0 0\n");
+    printf("\n");
 }
