@@ -110,6 +110,8 @@ void Maze::cut_maze()
     }
 
     grid[rows - 1][cols - 1] = 'E';
+            if (do_animate)
+                animate();
 
     for (int i = 0; i < (int)grandchildren.size(); i++)
     {
