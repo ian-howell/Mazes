@@ -13,6 +13,7 @@ int main(int argc, char** argv)
     int cols = 10;
     bool animate_flag = false;;
     bool print_unsolved = false;
+    bool print_solved = false;
 
     initscr();
     getmaxyx(stdscr, rows, cols);
@@ -32,6 +33,9 @@ int main(int argc, char** argv)
                 break;
             case 'u':
                 print_unsolved = true;
+                break;
+            case 's':
+                print_solved = true;
                 break;
             case 'h':
                 usage(argv[0]);
