@@ -7,23 +7,14 @@
 #include "cell.h"
 #include "maze.h"
 
-Maze::Maze()
+Maze::Maze(int row, int col, bool animate_flag)
 {
-    // Initialization
-    do_animate = true;
-    get_dimensions();
-    srand(time(NULL));
+    /* do_animate = false; */
+    do_animate = animate_flag;
+    rows = (row % 2) ? row - 2 : row - 3;
+    cols = (col % 2) ? col - 2 : col - 3;
 
-    grid = generate_grid();
-
-    cut_maze();
-}
-
-Maze::Maze(int row, int col)
-{
-    do_animate = false;
-    rows = (row % 2) ? row : row - 1;
-    cols = (col % 2) ? col : col - 1;
+    printf("row: %d\ncols: %d\n", rows, cols);
 
     srand(time(NULL));
 

@@ -42,8 +42,7 @@ class Maze
         void animate();
 
     public:
-        Maze();
-        Maze(int row, int col);
+        Maze(int row, int col, bool animate_flag);
         ~Maze();
 
         int get_rows() const { return rows; }
