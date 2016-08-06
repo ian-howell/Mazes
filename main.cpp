@@ -77,6 +77,7 @@ int main(int argc, char** argv)
         maze->print();
 
     delete maze;
+    delete solver;
 
     return 0;
 }
