@@ -14,8 +14,6 @@ Maze::Maze(int row, int col, bool animate_flag)
     rows = (row % 2) ? row - 2 : row - 3;
     cols = (col % 2) ? col - 2 : col - 3;
 
-    printf("row: %d\ncols: %d\n", rows, cols);
-
     srand(time(NULL));
 
     grid = generate_grid();

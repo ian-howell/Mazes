@@ -17,7 +17,6 @@ int main(int argc, char** argv)
 
     initscr();
     getmaxyx(stdscr, rows, cols);
-    printf("row: %d\ncols: %d\n", rows, cols);
     while ((myarg = getopt(argc, argv, "c:r:ahus")) != -1)
     {
         switch (myarg)
