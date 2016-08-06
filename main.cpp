@@ -1,28 +1,56 @@
-#include "maze.h"
 #include <stdio.h>
+#include <unistd.h>
 #include <ncurses.h>
 #include <cstdlib>
+#include "maze.h"
 
 void usage(const char* prgname);
 
 int main(int argc, char** argv)
 {
-    Maze *maze = NULL;
-    if (argc == 3)
+    int myarg;
+    int rows = 10;
+    int cols = 10;
+    bool animate_flag = false;;
+    bool print_unsolved = false;
+
+    initscr();
+    getmaxyx(stdscr, rows, cols);
+    printf("row: %d\ncols: %d\n", rows, cols);
+    while ((myarg = getopt(argc, argv, "c:r:ahus")) != -1)
     {
-        maze = new Maze(atoi(argv[1]), atoi(argv[2]));
+        switch (myarg)
+        {
+            case 'r':
+                rows = atoi(optarg);
+                break;
+            case 'c':
+                cols = atoi(optarg);
+                break;
+            case 'a':
+                animate_flag = true;
+                break;
+            case 'u':
+                print_unsolved = true;
+                break;
+            case 'h':
+                usage(argv[0]);
+                endwin();
+                return 0;
+        }
     }
-    else
-    {
-        initscr();
-        maze = new Maze();
+
+    Maze *maze = new Maze(rows, cols, animate_flag);
+
+    if (animate_flag)
         getch();
-        // Close ncurses
-        endwin();
-    }
 
-    maze->print();
+    endwin();
 
+    setvbuf(stdout, NULL, _IONBF, 0);
+
+    if (print_unsolved)
+        maze->print();
 
     delete maze;
 
