@@ -38,10 +38,17 @@ int main(int argc, char** argv)
                 print_solved = true;
                 break;
             case 'h':
-                usage(argv[0]);
                 endwin();
+                usage(argv[0]);
                 return 0;
         }
+    }
+
+    if (!print_solved && !print_unsolved && !animate_flag)
+    {
+        endwin();
+        usage(argv[0]);
+        return 0;
     }
 
     Maze *maze = new Maze(rows, cols, animate_flag);
@@ -77,7 +84,7 @@ int main(int argc, char** argv)
 void usage(const char* prgname)
 {
     printf("Usage: %s [OPTION]...\n", prgname);
-    printf("Example: %s -r 10 -c 15 -a\n", prgname);
+    printf("Example: %s -r 10 -c 15 -usa\n", prgname);
     printf("%-20s", "  -r NUM");
     printf("%-30s\n", "Maze will have NUM rows");
     printf("%-20s", "  -c NUM");
