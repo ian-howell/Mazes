@@ -22,7 +22,7 @@ void Player::init_grid(Maze* maze)
 void Player::move(direction dir)
 {
     // Erase the player
-    grid[row][col] = ' ';
+    grid[row][col] = '.';
     switch (dir)
     {
         case LEFT:
@@ -64,7 +64,7 @@ void Player::draw()
         {
             if (grid[i][j] == '#')
                 attron(COLOR_PAIR(1));
-            else if (grid[i][j] == ' ')
+            else if (grid[i][j] == ' ' || grid[i][j] == '.')
                 attron(COLOR_PAIR(2));
             else if (grid[i][j] == 'S')
                 attron(COLOR_PAIR(3));
