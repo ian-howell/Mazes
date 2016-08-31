@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include "maze.h"
 #include "solver.h"
+#include "player.h"
 
 void usage(const char* prgname);
 
@@ -15,10 +16,11 @@ int main(int argc, char** argv)
     bool animate_flag = false;;
     bool print_unsolved = false;
     bool print_solved = false;
+    bool play_flag = false;
 
     initscr();
     getmaxyx(stdscr, rows, cols);
-    while ((myarg = getopt(argc, argv, "c:r:ahus")) != -1)
+    while ((myarg = getopt(argc, argv, "c:r:ahusp")) != -1)
     {
         switch (myarg)
         {
@@ -41,6 +43,9 @@ int main(int argc, char** argv)
                 endwin();
                 usage(argv[0]);
                 return 0;
+            case 'p':
+                play_flag = true;
+                break;
         }
     }
 
@@ -53,10 +58,6 @@ int main(int argc, char** argv)
 
     Maze *maze = new Maze(rows, cols, animate_flag);
 
-    if (animate_flag)
-        getch();
-
-
     if (print_unsolved)
     {
         endwin();
@@ -64,9 +65,52 @@ int main(int argc, char** argv)
         initscr();
     }
 
-
     Solver* solver = new Solver(animate_flag);
-    solver->solve(maze);
+    Player* player = new Player(maze, 0, 0);
+
+    if (play_flag)
+    {
+        start_color();
+        noecho();
+        cbreak();
+
+        keypad(stdscr, TRUE);
+
+        refresh();
+        int c;
+
+        while (1)
+        {
+            c = wgetch(stdscr);
+            switch (c)
+            {
+                case KEY_UP:
+                    player->move(UP);
+                    break;
+                case KEY_DOWN:
+                    player->move(DOWN);
+                    break;
+                case KEY_LEFT:
+                    player->move(LEFT);
+                    break;
+                case KEY_RIGHT:
+                    player->move(RIGHT);
+                    break;
+            }
+            player->draw();
+
+            if (player->game_won)
+            {
+                clear();
+                mvwprintw(stdscr, cols / 2, rows / 2, "You win!");
+                break;
+            }
+        }
+    }
+    else
+    {
+        solver->solve(maze);
+    }
 
     if (animate_flag)
         getch();
@@ -78,6 +122,7 @@ int main(int argc, char** argv)
 
     delete maze;
     delete solver;
+    delete player;
 
     return 0;
 }
