@@ -2,11 +2,12 @@
 #define MAZEMENU
 #include <menu.h>
 
-const int GEN_NUM = 2;
+#define array_size(a) (sizeof(a) / sizeof(a[0]))
+
 const int WIDTH = 40;
 const int HEIGHT = 10;
 
 void get_flags();
-void print_in_middle(WINDOW *win, int starty, int startx, int width, char *string);
+void print_in_middle(WINDOW *win, int starty, int startx, int width, const char *string);
 
 #endif
