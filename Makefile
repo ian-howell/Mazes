@@ -1,7 +1,7 @@
 HEADERS = $(wildcard *.h)
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(SOURCES:%.cpp=%.o)
-LINKER = -lncurses
+LINKER = -lncurses -lmenu
 C_FLAGS = -Wall --pedantic-errors -O2
 
 CPP = g++
