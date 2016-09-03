@@ -4,7 +4,7 @@
 
 #define array_size(a) (sizeof(a) / sizeof(a[0]))
 
-const int WIDTH = 40;
+const int WIDTH = 60;
 const int HEIGHT = 10;
 
 void get_flags();
