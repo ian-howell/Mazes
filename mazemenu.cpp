@@ -208,14 +208,26 @@ void get_flags()
         items = menu_items(menus[cur_menu]);
         temp[0] = '\0';
 
-        if(flags & 1)
+        if(check_bit(flags, 0)) // XXXX XXX0
             strcat(temp, "Animate, ");
-        else
+        else // XXXX XXX1
             strcat(temp, "Don't Animate, ");
-        if (flags & 2)
-            strcat(temp, "Backtracking, ");
-        else
+
+        if (!check_bit(flags, 2) && !check_bit(flags, 1)) // XXXX X00X
+            strcat(temp, "Don't solve, ");
+        else if (!check_bit(flags, 2) && check_bit(flags, 1)) // XXXX X01X
             strcat(temp, "Manual, ");
+        else // XXXX X1XX
+            strcat(temp, "Backtracking, ");
+
+        if (!check_bit(flags, 4) && !check_bit(flags, 3)) // XXX0 0XXX
+            strcat(temp, "Don't print");
+        else if (!check_bit(flags, 4) && check_bit(flags, 3)) // XXX0 1XXX
+            strcat(temp, "Print unsolved");
+        else if (check_bit(flags, 4) && !check_bit(flags, 3)) // XXX1 0XXX
+            strcat(temp, "Print solved");
+        else if (check_bit(flags, 4) && check_bit(flags, 3)) // XXX1 1XXX
+            strcat(temp, "Print both solved and unsolved");
 
         move(20, 0);
         clrtoeol();
@@ -251,19 +263,60 @@ void set_flags(char* name, int* f)
 {
     if (!strcmp(name, "Yes"))
     {
-        *f |= 1;
+        set_bit(f, 0);
     }
     else if (!strcmp(name, "No"))
     {
-        *f &= (1 ^ ~0);
+        unset_bit(f, 0);
     }
-
-    if (!strcmp(name, "Backtracking"))
+    else if (!strcmp(name, "No Solve"))
     {
-        *f |= 2;
+        unset_bit(f, 2);
+        unset_bit(f, 1);
     }
     else if (!strcmp(name, "Manual"))
     {
-        *f &= (2 ^ ~0);
+        unset_bit(f, 2);
+        set_bit(f, 1);
     }
+    else if (!strcmp(name, "Backtracking"))
+    {
+        set_bit(f, 2);
+        unset_bit(f, 1);
+    }
+    else if (!strcmp(name, "No Print"))
+    {
+        unset_bit(f, 4);
+        unset_bit(f, 3);
+    }
+    else if (!strcmp(name, "Solved"))
+    {
+        unset_bit(f, 4);
+        set_bit(f, 3);
+    }
+    else if (!strcmp(name, "Unsolved"))
+    {
+        set_bit(f, 4);
+        unset_bit(f, 3);
+    }
+    else if (!strcmp(name, "Both"))
+    {
+        set_bit(f, 4);
+        set_bit(f, 3);
+    }
+}
+
+int check_bit(int f, int bitno)
+{
+    return f & 1<<bitno;
+}
+
+void set_bit(int* f, int bitno)
+{
+    *f = *f | 1<<bitno;
+}
+
+void unset_bit(int* f, int bitno)
+{
+    *f = *f & ~(1<<bitno);
 }
