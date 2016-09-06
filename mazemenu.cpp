@@ -4,7 +4,7 @@
 
 void set_flags(char* name, int* f);
 
-const char* yes_or_no[] = {
+const char* gen_options[] = {
     "Yes",
     "No",
     (char*)NULL
@@ -25,16 +25,18 @@ const char* print_options[] = {
     (char*)NULL
 };
 
-void get_flags()
+int get_flags()
 {
     init_pair(1, COLOR_WHITE, COLOR_BLACK);
     init_pair(2, COLOR_BLACK, COLOR_WHITE);
     int cur_line = 1;             // Keep track of which line we're on
+    int cur_menu = 0;             // Keep track of which menu we're manipulating
+    int flags = 0;                // The return value
 
     WINDOW *global_menu_win;
 
-    ITEM** yes_no_items;
-    MENU* generation_menu;
+    ITEM** gen_items;
+    MENU* gen_menu;
 
     ITEM** solve_items;
     MENU* solve_menu;
@@ -42,123 +44,62 @@ void get_flags()
     ITEM** print_items;
     MENU* print_menu;
 
-    int size;                        // To keep track of array sizes
-
     // Create menu box
     global_menu_win = newwin(HEIGHT, WIDTH, 2, (COLS - WIDTH) / 2);
     keypad(global_menu_win, TRUE);
-
-    // Give the menu box a border
     box(global_menu_win, 0 , 0);
-
-    // Add a title to the menu box
     print_in_middle(global_menu_win, cur_line++, 0, WIDTH, "Maze");
-
-    // Seperate the title and the content
     mvwaddch(global_menu_win, cur_line, 0, ACS_LTEE);
     mvwhline(global_menu_win, cur_line, 1, ACS_HLINE, WIDTH - 2);
     mvwaddch(global_menu_win, cur_line, WIDTH - 1, ACS_RTEE);
     cur_line++;
 
-    // Assign yes and no to items
-    size = array_size(yes_or_no);
-    yes_no_items = (ITEM**)calloc(size, sizeof(ITEM*));
-    for (int i = 0; i < size; i++)
-    {
-        yes_no_items[i] = new_item(yes_or_no[i], NULL);
-        set_item_userptr(yes_no_items[i], reinterpret_cast<void*>(set_flags));
-    }
-
-    // Title for generation
+    // Create generation menu
+    gen_items = get_items(gen_options, array_size(gen_options));
+    gen_menu = new_menu((ITEM**)gen_items);
+    set_format(gen_menu, array_size(gen_options));
+    set_menu_fore(gen_menu, COLOR_PAIR(2));
     print_in_middle(global_menu_win, cur_line++, 0, WIDTH, "Animate generation?");
 
-    // Create generation menu
-    generation_menu = new_menu((ITEM**)yes_no_items);
-    menu_opts_off(generation_menu, O_SHOWDESC);
-
-    // Set the format
-    set_menu_format(generation_menu, 1, size - 1);
-    set_menu_fore(generation_menu, COLOR_PAIR(2));
-    set_menu_mark(generation_menu, "");
-
-    // Put the generation menu into the global menu box
-    set_menu_win(generation_menu, global_menu_win);
-    set_menu_sub(generation_menu, derwin(global_menu_win, 1, 0, cur_line++, 26));
-
     // Post the generation menu
-    post_menu(generation_menu);
-
-    // Assign solve items
-    size = array_size(solve_options);
-    solve_items = (ITEM**)calloc(size, sizeof(ITEM*));
-    for (int i = 0; i < size; i++)
-    {
-        solve_items[i] = new_item(solve_options[i], NULL);
-        set_item_userptr(solve_items[i], reinterpret_cast<void*>(set_flags));
-    }
-
-    // Title for Solve option
-    print_in_middle(global_menu_win, cur_line++, 0, WIDTH, "Solve Method:");
+    set_menu_win(gen_menu, global_menu_win);
+    set_menu_sub(gen_menu, derwin(global_menu_win, 1, 0, cur_line++, 26));
+    post_menu(gen_menu);
 
     // Create Solve menu
+    solve_items = get_items(solve_options, array_size(solve_options));
     solve_menu = new_menu((ITEM**)solve_items);
-    menu_opts_off(solve_menu, O_SHOWDESC);
-
-    // Set the format
-    set_menu_format(solve_menu, 1, size - 1);
-    set_menu_fore(solve_menu, COLOR_PAIR(1));
-    set_menu_mark(solve_menu, "");
-
-    // Put the solve menu into the global menu box
-    set_menu_win(solve_menu, global_menu_win);
-    set_menu_sub(solve_menu, derwin(global_menu_win, 1, 0, cur_line++, 10));
+    set_format(solve_menu, array_size(solve_options));
+    print_in_middle(global_menu_win, cur_line++, 0, WIDTH, "Solve Method");
 
     // Post the solve menu
+    set_menu_win(solve_menu, global_menu_win);
+    set_menu_sub(solve_menu, derwin(global_menu_win, 1, 0, cur_line++, 10));
     post_menu(solve_menu);
 
-    // Assign print items
-    size = array_size(print_options);
-    print_items = (ITEM**)calloc(size, sizeof(ITEM*));
-    for (int i = 0; i < size; i++)
-    {
-        print_items[i] = new_item(print_options[i], NULL);
-        set_item_userptr(print_items[i], reinterpret_cast<void*>(set_flags));
-    }
-
-    // Title for print option
-    print_in_middle(global_menu_win, cur_line++, 0, WIDTH, "Print Method:");
-
     // Create print menu
+    print_items = get_items(print_options, array_size(print_options));
     print_menu = new_menu((ITEM**)print_items);
-    menu_opts_off(print_menu, O_SHOWDESC);
-
-    // Set the format
-    set_menu_format(print_menu, 1, size - 1);
-    set_menu_fore(print_menu, COLOR_PAIR(1));
-    set_menu_mark(print_menu, "");
-
-    // Put the print menu into the global menu box
-    set_menu_win(print_menu, global_menu_win);
-    set_menu_sub(print_menu, derwin(global_menu_win, 1, 0, cur_line++, 14));
+    set_format(print_menu, array_size(print_options));
+    print_in_middle(global_menu_win, cur_line++, 0, WIDTH, "Print Method");
 
     // Post the print menu
+    set_menu_win(print_menu, global_menu_win);
+    set_menu_sub(print_menu, derwin(global_menu_win, 1, 0, cur_line++, 14));
     post_menu(print_menu);
-    wrefresh(global_menu_win);      /* Show that box     */
+
+    // Show the menu box
+    wrefresh(global_menu_win);
+
+    // Print the status of the flags
+    print_flag_status(flags, cur_line);
 
     // Create a list of all menus
-    MENU* menus[3] = {
-        generation_menu,
-        solve_menu,
-        print_menu
-    };
+    MENU* menus[3] = { gen_menu, solve_menu, print_menu };
 
-    int cur_menu = 0;
-
-    int flags = 0;
     int c;
-    while (1)
+    while ((c = getch()) != 10)    // Enter
     {
-        c = getch();
         switch(c)
         {
             case KEY_RIGHT:
@@ -179,62 +120,17 @@ void get_flags()
                     cur_menu++;
                 set_menu_fore(menus[cur_menu], COLOR_PAIR(2));
                 break;
-            case 10: /* Enter */
-            {
-                // I'm so sorry
-                ITEM* cur;
-                void (*p)(char*, int*);
-
-                cur = current_item(menus[cur_menu]);
-
-                // Horrible cast: item_userptr returns a void*. And that's just
-                // sunshine and rainbows. _if you're using C_. But we're not.
-                // We're using C++. So the compiler is picky.
-                //
-                // Enter: reinterpret_cast. We give this guy some bits and it
-                // basically just throws them to the wind. It's unfortunately
-                // the only way to use userptrs in C++ without actually
-                // modifying Ncurses
-                p = reinterpret_cast<void (*)(char*, int*)>(item_userptr(cur));
-                p((char*)item_name(cur), &flags);
-                pos_menu_cursor(menus[cur_menu]);
-            }
-            break;
+            case ' ':      // Space
+                // Gets the name of the current item from the current menu
+                set_flags((char*)item_name(current_item(menus[cur_menu])), &flags);
+                break;
         }
 
-        char temp[200];
-        ITEM **items;
-
-        items = menu_items(menus[cur_menu]);
-        temp[0] = '\0';
-
-        if(check_bit(flags, 0)) // XXXX XXX0
-            strcat(temp, "Animate, ");
-        else // XXXX XXX1
-            strcat(temp, "Don't Animate, ");
-
-        if (!check_bit(flags, 2) && !check_bit(flags, 1)) // XXXX X00X
-            strcat(temp, "Don't solve, ");
-        else if (!check_bit(flags, 2) && check_bit(flags, 1)) // XXXX X01X
-            strcat(temp, "Manual, ");
-        else // XXXX X1XX
-            strcat(temp, "Backtracking, ");
-
-        if (!check_bit(flags, 4) && !check_bit(flags, 3)) // XXX0 0XXX
-            strcat(temp, "Don't print");
-        else if (!check_bit(flags, 4) && check_bit(flags, 3)) // XXX0 1XXX
-            strcat(temp, "Print unsolved");
-        else if (check_bit(flags, 4) && !check_bit(flags, 3)) // XXX1 0XXX
-            strcat(temp, "Print solved");
-        else if (check_bit(flags, 4) && check_bit(flags, 3)) // XXX1 1XXX
-            strcat(temp, "Print both solved and unsolved");
-
-        move(20, 0);
-        clrtoeol();
-        mvprintw(20, 0, temp);
+        print_flag_status(flags, cur_line);
         wrefresh(global_menu_win);
-
     }
+
+    return flags;
 }
 
 void print_in_middle(WINDOW *win, int starty, int startx, int width, const char *string)
@@ -319,4 +215,65 @@ void set_bit(int* f, int bitno)
 void unset_bit(int* f, int bitno)
 {
     *f = *f & ~(1<<bitno);
+}
+
+ITEM** get_items(const char* options[], int size)
+{
+    ITEM** items = (ITEM**)calloc(size, sizeof(ITEM*));
+    for (int i = 0; i < size; i++)
+        items[i] = new_item(options[i], NULL);
+
+    return items;
+}
+
+void set_format(MENU* menu, int size)
+{
+    set_menu_format(menu, 1, size - 1);
+    set_menu_fore(menu, COLOR_PAIR(1));
+    set_menu_mark(menu, "");
+}
+
+void print_flag_status(int flags, int lineno)
+{
+        char gen_temp[40];
+        char solve_temp[40];
+        char print_temp[40];
+        gen_temp[0] = '\0';
+        solve_temp[0] = '\0';
+        print_temp[0] = '\0';
+
+        if(check_bit(flags, 0)) // XXXX XXX0
+            strcat(gen_temp, "Animate");
+        else // XXXX XXX1
+            strcat(gen_temp, "Don't Animate");
+
+        if (!check_bit(flags, 2) && !check_bit(flags, 1)) // XXXX X00X
+            strcat(solve_temp, "Don't solve");
+        else if (!check_bit(flags, 2) && check_bit(flags, 1)) // XXXX X01X
+            strcat(solve_temp, "Solve with the arrow keys");
+        else // XXXX X1XX
+            strcat(solve_temp, "Automatically solve with recursive backtracking");
+
+        if (!check_bit(flags, 4) && !check_bit(flags, 3)) // XXX0 0XXX
+            strcat(print_temp, "Don't print the maze");
+        else if (!check_bit(flags, 4) && check_bit(flags, 3)) // XXX0 1XXX
+            strcat(print_temp, "Print the unsolved maze");
+        else if (check_bit(flags, 4) && !check_bit(flags, 3)) // XXX1 0XXX
+            strcat(print_temp, "Print the solved maze");
+        else if (check_bit(flags, 4) && check_bit(flags, 3)) // XXX1 1XXX
+            strcat(print_temp, "Print both solved and unsolved mazes");
+
+        int status_line = lineno + 3;
+
+        move(status_line, 0);
+        clrtoeol();
+        print_in_middle(stdscr, status_line, 0, COLS, gen_temp);
+
+        move(status_line + 1, 0);
+        clrtoeol();
+        print_in_middle(stdscr, status_line + 1, 0, COLS, solve_temp);
+
+        move(status_line + 2, 0);
+        clrtoeol();
+        print_in_middle(stdscr, status_line + 2, 0, COLS, print_temp);
 }
