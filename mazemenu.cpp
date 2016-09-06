@@ -1,4 +1,5 @@
 #include "mazemenu.h"
+#include "flags.h"
 #include <cstdlib>
 #include <cstring>
 
@@ -235,45 +236,42 @@ void set_format(MENU* menu, int size)
 
 void print_flag_status(int flags, int lineno)
 {
-        char gen_temp[40];
-        char solve_temp[40];
-        char print_temp[40];
-        gen_temp[0] = '\0';
-        solve_temp[0] = '\0';
-        print_temp[0] = '\0';
-
-        if(check_bit(flags, 0)) // XXXX XXX0
-            strcat(gen_temp, "Animate");
-        else // XXXX XXX1
-            strcat(gen_temp, "Don't Animate");
-
-        if (!check_bit(flags, 2) && !check_bit(flags, 1)) // XXXX X00X
-            strcat(solve_temp, "Don't solve");
-        else if (!check_bit(flags, 2) && check_bit(flags, 1)) // XXXX X01X
-            strcat(solve_temp, "Solve with the arrow keys");
-        else // XXXX X1XX
-            strcat(solve_temp, "Automatically solve with recursive backtracking");
-
-        if (!check_bit(flags, 4) && !check_bit(flags, 3)) // XXX0 0XXX
-            strcat(print_temp, "Don't print the maze");
-        else if (!check_bit(flags, 4) && check_bit(flags, 3)) // XXX0 1XXX
-            strcat(print_temp, "Print the unsolved maze");
-        else if (check_bit(flags, 4) && !check_bit(flags, 3)) // XXX1 0XXX
-            strcat(print_temp, "Print the solved maze");
-        else if (check_bit(flags, 4) && check_bit(flags, 3)) // XXX1 1XXX
-            strcat(print_temp, "Print both solved and unsolved mazes");
-
+        char temp[60];
+        temp[0] = '\0';
         int status_line = lineno + 3;
+
+        if (ANIMATE)
+            strcat(temp, "Animate");
+        else
+            strcat(temp, "Don't Animate");
 
         move(status_line, 0);
         clrtoeol();
-        print_in_middle(stdscr, status_line, 0, COLS, gen_temp);
+        print_in_middle(stdscr, status_line, 0, COLS, temp);
+        temp[0] = '\0';
+
+        if (MAN_SOLVE)
+            strcat(temp, "Solve with the arrow keys");
+        else if (BACKTRACK_SOLVE)
+            strcat(temp, "Automatically solve with recursive backtracking");
+        else
+            strcat(temp, "Don't solve");
 
         move(status_line + 1, 0);
         clrtoeol();
-        print_in_middle(stdscr, status_line + 1, 0, COLS, solve_temp);
+        print_in_middle(stdscr, status_line + 1, 0, COLS, temp);
+        temp[0] = '\0';
+
+        if (PRINT_UNSOLVED)
+            strcat(temp, "Print the unsolved maze");
+        else if (PRINT_SOLVED)
+            strcat(temp, "Print the solved maze");
+        else if (PRINT_BOTH)
+            strcat(temp, "Print both solved and unsolved mazes");
+        else
+            strcat(temp, "Don't print the maze");
 
         move(status_line + 2, 0);
         clrtoeol();
-        print_in_middle(stdscr, status_line + 2, 0, COLS, print_temp);
+        print_in_middle(stdscr, status_line + 2, 0, COLS, temp);
 }
