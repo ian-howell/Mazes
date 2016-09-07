@@ -5,7 +5,7 @@
 
 void set_flags(char* name, int* f);
 
-const char* gen_options[] = {
+const char* animate_options[] = {
     "Yes",
     "No",
     (char*)NULL
@@ -36,8 +36,8 @@ int get_flags()
 
     WINDOW *global_menu_win;
 
-    ITEM** gen_items;
-    MENU* gen_menu;
+    ITEM** animate_items;
+    MENU* animate_menu;
 
     ITEM** solve_items;
     MENU* solve_menu;
@@ -55,17 +55,18 @@ int get_flags()
     mvwaddch(global_menu_win, cur_line, WIDTH - 1, ACS_RTEE);
     cur_line++;
 
-    // Create generation menu
-    gen_items = get_items(gen_options, array_size(gen_options));
-    gen_menu = new_menu((ITEM**)gen_items);
-    set_format(gen_menu, array_size(gen_options));
-    set_menu_fore(gen_menu, COLOR_PAIR(2));
-    print_in_middle(global_menu_win, cur_line++, 0, WIDTH, "Animate generation?");
 
-    // Post the generation menu
-    set_menu_win(gen_menu, global_menu_win);
-    set_menu_sub(gen_menu, derwin(global_menu_win, 1, 0, cur_line++, 26));
-    post_menu(gen_menu);
+    // Create animation menu
+    animate_items = get_items(animate_options, array_size(animate_options));
+    animate_menu = new_menu((ITEM**)animate_items);
+    set_format(animate_menu, array_size(animate_options));
+    set_menu_fore(animate_menu, COLOR_PAIR(2));
+    print_in_middle(global_menu_win, cur_line++, 0, WIDTH, "Animate?");
+
+    // Post the animation menu
+    set_menu_win(animate_menu, global_menu_win);
+    set_menu_sub(animate_menu, derwin(global_menu_win, 1, 0, cur_line++, 26));
+    post_menu(animate_menu);
 
     // Create Solve menu
     solve_items = get_items(solve_options, array_size(solve_options));
@@ -92,11 +93,12 @@ int get_flags()
     // Show the menu box
     wrefresh(global_menu_win);
 
+
     // Print the status of the flags
     print_flag_status(flags, cur_line);
 
     // Create a list of all menus
-    MENU* menus[3] = { gen_menu, solve_menu, print_menu };
+    MENU* menus[3] = { animate_menu, solve_menu, print_menu };
 
     int c;
     while ((c = getch()) != 10)    // Enter
