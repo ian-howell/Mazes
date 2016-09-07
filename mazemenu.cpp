@@ -238,42 +238,42 @@ void set_format(MENU* menu, int size)
 
 void print_flag_status(int flags, int lineno)
 {
-        char temp[60];
-        temp[0] = '\0';
-        int status_line = lineno + 3;
+    char temp[60];
+    temp[0] = '\0';
+    int status_line = lineno + 3;
 
-        if (ANIMATE)
-            strcat(temp, "Animate");
-        else
-            strcat(temp, "Don't Animate");
+    if (ANIMATE)
+        strcat(temp, "Animate");
+    else
+        strcat(temp, "Don't Animate");
 
-        move(status_line, 0);
-        clrtoeol();
-        print_in_middle(stdscr, status_line, 0, COLS, temp);
-        temp[0] = '\0';
+    move(status_line, 0);
+    clrtoeol();
+    print_in_middle(stdscr, status_line, 0, COLS, temp);
+    temp[0] = '\0';
 
-        if (MAN_SOLVE)
-            strcat(temp, "Solve with the arrow keys");
-        else if (BACKTRACK_SOLVE)
-            strcat(temp, "Automatically solve with recursive backtracking");
-        else
-            strcat(temp, "Don't solve");
+    if (MAN_SOLVE)
+        strcat(temp, "Solve with the arrow keys");
+    else if (BACKTRACK_SOLVE)
+        strcat(temp, "Automatically solve with recursive backtracking");
+    else
+        strcat(temp, "Don't solve");
 
-        move(status_line + 1, 0);
-        clrtoeol();
-        print_in_middle(stdscr, status_line + 1, 0, COLS, temp);
-        temp[0] = '\0';
+    move(status_line + 1, 0);
+    clrtoeol();
+    print_in_middle(stdscr, status_line + 1, 0, COLS, temp);
+    temp[0] = '\0';
 
-        if (PRINT_UNSOLVED)
-            strcat(temp, "Print the unsolved maze");
-        else if (PRINT_SOLVED)
-            strcat(temp, "Print the solved maze");
-        else if (PRINT_BOTH)
-            strcat(temp, "Print both solved and unsolved mazes");
-        else
-            strcat(temp, "Don't print the maze");
+    if (PRINT_UNSOLVED)
+        strcat(temp, "Print the unsolved maze");
+    else if (PRINT_SOLVED)
+        strcat(temp, "Print the solved maze");
+    else if (PRINT_BOTH)
+        strcat(temp, "Print both solved and unsolved mazes");
+    else
+        strcat(temp, "Don't print the maze");
 
-        move(status_line + 2, 0);
-        clrtoeol();
-        print_in_middle(stdscr, status_line + 2, 0, COLS, temp);
+    move(status_line + 2, 0);
+    clrtoeol();
+    print_in_middle(stdscr, status_line + 2, 0, COLS, temp);
 }
