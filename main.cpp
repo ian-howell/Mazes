@@ -5,6 +5,8 @@
 #include "maze.h"
 #include "solver.h"
 #include "player.h"
+#include "flags.h"
+#include "mazemenu.h"
 
 void usage(const char* prgname);
 
@@ -13,14 +15,16 @@ int main(int argc, char** argv)
     int myarg;
     int rows = 10;
     int cols = 10;
-    bool animate_flag = false;;
-    bool print_unsolved = false;
-    bool print_solved = false;
-    bool play_flag = false;
+    int flags;
 
     initscr();
+    start_color();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    curs_set(0);
     getmaxyx(stdscr, rows, cols);
-    while ((myarg = getopt(argc, argv, "c:r:ahusp")) != -1)
+    while ((myarg = getopt(argc, argv, "c:r:h")) != -1)
     {
         switch (myarg)
         {
@@ -30,51 +34,32 @@ int main(int argc, char** argv)
             case 'c':
                 cols = atoi(optarg);
                 break;
-            case 'a':
-                animate_flag = true;
-                break;
-            case 'u':
-                print_unsolved = true;
-                break;
-            case 's':
-                print_solved = true;
-                break;
             case 'h':
                 endwin();
                 usage(argv[0]);
                 return 0;
-            case 'p':
-                play_flag = true;
-                break;
         }
     }
 
-    if (!print_solved && !print_unsolved && !animate_flag)
-    {
-        endwin();
-        usage(argv[0]);
-        return 0;
-    }
+    flags = get_flags();
 
-    Maze *maze = new Maze(rows, cols, animate_flag);
+    Maze *maze = new Maze(rows, cols, ANIMATE);
 
-    if (print_unsolved)
+    if (PRINT_UNSOLVED || PRINT_BOTH)
     {
         endwin();
         maze->print();
         initscr();
     }
 
-    Solver* solver = new Solver(animate_flag);
+    Solver* solver = new Solver(ANIMATE);
     Player* player = new Player(maze, 0, 0);
 
-    if (play_flag)
+    if (MAN_SOLVE)
     {
         start_color();
         noecho();
         cbreak();
-
-        keypad(stdscr, TRUE);
 
         refresh();
         int c;
@@ -107,17 +92,14 @@ int main(int argc, char** argv)
             }
         }
     }
-    else
+    else if (BACKTRACK_SOLVE)
     {
         solver->solve(maze);
     }
 
-    if (animate_flag)
-        getch();
-
     endwin();
 
-    if (print_solved)
+    if (PRINT_SOLVED || PRINT_BOTH)
         maze->print();
 
     delete maze;
