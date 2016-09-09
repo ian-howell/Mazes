@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 
     Maze *maze = new Maze(rows, cols, ANIMATE);
 
-    if (PRINT_UNSOLVED || PRINT_BOTH)
+    if (PRINT_UNSOLVED)
     {
         endwin();
         maze->print();
@@ -101,7 +101,7 @@ int main(int argc, char** argv)
 
     endwin();
 
-    if (PRINT_SOLVED || PRINT_BOTH)
+    if (PRINT_SOLVED)
         maze->print();
 
     delete maze;

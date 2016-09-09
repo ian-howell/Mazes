@@ -283,12 +283,12 @@ void print_flag_status(int flags, int lineno)
     print_in_middle(stdscr, status_line + 1, 0, COLS, temp);
     temp[0] = '\0';
 
-    if (PRINT_UNSOLVED)
+    if (PRINT_SOLVED && PRINT_UNSOLVED)
+        strcat(temp, "Print both solved and unsolved mazes");
+    else if (PRINT_UNSOLVED)
         strcat(temp, "Print the unsolved maze");
     else if (PRINT_SOLVED)
         strcat(temp, "Print the solved maze");
-    else if (PRINT_BOTH)
-        strcat(temp, "Print both solved and unsolved mazes");
     else
         strcat(temp, "Don't print the maze");
 
