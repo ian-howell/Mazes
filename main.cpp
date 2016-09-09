@@ -64,6 +64,9 @@ int main(int argc, char** argv)
         cbreak();
 
         refresh();
+
+        player->draw();
+
         int c;
 
         while (1)

@@ -21,32 +21,44 @@ void Player::init_grid(Maze* maze)
 
 void Player::move(direction dir)
 {
+    int newcol = col;
+    int newrow = row;
     // Erase the player
-    grid[row][col] = '.';
+    /* grid[row][col] = ' '; */
     switch (dir)
     {
         case LEFT:
             if (is_valid(row, col - 1))
-                col--;
+                newcol--;
             break;
         case RIGHT:
             if (is_valid(row, col + 1))
-                col++;
+                newcol++;
             break;
         case UP:
             if (is_valid(row - 1, col))
-                row--;
+                newrow--;
             break;
         case DOWN:
             if (is_valid(row + 1, col))
-                row++;
+                newrow++;
             break;
     }
 
-    if (grid[row][col] == 'E')
+    if (grid[newrow][newcol] == 'E')
+    {
         game_won = true;
+        grid[row][col] = '.';
+        return;
+    }
+    else if (grid[newrow][newcol] == '.')
+        grid[row][col] = ' ';
+    else
+        grid[row][col] = '.';
 
     // Print the player in the new location
+    row = newrow;
+    col = newcol;
     grid[row][col] = 'S';
 }
 
@@ -57,6 +69,7 @@ void Player::draw()
     init_pair(2, COLOR_WHITE, COLOR_WHITE);
     init_pair(3, COLOR_BLUE, COLOR_BLUE);
     init_pair(4, COLOR_RED, COLOR_RED);
+    init_pair(5, COLOR_GREEN, COLOR_GREEN);
 
     for (int i = 0; i < max_row; i++)
     {
@@ -64,8 +77,10 @@ void Player::draw()
         {
             if (grid[i][j] == '#')
                 attron(COLOR_PAIR(1));
-            else if (grid[i][j] == ' ' || grid[i][j] == '.')
+            else if (grid[i][j] == ' ')
                 attron(COLOR_PAIR(2));
+            else if (grid[i][j] == '.')
+                attron(COLOR_PAIR(5));
             else if (grid[i][j] == 'S')
                 attron(COLOR_PAIR(3));
             else
@@ -77,6 +92,7 @@ void Player::draw()
             attroff(COLOR_PAIR(2));
             attroff(COLOR_PAIR(3));
             attroff(COLOR_PAIR(4));
+            attroff(COLOR_PAIR(5));
         }
     }
     refresh();
