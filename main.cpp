@@ -7,6 +7,7 @@
 #include "player.h"
 #include "flags.h"
 #include "mazemenu.h"
+#include "maze_gen.h"
 
 void usage(const char* prgname);
 
@@ -45,7 +46,9 @@ int main(int argc, char** argv)
 
     clear();
 
-    Maze *maze = new Maze(rows, cols, ANIMATE);
+    Maze* maze = new Maze(rows, cols);
+    Maze_gen* gen = new Maze_gen(maze, true);
+    gen->create_maze();
 
     if (PRINT_UNSOLVED)
     {
@@ -54,7 +57,7 @@ int main(int argc, char** argv)
         initscr();
     }
 
-    Solver* solver = new Solver(ANIMATE);
+    Solver* solver = new Solver(maze, ANIMATE);
     Player* player = new Player(maze, 0, 0);
 
     if (MAN_SOLVE)
@@ -65,7 +68,7 @@ int main(int argc, char** argv)
 
         refresh();
 
-        player->draw();
+        /* player->draw(); */
 
         int c;
 
@@ -87,7 +90,8 @@ int main(int argc, char** argv)
                     player->move(RIGHT);
                     break;
             }
-            player->draw();
+            /* player->draw(); */
+            maze->draw();
 
             if (player->game_won)
             {
@@ -99,7 +103,7 @@ int main(int argc, char** argv)
     }
     else if (BACKTRACK_SOLVE)
     {
-        solver->solve(maze);
+        solver->solve();
     }
 
     endwin();
@@ -108,6 +112,7 @@ int main(int argc, char** argv)
         maze->print();
 
     delete maze;
+    delete gen;
     delete solver;
     delete player;
 

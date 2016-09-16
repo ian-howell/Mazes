@@ -1,23 +1,22 @@
 #include <unistd.h>
 #include "solver.h"
 #include "cell.h"
+#include <cstdio>
+#include <ncurses.h>
 
-Solver::Solver(bool animate_flag)
+Solver::Solver(Maze* maze, bool animate_flag)
 {
     do_animate = animate_flag;
-}
-
-void Solver::init_grid(Maze* maze)
-{
+    this->maze = maze;
     grid = maze->get_grid();
-    max_row = maze->get_rows();
-    max_col = maze->get_cols();
-
     find_start();
 }
 
 void Solver::find_start()
 {
+    int max_row = maze->get_rows();
+    int max_col = maze->get_cols();
+
     for (int i = 0; i < max_row; i++)
     {
         for (int j = 0; j < max_col; j++)
@@ -32,10 +31,8 @@ void Solver::find_start()
     }
 }
 
-bool Solver::solve(Maze* maze)
+bool Solver::solve()
 {
-    init_grid(maze);
-
     return solve_r(start_row, start_col);
 }
 
@@ -57,7 +54,10 @@ bool Solver::solve_r(int row, int col)
             grid[r][c] = '.';
 
             if (do_animate)
-                animate();
+            {
+                maze->draw();
+                usleep(100000);
+            }
 
             if (solve_r(r, c))
             {
@@ -69,7 +69,10 @@ bool Solver::solve_r(int row, int col)
                 dir++;
 
                 if (do_animate)
-                    animate();
+                {
+                    maze->draw();
+                    usleep(100000);
+                }
             }
         }
         else
@@ -101,52 +104,22 @@ void Solver::get_new_cell(int& row, int& col, int dir)
 
 bool Solver::is_valid(int row, int col)
 {
-    if (row < 0 || col < 0 || row >= max_row || col >= max_col)
-        return false;
+    bool retval = true;
 
-    switch (grid[row][col])
+    if (maze->is_valid(row, col))
     {
-        case '.':
-        case '#':
-        case 'S':
-            return false;
-    }
-
-    return true;
-}
-
-void Solver::animate()
-{
-    start_color();
-    init_pair(1, COLOR_BLACK, COLOR_BLACK);
-    init_pair(2, COLOR_WHITE, COLOR_WHITE);
-    init_pair(3, COLOR_BLUE, COLOR_BLUE);
-    init_pair(4, COLOR_RED, COLOR_RED);
-    init_pair(5, COLOR_GREEN, COLOR_GREEN);
-
-    for (int i = 0; i < max_row; i++)
-    {
-        for (int j = 0; j < max_col; j++)
+        switch (grid[row][col])
         {
-            if (grid[i][j] == '#')
-                attron(COLOR_PAIR(1));
-            else if (grid[i][j] == ' ')
-                attron(COLOR_PAIR(2));
-            else if (grid[i][j] == 'S')
-                attron(COLOR_PAIR(3));
-            else if (grid[i][j] == '.')
-                attron(COLOR_PAIR(5));
-            else
-                attron(COLOR_PAIR(4));
-
-            mvwprintw(stdscr, i + 1, j + 1, " ");
-
-            attroff(COLOR_PAIR(1));
-            attroff(COLOR_PAIR(2));
-            attroff(COLOR_PAIR(3));
-            attroff(COLOR_PAIR(4));
+            case '.':
+            case '#':
+            case 'S':
+                retval = false;
         }
     }
-    refresh();
-    usleep(100000);
+    else
+    {
+        retval = false;
+    }
+
+    return retval;
 }

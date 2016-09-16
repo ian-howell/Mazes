@@ -12,6 +12,4 @@ class Cell
         Cell* get_child();
 };
 
-bool is_valid(int r, int c, int max_row, int max_col);
-
 #endif
