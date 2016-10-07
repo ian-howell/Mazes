@@ -14,7 +14,6 @@ Player::Player(Maze* maze, int row, int col)
 
 void Player::move(direction dir)
 {
-    printw("Moving %d", dir);
     int newcol = col;
     int newrow = row;
 
@@ -60,8 +59,6 @@ void Player::move(direction dir)
 bool Player::is_valid(int row, int col)
 {
     bool retval = true;
-
-    printw("Testing row %d, col %d\n", row, col);
 
     if (maze->is_valid(row, col))
     {
