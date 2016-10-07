@@ -4,8 +4,8 @@
 
 Maze::Maze(int rows, int cols)
 {
-    this->rows = rows;
-    this->cols = cols;
+    this->rows = (rows % 2) ? rows : rows - 1;
+    this->cols = (cols % 2) ? cols : cols - 1;
     grid = new char*[rows];
     for (int i = 0; i < rows; i++)
     {

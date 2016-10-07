@@ -24,7 +24,14 @@ int main(int argc, char** argv)
     noecho();
     keypad(stdscr, TRUE);
     curs_set(0);
+
+    // Get the screen dimensions
     getmaxyx(stdscr, rows, cols);
+    // Normalize the dimensions so there is a border between the edge of
+    // the screen and the maze walls
+    rows -= 2;
+    cols -= 2;
+
     while ((myarg = getopt(argc, argv, "c:r:h")) != -1)
     {
         switch (myarg)
