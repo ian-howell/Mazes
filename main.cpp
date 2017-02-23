@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     clear();
 
     Maze* maze = new Maze(rows, cols);
-    Maze_gen* gen = new Maze_gen(maze, ANIMATE);
+    Maze_gen* gen = new Maze_gen(maze, ANIMATE_GEN);
     gen->create_maze();
 
     if (PRINT_UNSOLVED)
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
         initscr();
     }
 
-    Solver* solver = new Solver(maze, BACKTRACK_SOLVE);
+    Solver* solver = new Solver(maze, ANIMATE_SOLVE);
     Player* player = new Player(maze, 0, 0);
 
     if (MAN_SOLVE)
@@ -112,6 +112,11 @@ int main(int argc, char** argv)
     {
         maze->draw();
         solver->backtrack();
+    }
+    else if (BFS_SOLVE)
+    {
+        maze->draw();
+        solver->breadth_first_search();
     }
 
     getch();

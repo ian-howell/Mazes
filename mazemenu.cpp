@@ -15,6 +15,7 @@ const char* solve_options[] = {
     "No Solve",
     "Manual",
     "Backtracking",
+    "BFS",
     (char*)NULL
 };
 
@@ -76,7 +77,7 @@ int get_flags()
 
     // Post the solve menu
     set_menu_win(solve_menu, global_menu_win);
-    set_menu_sub(solve_menu, derwin(global_menu_win, 1, 0, cur_line++, 10));
+    set_menu_sub(solve_menu, derwin(global_menu_win, 1, 0, cur_line++, 7));
     post_menu(solve_menu);
 
     // Create print menu
@@ -202,6 +203,11 @@ void set_flags(char* name, int* f)
         set_bit(f, 2);
         unset_bit(f, 1);
     }
+    else if (!strcmp(name, "BFS"))
+    {
+        set_bit(f, 2);
+        set_bit(f, 1);
+    }
     else if (!strcmp(name, "No Print"))
     {
         unset_bit(f, 4);
@@ -261,7 +267,7 @@ void print_flag_status(int flags, int lineno)
     temp[0] = '\0';
     int status_line = lineno + 3;
 
-    if (ANIMATE)
+    if (ANIMATE_GEN)
         strcat(temp, "Animate");
     else
         strcat(temp, "Don't Animate");
@@ -275,6 +281,8 @@ void print_flag_status(int flags, int lineno)
         strcat(temp, "Solve with the arrow keys");
     else if (BACKTRACK_SOLVE)
         strcat(temp, "Automatically solve with recursive backtracking");
+    else if (BFS_SOLVE)
+        strcat(temp, "Automatically solve with BreadthFirstSearch");
     else
         strcat(temp, "Don't solve");
 
