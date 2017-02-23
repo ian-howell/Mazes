@@ -2,15 +2,15 @@ HEADERS = $(wildcard *.h)
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(SOURCES:%.cpp=%.o)
 LINKER = -lncurses -lmenu
-C_FLAGS = -Wall --pedantic-errors -O2 -g
+CFLAGS =
 
 CPP = g++
 
-maze: ${OBJECTS} ${HEADERS}
-	${CPP} ${C_FLAGS} ${OBJECTS} ${LINKER} -o maze
+maze: ${OBJECTS}
+	${CPP} ${C_FLAGS} ${OBJECTS} ${LINKER} -o $@
 
-%.o: %.cpp ${HEADERS}
-	${CPP} ${C_FLAGS} -c $<
+%.o: %.cpp
+	${CPP} ${C_FLAGS} -c $< -o $@
 
 .PHONY: clean debug
 
@@ -20,3 +20,9 @@ debug: maze
 clean:
 	-@rm -f *.o
 	-@rm -f maze
+	-@rm -f depend
+
+depend: $(SOURCES) $(HEADERS)
+	@g++ -MM *.cpp > $@
+
+-include depend
