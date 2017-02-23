@@ -6,11 +6,11 @@ Maze::Maze(int rows, int cols)
 {
     this->rows = (rows % 2) ? rows : rows - 1;
     this->cols = (cols % 2) ? cols : cols - 1;
-    grid = new char*[rows];
-    for (int i = 0; i < rows; i++)
+    grid = new char*[this->rows];
+    for (int i = 0; i < this->rows; i++)
     {
-        grid[i] = new char[cols];
-        for (int j = 0; j < cols; j++)
+        grid[i] = new char[this->cols];
+        for (int j = 0; j < this->cols; j++)
         {
             grid[i][j] = '#';
         }
