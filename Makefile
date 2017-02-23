@@ -7,10 +7,12 @@ CFLAGS =
 CPP = g++
 
 maze: ${OBJECTS}
-	${CPP} ${C_FLAGS} ${OBJECTS} ${LINKER} -o $@
+	@${CPP} ${C_FLAGS} ${OBJECTS} ${LINKER} -o $@
+	@rm depend
+	@echo "Done!"
 
 %.o: %.cpp
-	${CPP} ${C_FLAGS} -c $< -o $@
+	@${CPP} ${C_FLAGS} -c $< -o $@
 
 .PHONY: clean debug
 
