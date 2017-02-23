@@ -22,6 +22,7 @@ class Solver
     public:
         Solver(Maze* maze, bool animate_flag);
         bool backtrack();
+        void breadth_first_search();
 };
 
 enum
@@ -31,4 +32,7 @@ enum
     WEST,
     NORTH
 };
+
+std::vector<Cell> get_neighbors(Cell* node, const int max_row, const int max_col);
+
 #endif
