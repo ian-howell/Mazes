@@ -8,6 +8,7 @@ class Cell
         int col;
         Cell *parent;
 
+        Cell();
         Cell(int row, int col, Cell *parent);
         Cell* get_child();
 };

@@ -1,6 +1,11 @@
 #include "cell.h"
 #define NULL 0
 
+Cell::Cell()
+{
+  /* Intentionally left empty */
+}
+
 Cell::Cell(int row, int col, Cell* parent)
 {
     this->row = row;
