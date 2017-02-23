@@ -31,12 +31,12 @@ void Solver::find_start()
     }
 }
 
-bool Solver::solve()
+bool Solver::backtrack()
 {
-    return solve_r(start_row, start_col);
+    return backtrack_r(start_row, start_col);
 }
 
-bool Solver::solve_r(int row, int col)
+bool Solver::backtrack_r(int row, int col)
 {
     int dir = 0;
     do
@@ -59,7 +59,7 @@ bool Solver::solve_r(int row, int col)
                 usleep(100000);
             }
 
-            if (solve_r(r, c))
+            if (backtrack_r(r, c))
             {
                 return true;
             }

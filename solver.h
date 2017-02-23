@@ -14,12 +14,12 @@ class Solver
 
         void find_start();
         void get_new_cell(int& row, int& col, int dir);
-        bool solve_r(int row, int col);
+        bool backtrack_r(int row, int col);
         bool is_valid(int row, int col);
 
     public:
         Solver(Maze* maze, bool animate_flag);
-        bool solve();
+        bool backtrack();
 };
 
 enum

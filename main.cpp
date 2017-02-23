@@ -111,7 +111,7 @@ int main(int argc, char** argv)
     else if (BACKTRACK_SOLVE)
     {
         maze->draw();
-        solver->solve();
+        solver->backtrack();
     }
 
     getch();
