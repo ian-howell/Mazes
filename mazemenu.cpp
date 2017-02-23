@@ -136,19 +136,19 @@ int get_flags()
     // Free up memory
     unpost_menu(animate_menu);
     free_menu(animate_menu);
-    for (int i = 0; i < array_size(animate_options); i++)
+    for (unsigned int i = 0; i < array_size(animate_options); i++)
         free_item(animate_items[i]);
     free(animate_items);
 
     unpost_menu(solve_menu);
     free_menu(solve_menu);
-    for (int i = 0; i < array_size(solve_options); i++)
+    for (unsigned int i = 0; i < array_size(solve_options); i++)
         free_item(solve_items[i]);
     free(solve_items);
 
     unpost_menu(print_menu);
     free_menu(print_menu);
-    for (int i = 0; i < array_size(print_options); i++)
+    for (unsigned int i = 0; i < array_size(print_options); i++)
         free_item(print_items[i]);
     free(print_items);
 
