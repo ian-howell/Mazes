@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include "solver.h"
 #include "cell.h"
+#include "maze.h"
 #include <cstdio>
 #include <ncurses.h>
 #include <vector>
@@ -64,7 +65,7 @@ bool Solver::backtrack_r(int row, int col)
             if (do_animate)
             {
                 maze->draw();
-                usleep(100000);
+                usleep(DRAW_DELAY);
             }
 
             if (backtrack_r(r, c))
@@ -79,7 +80,7 @@ bool Solver::backtrack_r(int row, int col)
                 if (do_animate)
                 {
                     maze->draw();
-                    usleep(100000);
+                    usleep(DRAW_DELAY);
                 }
             }
         }
@@ -152,7 +153,7 @@ void Solver::breadth_first_search()
                 if (do_animate)
                 {
                     maze->draw();
-                    usleep(100000);
+                    usleep(DRAW_DELAY);
                 }
             }
 
@@ -185,7 +186,7 @@ void Solver::breadth_first_search()
             if (do_animate)
             {
                 maze->draw();
-                usleep(100000);
+                usleep(DRAW_DELAY);
             }
             neighbors[i].parent = u;
             Cell* v = new Cell;

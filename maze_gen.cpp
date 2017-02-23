@@ -66,12 +66,10 @@ void Maze_gen::create_maze()
                 }
             }
 
-            /* if (do_animate) */
-            /*     animate(); */
             if (do_animate)
             {
                 maze->draw();
-                usleep(100000);
+                usleep(DRAW_DELAY);
             }
 
             grid[r][c] = ' ';
@@ -83,12 +81,10 @@ void Maze_gen::create_maze()
     }
 
     grid[rows - 1][cols - 1] = 'E';
-    /* if (do_animate) */
-    /*     animate(); */
     if (do_animate)
     {
         maze->draw();
-        usleep(100000);
+        usleep(DRAW_DELAY);
     }
 
     for (int i = 0; i < (int)grandchildren.size(); i++)

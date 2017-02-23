@@ -1,6 +1,8 @@
 #ifndef MAZE_H
 #define MAZE_H
 
+#define DRAW_DELAY 50000
+
 class Maze
 {
     private:
