@@ -9,20 +9,20 @@ HEADERS = $(wildcard *.h)
 
 OBJECTS = $(SOURCES:%.cpp=%.o)
 
-default: maze
+default: driver
 
 %.o: %.cpp
 	@echo "Compiling $<"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
-maze: $(OBJECTS)
+driver: $(OBJECTS)
 	@echo "Building $@"
 	@$(CXX) $(CXXFLAGS) $(OBJECTS) $(LINKER) -o $@
-	@echo "Finished building maze"
+	@echo "Finished building driver"
 
 clean:
 	-@rm -f core
-	-@rm -f maze
+	-@rm -f driver
 	-@rm -f depend
 	-@rm -f $(OBJECTS)
 
