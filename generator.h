@@ -3,11 +3,10 @@
 #include <ncurses.h>
 #include "maze.h"
 
-class Maze_gen
+class Generator
 {
     private:
         Maze* maze;
-        bool do_animate;
 
         /**
          * animate
@@ -17,13 +16,13 @@ class Maze_gen
         void animate();
 
     public:
-        Maze_gen(Maze* maze, bool animate_flag);
+        Generator(Maze* maze);
 
         /**
          * create_maze
          *
          * Uses Prim's algorithm to create a random path through the maze
          */
-        void create_maze();
+        void create_maze(bool animate=false);
 };
 #endif

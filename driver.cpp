@@ -47,87 +47,85 @@ int main(int argc, char** argv)
         }
     }
 
-    flags = get_flags();
-
     clear();
 
     Maze* maze = new Maze(rows, cols);
-    Maze_gen* gen = new Maze_gen(maze, ANIMATE_GEN);
-    gen->create_maze();
+    Generator* generator = new Generator(maze);
+    generator->create_maze(true);
 
-    if (PRINT_UNSOLVED)
-    {
-        endwin();
-        maze->print();
-        initscr();
-    }
+    /* if (PRINT_UNSOLVED) */
+    /* { */
+    /*     endwin(); */
+    /*     maze->print(); */
+    /*     initscr(); */
+    /* } */
 
-    Solver* solver = new Solver(maze, ANIMATE_SOLVE);
-    Player* player = new Player(maze, 0, 0);
+    /* Solver* solver = new Solver(maze, ANIMATE_SOLVE); */
+    /* Player* player = new Player(maze, 0, 0); */
 
-    if (MAN_SOLVE)
-    {
-        start_color();
-        noecho();
-        cbreak();
+    /* if (MAN_SOLVE) */
+    /* { */
+    /*     start_color(); */
+    /*     noecho(); */
+    /*     cbreak(); */
 
-        refresh();
+    /*     refresh(); */
 
-        maze->draw();
+    /*     maze->draw(); */
 
-        int c;
+    /*     int c; */
 
-        while (1)
-        {
-            c = wgetch(stdscr);
-            switch (c)
-            {
-                case KEY_UP:
-                    player->move(UP);
-                    break;
-                case KEY_DOWN:
-                    player->move(DOWN);
-                    break;
-                case KEY_LEFT:
-                    player->move(LEFT);
-                    break;
-                case KEY_RIGHT:
-                    player->move(RIGHT);
-                    break;
-            }
-            /* player->draw(); */
-            maze->draw();
+    /*     while (1) */
+    /*     { */
+    /*         c = wgetch(stdscr); */
+    /*         switch (c) */
+    /*         { */
+    /*             case KEY_UP: */
+    /*                 player->move(UP); */
+    /*                 break; */
+    /*             case KEY_DOWN: */
+    /*                 player->move(DOWN); */
+    /*                 break; */
+    /*             case KEY_LEFT: */
+    /*                 player->move(LEFT); */
+    /*                 break; */
+    /*             case KEY_RIGHT: */
+    /*                 player->move(RIGHT); */
+    /*                 break; */
+    /*         } */
+    /*         /1* player->draw(); *1/ */
+    /*         maze->draw(); */
 
-            if (player->game_won)
-            {
-                clear();
-                mvwprintw(stdscr, cols / 2, rows / 2, "You win!");
-                break;
-            }
-        }
-    }
-    else if (BACKTRACK_SOLVE)
-    {
-        maze->draw();
-        solver->backtrack();
-    }
-    else if (BFS_SOLVE)
-    {
-        maze->draw();
-        solver->breadth_first_search();
-    }
+    /*         if (player->game_won) */
+    /*         { */
+    /*             clear(); */
+    /*             mvwprintw(stdscr, cols / 2, rows / 2, "You win!"); */
+    /*             break; */
+    /*         } */
+    /*     } */
+    /* } */
+    /* else if (BACKTRACK_SOLVE) */
+    /* { */
+    /*     maze->draw(); */
+    /*     solver->backtrack(); */
+    /* } */
+    /* else if (BFS_SOLVE) */
+    /* { */
+    /*     maze->draw(); */
+    /*     solver->breadth_first_search(); */
+    /* } */
 
-    getch();
+    /* getch(); */
 
     endwin();
 
-    if (PRINT_SOLVED)
-        maze->print();
+    /* if (PRINT_SOLVED) */
+    /*     maze->print(); */
 
     delete maze;
-    delete gen;
-    delete solver;
-    delete player;
+    delete generator;
+    /* delete solver; */
+    /* delete player; */
 
     return 0;
 }

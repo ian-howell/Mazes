@@ -8,15 +8,13 @@
 #include "maze.h"
 #include "generator.h"
 
-Maze_gen::Maze_gen(Maze* maze, bool animate_flag)
+Generator::Generator(Maze* maze)
 {
-    do_animate = animate_flag;
     this->maze = maze;
-
     srand(time(NULL));
 }
 
-void Maze_gen::create_maze()
+void Generator::create_maze(bool animate)
 {
     char** grid = maze->get_grid();
     int rows = maze->get_rows();
@@ -66,7 +64,7 @@ void Maze_gen::create_maze()
                 }
             }
 
-            if (do_animate)
+            if (animate)
             {
                 maze->draw();
                 usleep(DRAW_DELAY);
@@ -81,7 +79,7 @@ void Maze_gen::create_maze()
     }
 
     grid[rows - 1][cols - 1] = 'E';
-    if (do_animate)
+    if (animate)
     {
         maze->draw();
         usleep(DRAW_DELAY);
