@@ -6,7 +6,7 @@
 
 #include "cell.h"
 #include "maze.h"
-#include "maze_gen.h"
+#include "generator.h"
 
 Maze_gen::Maze_gen(Maze* maze, bool animate_flag)
 {
