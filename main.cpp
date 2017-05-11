@@ -5,8 +5,6 @@
 #include "maze.h"
 #include "solver.h"
 #include "player.h"
-#include "flags.h"
-#include "mazemenu.h"
 #include "maze_gen.h"
 
 void usage(const char* prgname);
