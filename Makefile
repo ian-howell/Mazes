@@ -1,30 +1,33 @@
-HEADERS = $(wildcard *.h)
+.PHONY: all clean
+
+CXX = /usr/bin/g++
+CXXFLAGS = -g -Wall -w -pedantic-errors -Wextra -Wconversion -std=c++11
+LINKER = -lncurses
+
 SOURCES = $(wildcard *.cpp)
+HEADERS = $(wildcard *.h)
+
 OBJECTS = $(SOURCES:%.cpp=%.o)
-LINKER = -lncurses -lmenu
-CFLAGS =
 
-CPP = g++
-
-maze: ${OBJECTS}
-	@${CPP} ${C_FLAGS} ${OBJECTS} ${LINKER} -o $@
-	@rm depend
-	@echo "Done!"
+default: maze
 
 %.o: %.cpp
-	@${CPP} ${C_FLAGS} -c $< -o $@
+	@echo "Compiling $<"
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
-.PHONY: clean debug
-
-debug: C_FLAGS = -g -Wall --pedantic-errors
-debug: maze
+maze: $(OBJECTS)
+	@echo "Building $@"
+	@$(CXX) $(CXXFLAGS) $(OBJECTS) $(LINKER) -o $@
+	@echo "Finished building maze"
 
 clean:
-	-@rm -f *.o
+	-@rm -f core
 	-@rm -f maze
 	-@rm -f depend
+	-@rm -f $(OBJECTS)
 
 depend: $(SOURCES) $(HEADERS)
-	@g++ -MM *.cpp > $@
+	@echo "Generating dependencies"
+	@$(CXX) -std=c++11 -MM *.cpp > $@
 
 -include depend
