@@ -4,13 +4,13 @@
 
 Maze::Maze(int rows, int cols)
 {
-  this->rows = (rows % 2) ? rows : rows - 1;
-  this->cols = (cols % 2) ? cols : cols - 1;
-  grid = new char*[this->rows];
-  for (int i = 0; i < this->rows; i++)
+  rows = (rows % 2) ? rows : rows - 1;
+  cols = (cols % 2) ? cols : cols - 1;
+  grid = new char*[rows];
+  for (int i = 0; i < rows; i++)
   {
-    grid[i] = new char[this->cols];
-    for (int j = 0; j < this->cols; j++)
+    grid[i] = new char[cols];
+    for (int j = 0; j < cols; j++)
     {
       grid[i][j] = '#';
     }
@@ -22,20 +22,19 @@ Maze::Maze(const char* filename)
   FILE* f = fopen(filename, "r");
   fscanf(f, "%d %d\n", &rows, &cols);
 
-  grid = new char*[this->rows];
-  for (int i = 0; i < this->rows; i++)
-    grid[i] = new char[this->cols];
+  grid = new char*[rows];
 
   char dummy;
   for (int i = 0; i < rows; i++)
   {
+    grid[i] = new char[cols];
     for (int j = 0; j < cols; j++)
     {
       fscanf(f, "%c", &grid[i][j]);
-      printf("(%c)", grid[i][j]);
     }
     fscanf(f, "%c", &dummy);
   }
+  fclose(f);
 }
 
 Maze::~Maze()
