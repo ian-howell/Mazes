@@ -69,7 +69,9 @@ bool Solver::backtrack_r(int row, int col, bool animate)
     if (is_valid(r, c))
     {
       if (grid[r][c] == 'E')
+      {
         return true;
+      }
 
       grid[r][c] = '*';
 
@@ -83,6 +85,13 @@ bool Solver::backtrack_r(int row, int col, bool animate)
 
       if (backtrack_r(r, c, animate))
       {
+        grid[r][c] = '*';
+
+        if (animate)
+        {
+          maze->draw();
+          usleep(DRAW_DELAY);
+        }
         return true;
       }
       else
@@ -165,12 +174,12 @@ void Solver::breadth_first_search(bool animate)
   while (!frontier.empty())
   {
     u = frontier.front(); frontier.pop();
-    grid[u->row][u->col] = '.';
     if (u->row == end.row && u->col == end.col)
     {
       for (Cell* runner = u; runner; runner = runner->parent)
       {
-        grid[runner->row][runner->col] = '*';
+        if (grid[runner->row][runner->col] == '.')
+          grid[runner->row][runner->col] = '*';
         if (animate)
         {
           maze->draw();
@@ -195,6 +204,8 @@ void Solver::breadth_first_search(bool animate)
       return;
     }
 
+    if (grid[u->row][u->col] != 'S')
+      grid[u->row][u->col] = '.';
     std::vector<Cell> neighbors = get_neighbors(u, maze->get_rows(), maze->get_cols());
     for (size_t i = 0; i < neighbors.size(); i++)
     {
@@ -206,7 +217,8 @@ void Solver::breadth_first_search(bool animate)
         case 'S':
           continue;
       }
-      grid[neighbors[i].row][neighbors[i].col] = ',';
+      if (grid[neighbors[i].row][neighbors[i].col] != 'E')
+        grid[neighbors[i].row][neighbors[i].col] = ',';
       if (animate)
       {
         maze->draw();
