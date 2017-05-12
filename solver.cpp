@@ -45,19 +45,7 @@ bool Solver::backtrack(bool animate)
 
   if (animate)
   {
-    initscr();
-    cbreak();
-    noecho();
-    keypad(stdscr, TRUE);
-    curs_set(0);
-
-    start_color();
-    init_pair(1, COLOR_BLACK, COLOR_BLACK);
-    init_pair(2, COLOR_WHITE, COLOR_WHITE);
-    init_pair(3, COLOR_BLUE, COLOR_BLUE);
-    init_pair(4, COLOR_RED, COLOR_RED);
-    init_pair(5, COLOR_GREEN, COLOR_GREEN);
-
+    maze->init_curses();
     clear();
   }
 
@@ -163,19 +151,7 @@ void Solver::breadth_first_search(bool animate)
 
   if (animate)
   {
-    initscr();
-    cbreak();
-    noecho();
-    keypad(stdscr, TRUE);
-    curs_set(0);
-
-    start_color();
-    init_pair(1, COLOR_BLACK, COLOR_BLACK);
-    init_pair(2, COLOR_WHITE, COLOR_WHITE);
-    init_pair(3, COLOR_BLUE, COLOR_BLUE);
-    init_pair(4, COLOR_RED, COLOR_RED);
-    init_pair(5, COLOR_GREEN, COLOR_GREEN);
-
+    maze->init_curses();
     clear();
   }
 

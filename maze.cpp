@@ -49,6 +49,23 @@ Maze::~Maze()
   grid = nullptr;
 }
 
+void Maze::init_curses()
+{
+  initscr();
+  cbreak();
+  noecho();
+  keypad(stdscr, TRUE);
+  curs_set(0);
+
+  start_color();
+  init_pair(1, COLOR_BLACK, COLOR_BLACK);
+  init_pair(2, COLOR_WHITE, COLOR_WHITE);
+  init_pair(3, COLOR_BLUE, COLOR_BLUE);
+  init_pair(4, COLOR_RED, COLOR_RED);
+  init_pair(5, COLOR_GREEN, COLOR_GREEN);
+
+}
+
 void Maze::print(const char* filename)
 {
   FILE* f = fopen(filename, "w");
