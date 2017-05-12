@@ -10,83 +10,96 @@
 
 Generator::Generator(Maze* maze)
 {
-    this->maze = maze;
-    srand(time(NULL));
+  this->maze = maze;
+  srand(time(NULL));
 }
 
 void Generator::create_maze(bool animate)
 {
-    char** grid = maze->get_grid();
-    int rows = maze->get_rows();
-    int cols = maze->get_cols();
-    Cell start(0, 0, NULL);
+  if (animate)
+  {
+    start_color();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    curs_set(0);
+    clear();
 
-    grid[start.row][start.col] = 'S';
+  }
+  char** grid = maze->get_grid();
+  int rows = maze->get_rows();
+  int cols = maze->get_cols();
+  Cell start(0, 0, NULL);
 
-    std::vector<Cell *> frontier;
+  grid[start.row][start.col] = 'S';
 
-    // Add the start node's neighbors to the frontier
-    frontier.push_back(new Cell(start.row + 1, start.col, &start));
-    frontier.push_back(new Cell(start.row, start.col + 1, &start));
+  std::vector<Cell *> frontier;
 
-    Cell* child;
-    Cell* gc;
-    std::vector<Cell *> grandchildren;
-    bool gc_used = false;
+  // Add the start node's neighbors to the frontier
+  frontier.push_back(new Cell(start.row + 1, start.col, &start));
+  frontier.push_back(new Cell(start.row, start.col + 1, &start));
 
-    while (!frontier.empty())
+  Cell* child;
+  Cell* gc;
+  std::vector<Cell *> grandchildren;
+  bool gc_used = false;
+
+  while (!frontier.empty())
+  {
+    int rand_point = rand() % frontier.size();
+    child = frontier[rand_point];
+    frontier.erase(frontier.begin() + rand_point);
+
+    gc = child->get_child();
+    int r = gc->row;
+    int c = gc->col;
+
+    if (maze->is_valid(r, c) && grid[r][c] == '#')
     {
-        int rand_point = rand() % frontier.size();
-        child = frontier[rand_point];
-        frontier.erase(frontier.begin() + rand_point);
+      grid[child->row][child->col] = ' ';
+      grid[r][c] = 'E';
 
-        gc = child->get_child();
-        int r = gc->row;
-        int c = gc->col;
-
-        if (maze->is_valid(r, c) && grid[r][c] == '#')
+      for (int i = -1; i <= 1; i += 2)
+      {
+        if (maze->is_valid(r + i, c))
         {
-            grid[child->row][child->col] = ' ';
-            grid[r][c] = 'E';
-
-            for (int i = -1; i <= 1; i += 2)
-            {
-                if (maze->is_valid(r + i, c))
-                {
-                    frontier.push_back(new Cell(r + i, c, gc));
-                    gc_used = true;
-                }
-
-                if (maze->is_valid(r, c + i))
-                {
-                    frontier.push_back(new Cell(r, c + i, gc));
-                    gc_used = true;
-                }
-            }
-
-            if (animate)
-            {
-                maze->draw();
-                usleep(DRAW_DELAY);
-            }
-
-            grid[r][c] = ' ';
+          frontier.push_back(new Cell(r + i, c, gc));
+          gc_used = true;
         }
 
-        delete child;
+        if (maze->is_valid(r, c + i))
+        {
+          frontier.push_back(new Cell(r, c + i, gc));
+          gc_used = true;
+        }
+      }
 
-        (!gc_used) ?  delete gc : grandchildren.push_back(gc);
-    }
-
-    grid[rows - 1][cols - 1] = 'E';
-    if (animate)
-    {
+      if (animate)
+      {
         maze->draw();
         usleep(DRAW_DELAY);
+      }
+
+      grid[r][c] = ' ';
     }
 
-    for (int i = 0; i < (int)grandchildren.size(); i++)
-    {
-        delete grandchildren[i];
-    }
+    delete child;
+
+    (!gc_used) ?  delete gc : grandchildren.push_back(gc);
+  }
+
+  grid[rows - 1][cols - 1] = 'E';
+  if (animate)
+  {
+    maze->draw();
+    usleep(DRAW_DELAY);
+    getch();
+    endwin();
+  }
+
+  for (int i = 0; i < (int)grandchildren.size(); i++)
+  {
+    delete grandchildren[i];
+  }
+  return;
 }
