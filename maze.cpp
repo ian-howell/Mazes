@@ -41,8 +41,12 @@ Maze::~Maze()
 {
   // Delete the grid
   for (int i = 0; i < rows; i++)
+  {
     delete [] grid[i];
+    grid[i] = nullptr;
+  }
   delete [] grid;
+  grid = nullptr;
 }
 
 void Maze::print(const char* filename)
