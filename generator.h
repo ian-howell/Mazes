@@ -5,24 +5,24 @@
 
 class Generator
 {
-    private:
-        Maze* maze;
+ private:
+  Maze* maze;
 
-        /**
-         * animate
-         *
-         * Color the maze, then print it to the screen
-         */
-        void animate();
+  /**
+   * animate
+   *
+   * Color the maze, then print it to the screen
+   */
+  void animate();
 
-    public:
-        Generator(Maze* maze);
+ public:
+  Generator(Maze* maze);
 
-        /**
-         * create_maze
-         *
-         * Uses Prim's algorithm to create a random path through the maze
-         */
-        void create_maze(bool animate=false);
+  /**
+   * create_maze
+   *
+   * Uses Prim's algorithm to create a random path through the maze
+   */
+  void create_maze(bool animate=false);
 };
 #endif

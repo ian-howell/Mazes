@@ -4,87 +4,87 @@
 
 Maze::Maze(int rows, int cols)
 {
-    this->rows = (rows % 2) ? rows : rows - 1;
-    this->cols = (cols % 2) ? cols : cols - 1;
-    grid = new char*[this->rows];
-    for (int i = 0; i < this->rows; i++)
+  this->rows = (rows % 2) ? rows : rows - 1;
+  this->cols = (cols % 2) ? cols : cols - 1;
+  grid = new char*[this->rows];
+  for (int i = 0; i < this->rows; i++)
+  {
+    grid[i] = new char[this->cols];
+    for (int j = 0; j < this->cols; j++)
     {
-        grid[i] = new char[this->cols];
-        for (int j = 0; j < this->cols; j++)
-        {
-            grid[i][j] = '#';
-        }
+      grid[i][j] = '#';
     }
+  }
 }
 
 Maze::~Maze()
 {
-    // Delete the grid
-    for (int i = 0; i < rows; i++)
-        delete [] grid[i];
-    delete [] grid;
+  // Delete the grid
+  for (int i = 0; i < rows; i++)
+    delete [] grid[i];
+  delete [] grid;
 }
 
 void Maze::print()
 {
-    for (int i = 0; i < cols + 2; i++)
+  for (int i = 0; i < cols + 2; i++)
+  {
+    printf("#");
+  }
+  printf("\n");
+  for (int i = 0; i < rows; i++)
+  {
+    printf("#");
+    for (int j = 0; j < cols; j++)
     {
-        printf("#");
+      printf("%c", grid[i][j]);
     }
-    printf("\n");
-    for (int i = 0; i < rows; i++)
-    {
-        printf("#");
-        for (int j = 0; j < cols; j++)
-        {
-            printf("%c", grid[i][j]);
-        }
-        printf("#\n");
-    }
-    for (int i = 0; i < cols + 2; i++)
-    {
-        printf("#");
-    }
-    printf("\n");
+    printf("#\n");
+  }
+  for (int i = 0; i < cols + 2; i++)
+  {
+    printf("#");
+  }
+  printf("\n");
 }
 
 void Maze::draw()
 {
-    start_color();
-    init_pair(1, COLOR_BLACK, COLOR_BLACK);
-    init_pair(2, COLOR_WHITE, COLOR_WHITE);
-    init_pair(3, COLOR_BLUE, COLOR_BLUE);
-    init_pair(4, COLOR_RED, COLOR_RED);
-    init_pair(5, COLOR_GREEN, COLOR_GREEN);
+  start_color();
+  init_pair(1, COLOR_BLACK, COLOR_BLACK);
+  init_pair(2, COLOR_WHITE, COLOR_WHITE);
+  init_pair(3, COLOR_BLUE, COLOR_BLUE);
+  init_pair(4, COLOR_RED, COLOR_RED);
+  init_pair(5, COLOR_GREEN, COLOR_GREEN);
 
-    for (int i = 0; i < rows; i++)
+  for (int i = 0; i < rows; i++)
+  {
+    for (int j = 0; j < cols; j++)
     {
-        for (int j = 0; j < cols; j++)
-        {
-            if (grid[i][j] == '#')
-                attron(COLOR_PAIR(1));
-            else if (grid[i][j] == ' ')
-                attron(COLOR_PAIR(2));
-            else if (grid[i][j] == '.')
-                attron(COLOR_PAIR(5));
-            else if (grid[i][j] == 'S')
-                attron(COLOR_PAIR(3));
-            else
-                attron(COLOR_PAIR(4));
+      if (grid[i][j] == '#')
+        attron(COLOR_PAIR(1));
+      else if (grid[i][j] == ' ')
+        attron(COLOR_PAIR(2));
+      else if (grid[i][j] == '.')
+        attron(COLOR_PAIR(5));
+      else if (grid[i][j] == 'S')
+        attron(COLOR_PAIR(3));
+      else
+        attron(COLOR_PAIR(4));
 
-            mvwprintw(stdscr, i + 1, j + 1, "%c", grid[i][j]);
+      mvwprintw(stdscr, i + 1, j + 1, "%c", grid[i][j]);
 
-            attroff(COLOR_PAIR(1));
-            attroff(COLOR_PAIR(2));
-            attroff(COLOR_PAIR(3));
-            attroff(COLOR_PAIR(4));
-            attroff(COLOR_PAIR(5));
-        }
+      attroff(COLOR_PAIR(1));
+      attroff(COLOR_PAIR(2));
+      attroff(COLOR_PAIR(3));
+      attroff(COLOR_PAIR(4));
+      attroff(COLOR_PAIR(5));
     }
-    refresh();
+  }
+  refresh();
 }
 
 bool Maze::is_valid(int r, int c)
 {
-    return r >= 0 && r < rows && c >= 0 && c < cols;
+  return r >= 0 && r < rows && c >= 0 && c < cols;
 }

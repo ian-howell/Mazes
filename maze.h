@@ -5,23 +5,23 @@
 
 class Maze
 {
-    private:
-        int rows;
-        int cols;
-        char** grid;
+ private:
+  int rows;
+  int cols;
+  char** grid;
 
-    public:
-        Maze(int row, int col);
-        ~Maze();
+ public:
+  Maze(int row, int col);
+  ~Maze();
 
-        int get_rows() const { return rows; }
-        int get_cols() const { return cols; }
-        char** get_grid() const { return grid; }
+  int get_rows() const { return rows; }
+  int get_cols() const { return cols; }
+  char** get_grid() const { return grid; }
 
-        void print();
+  void print();
 
-        void draw();
+  void draw();
 
-        bool is_valid(int r, int c);
+  bool is_valid(int r, int c);
 };
 #endif

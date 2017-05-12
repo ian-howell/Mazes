@@ -3,14 +3,14 @@
 
 class Cell
 {
-    public:
-        int row;
-        int col;
-        Cell *parent;
+ public:
+  int row;
+  int col;
+  Cell *parent;
 
-        Cell();
-        Cell(int row, int col, Cell *parent);
-        Cell* get_child();
+  Cell();
+  Cell(int row, int col, Cell *parent);
+  Cell* get_child();
 };
 
 #endif
