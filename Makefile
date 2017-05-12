@@ -11,7 +11,8 @@ MAZE_OBJECTS = maze.o cell.o
 GENERATOR_OBJECTS = generator.o generator_driver.o
 SOLVER_OBJECTS = solver.o player.o solver_driver.o
 
-default: solver_driver
+all: solver_driver generator_driver
+default: all
 
 %.o: %.cpp
 	@echo "Compiling $<"
