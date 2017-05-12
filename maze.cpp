@@ -74,7 +74,23 @@ void Maze::print(const char* filename)
   {
     for (int j = 0; j < cols; j++)
     {
-      fprintf(f, "%c", grid[i][j]);
+      switch(grid[i][j])
+      {
+        case 'S':
+          fprintf(f, "S");
+          break;
+        case 'E':
+          fprintf(f, "E");
+          break;
+        case '#':
+          fprintf(f, "#");
+          break;
+        case '*':
+          fprintf(f, ".");
+          break;
+        default:
+          fprintf(f, " ");
+      }
     }
     fprintf(f, "\n");
   }
