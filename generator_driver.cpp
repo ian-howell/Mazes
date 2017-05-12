@@ -13,6 +13,8 @@ int main(int argc, char** argv)
 {
   int rows = 10;
   int cols = 10;
+  std::string algorithm = "nothing";
+  bool animate_flag = false;
 
   // Get the screen dimensions
   initscr();
@@ -26,13 +28,11 @@ int main(int argc, char** argv)
 
   int c;
   int opt_index = 0;
-
-  std::string algorithm = "nothing";
-
   struct option opts[] = {
     {"rows",         required_argument, 0, 'r'},
     {"cols",         required_argument, 0, 'c'},
-    {"algorithm",    required_argument, 0, 'a'}
+    {"algorithm",    required_argument, 0, 'a'},
+    {"animate",      no_argument,       0, 0}
   };
 
   while ((c = getopt_long(argc, argv, "r:c:a:h", opts, &opt_index)) != -1)
@@ -48,12 +48,15 @@ int main(int argc, char** argv)
       case 'a':
         algorithm = optarg;
         break;
+      case 0:
+        animate_flag = true;
+        break;
     }
   }
 
   Maze* maze = new Maze(rows, cols);
   Generator* generator = new Generator(maze);
-  generator->create_maze(false);
+  generator->create_maze(animate_flag);
   maze->print();
 
   delete maze;
