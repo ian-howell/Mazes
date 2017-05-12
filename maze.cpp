@@ -28,26 +28,15 @@ Maze::~Maze()
 void Maze::print(const char* filename)
 {
   FILE* f = fopen(filename, "w");
-  fprintf(f, "%d %d\n", rows + 2, cols + 2);
-  for (int i = 0; i < cols + 2; i++)
-  {
-    fprintf(f, "#");
-  }
-  fprintf(f, "\n");
+  fprintf(f, "%d %d\n", rows, cols);
   for (int i = 0; i < rows; i++)
   {
-    fprintf(f, "#");
     for (int j = 0; j < cols; j++)
     {
       fprintf(f, "%c", grid[i][j]);
     }
-    fprintf(f, "#\n");
+    fprintf(f, "\n");
   }
-  for (int i = 0; i < cols + 2; i++)
-  {
-    fprintf(f, "#");
-  }
-  fprintf(f, "\n");
   fclose(f);
   return;
 }
