@@ -12,10 +12,12 @@ int main(int argc, char** argv)
   int opt_index = 0;
   char* algorithm = NULL;
   char* input_file = NULL;
+  char* output_file = NULL;
 
   struct option opts[] = {
     {"algorithm",    required_argument, 0, 'a'},
-    {"file",         required_argument, 0, 'f'}
+    {"infile",       required_argument, 0, 'i'},
+    {"outfile",      required_argument, 0, 'o'}
   };
 
   while ((c = getopt_long(argc, argv, "r:c:a:h", opts, &opt_index)) != -1)
@@ -25,8 +27,11 @@ int main(int argc, char** argv)
       case 'a':
         algorithm = optarg;
         break;
-      case 'f':
+      case 'i':
         input_file = optarg;
+        break;
+      case 'o':
+        output_file = optarg;
         break;
     }
   }
@@ -38,8 +43,6 @@ int main(int argc, char** argv)
   }
 
   Maze* maze = new Maze(input_file);
-  maze->print("out.txt");
-
   Solver* solver = new Solver(maze);
 
   if (strcmp(algorithm, "bt") == 0)
@@ -50,6 +53,9 @@ int main(int argc, char** argv)
   {
     solver->breadth_first_search();
   }
+
+  if (output_file)
+    maze->print(output_file);
 
   /* Player* player = new Player(maze, 0, 0); */
 
