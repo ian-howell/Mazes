@@ -18,14 +18,22 @@ void Generator::create_maze(bool animate)
 {
   if (animate)
   {
-    start_color();
+    initscr();
     cbreak();
     noecho();
     keypad(stdscr, TRUE);
     curs_set(0);
-    clear();
 
+    start_color();
+    init_pair(1, COLOR_BLACK, COLOR_BLACK);
+    init_pair(2, COLOR_WHITE, COLOR_WHITE);
+    init_pair(3, COLOR_BLUE, COLOR_BLUE);
+    init_pair(4, COLOR_RED, COLOR_RED);
+    init_pair(5, COLOR_GREEN, COLOR_GREEN);
+
+    clear();
   }
+
   char** grid = maze->get_grid();
   int rows = maze->get_rows();
   int cols = maze->get_cols();
