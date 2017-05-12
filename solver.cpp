@@ -199,8 +199,11 @@ void Solver::breadth_first_search(bool animate)
         delete u;
       }
 
-      getchar();
-      endwin();
+      if (animate)
+      {
+        getchar();
+        endwin();
+      }
       return;
     }
 
@@ -234,8 +237,11 @@ void Solver::breadth_first_search(bool animate)
       to_delete.push(u);
   }
 
-  getchar();
-  endwin();
+  if (animate)
+  {
+    getchar();
+    endwin();
+  }
 
   return;
 }
