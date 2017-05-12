@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <ncurses.h>
 #include <getopt.h>
+#include <cstring>
 #include "maze.h"
 #include "solver.h"
 #include "player.h"
@@ -39,7 +40,17 @@ int main(int argc, char** argv)
   Maze* maze = new Maze(input_file);
   maze->print("out.txt");
 
-  /* Solver* solver = new Solver(maze, ANIMATE_SOLVE); */
+  Solver* solver = new Solver(maze);
+
+  if (strcmp(algorithm, "bt") == 0)
+  {
+    solver->backtrack();
+  }
+  else if (strcmp(algorithm, "bfs") == 0)
+  {
+    solver->breadth_first_search();
+  }
+
   /* Player* player = new Player(maze, 0, 0); */
 
   /* if (MAN_SOLVE) */
@@ -83,21 +94,10 @@ int main(int argc, char** argv)
   /*         } */
   /*     } */
   /* } */
-  /* else if (BACKTRACK_SOLVE) */
-  /* { */
-  /*     maze->draw(); */
-  /*     solver->backtrack(); */
-  /* } */
-  /* else if (BFS_SOLVE) */
-  /* { */
-  /*     maze->draw(); */
-  /*     solver->breadth_first_search(); */
-  /* } */
-
   /* getch(); */
 
   delete maze;
-  /* delete solver; */
+  delete solver;
   /* delete player; */
 
   return 0;
