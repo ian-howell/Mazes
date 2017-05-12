@@ -5,8 +5,7 @@
 #include <cstdio>
 #include <ncurses.h>
 #include <vector>
-#include <queue>
-#include <stack>
+#include <deque>
 
 Solver::Solver(Maze* maze)
 {
@@ -157,10 +156,10 @@ bool Solver::is_valid(int row, int col)
   return retval;
 }
 
-void Solver::breadth_first_search(bool animate)
+void Solver::X_first_search(bool bfs, bool animate)
 {
-  std::queue<Cell*> frontier;
-  std::queue<Cell*> to_delete;
+  std::deque<Cell*> frontier;
+  std::deque<Cell*> to_delete;
 
   if (animate)
   {
@@ -169,12 +168,20 @@ void Solver::breadth_first_search(bool animate)
   }
 
   start.parent = NULL;
-  frontier.push(&start);
+  frontier.push_back(&start);
 
   Cell* u;
   while (!frontier.empty())
   {
-    u = frontier.front(); frontier.pop();
+    if (bfs)
+    {
+      u = frontier.front(); frontier.pop_front();
+    }
+    else
+    {
+      u = frontier.back(); frontier.pop_back();
+    }
+
     if (u->row == end.row && u->col == end.col)
     {
       for (Cell* runner = u; runner; runner = runner->parent)
@@ -191,12 +198,12 @@ void Solver::breadth_first_search(bool animate)
       delete u;
       while(!frontier.empty())
       {
-        u = frontier.front(); frontier.pop();
+        u = frontier.back(); frontier.pop_back();
         delete u;
       }
       while (!to_delete.empty())
       {
-        u = to_delete.front(); to_delete.pop();
+        u = to_delete.back(); to_delete.pop_back();
         delete u;
       }
 
@@ -231,102 +238,11 @@ void Solver::breadth_first_search(bool animate)
       neighbors[i].parent = u;
       Cell* v = new Cell;
       *v = neighbors[i];
-      frontier.push(v);
+      frontier.push_back(v);
     }
 
     if (u->parent != NULL)
-      to_delete.push(u);
-  }
-
-  if (animate)
-  {
-    getchar();
-    endwin();
-  }
-
-  return;
-}
-
-void Solver::depth_first_search(bool animate)
-{
-  std::stack<Cell*> frontier;
-  std::stack<Cell*> to_delete;
-
-  if (animate)
-  {
-    maze->init_curses();
-    clear();
-  }
-
-  start.parent = NULL;
-  frontier.push(&start);
-
-  Cell* u;
-  while (!frontier.empty())
-  {
-    u = frontier.top(); frontier.pop();
-    if (u->row == end.row && u->col == end.col)
-    {
-      for (Cell* runner = u; runner; runner = runner->parent)
-      {
-        if (grid[runner->row][runner->col] == '.')
-          grid[runner->row][runner->col] = '*';
-        if (animate)
-        {
-          maze->draw();
-          usleep(DRAW_DELAY);
-        }
-      }
-
-      delete u;
-      while(!frontier.empty())
-      {
-        u = frontier.top(); frontier.pop();
-        delete u;
-      }
-      while (!to_delete.empty())
-      {
-        u = to_delete.top(); to_delete.pop();
-        delete u;
-      }
-
-      if (animate)
-      {
-        getchar();
-        endwin();
-      }
-
-      return;
-    }
-
-    if (grid[u->row][u->col] != 'S')
-      grid[u->row][u->col] = '.';
-    std::vector<Cell> neighbors = get_neighbors(u, maze->get_rows(), maze->get_cols());
-    for (size_t i = 0; i < neighbors.size(); i++)
-    {
-      switch (grid[neighbors[i].row][neighbors[i].col])
-      {
-        case '.':
-        case '#':
-        case ',':
-        case 'S':
-          continue;
-      }
-      if (grid[neighbors[i].row][neighbors[i].col] != 'E')
-        grid[neighbors[i].row][neighbors[i].col] = ',';
-      if (animate)
-      {
-        maze->draw();
-        usleep(DRAW_DELAY);
-      }
-      neighbors[i].parent = u;
-      Cell* v = new Cell;
-      *v = neighbors[i];
-      frontier.push(v);
-    }
-
-    if (u->parent != NULL)
-      to_delete.push(u);
+      to_delete.push_back(u);
   }
 
   if (animate)

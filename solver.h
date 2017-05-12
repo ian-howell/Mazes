@@ -21,8 +21,7 @@ class Solver
  public:
   Solver(Maze* maze);
   bool backtrack(bool animate=true);
-  void breadth_first_search(bool animate=true);
-  void depth_first_search(bool animate=true);
+  void X_first_search(bool bfs, bool animate=true);
 };
 
 enum
