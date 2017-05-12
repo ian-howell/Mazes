@@ -55,6 +55,12 @@ int main(int argc, char** argv)
     }
   }
 
+  if (!algorithm)
+  {
+    fprintf(stderr, "Must specify an algorithm (prims)\n");
+    return 0;
+  }
+
   Maze* maze = new Maze(rows, cols);
   Generator* generator = new Generator(maze);
   generator->create_maze(animate_flag);
