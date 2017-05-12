@@ -25,28 +25,31 @@ Maze::~Maze()
   delete [] grid;
 }
 
-void Maze::print()
+void Maze::print(const char* filename)
 {
-  printf("%d %d\n", rows + 2, cols + 2);
+  FILE* f = fopen(filename, "w");
+  fprintf(f, "%d %d\n", rows + 2, cols + 2);
   for (int i = 0; i < cols + 2; i++)
   {
-    printf("#");
+    fprintf(f, "#");
   }
-  printf("\n");
+  fprintf(f, "\n");
   for (int i = 0; i < rows; i++)
   {
-    printf("#");
+    fprintf(f, "#");
     for (int j = 0; j < cols; j++)
     {
-      printf("%c", grid[i][j]);
+      fprintf(f, "%c", grid[i][j]);
     }
-    printf("#\n");
+    fprintf(f, "#\n");
   }
   for (int i = 0; i < cols + 2; i++)
   {
-    printf("#");
+    fprintf(f, "#");
   }
-  printf("\n");
+  fprintf(f, "\n");
+  fclose(f);
+  return;
 }
 
 void Maze::draw()

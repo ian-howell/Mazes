@@ -13,7 +13,8 @@ int main(int argc, char** argv)
 {
   int rows = 10;
   int cols = 10;
-  std::string algorithm = "nothing";
+  char* algorithm = NULL;
+  char* output_file = NULL;
   bool animate_flag = false;
 
   // Get the screen dimensions
@@ -32,7 +33,8 @@ int main(int argc, char** argv)
     {"rows",         required_argument, 0, 'r'},
     {"cols",         required_argument, 0, 'c'},
     {"algorithm",    required_argument, 0, 'a'},
-    {"animate",      no_argument,       0, 0}
+    {"animate",      no_argument,       0, 0},
+    {"file",         required_argument, 0, 'f'}
   };
 
   while ((c = getopt_long(argc, argv, "r:c:a:h", opts, &opt_index)) != -1)
@@ -48,6 +50,9 @@ int main(int argc, char** argv)
       case 'a':
         algorithm = optarg;
         break;
+      case 'f':
+        output_file = optarg;
+        break;
       case 0:
         animate_flag = true;
         break;
@@ -57,7 +62,8 @@ int main(int argc, char** argv)
   Maze* maze = new Maze(rows, cols);
   Generator* generator = new Generator(maze);
   generator->create_maze(animate_flag);
-  maze->print();
+  if (output_file)
+    maze->print(output_file);
 
   delete maze;
   delete generator;

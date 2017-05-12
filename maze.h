@@ -18,7 +18,7 @@ class Maze
   int get_cols() const { return cols; }
   char** get_grid() const { return grid; }
 
-  void print();
+  void print(const char* filename);
 
   void draw();
 
