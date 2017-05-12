@@ -5,7 +5,8 @@
 *.o
 
 # Binary
-maze
+generator_driver
+solver_driver
 
 # Dependencies
 depend
