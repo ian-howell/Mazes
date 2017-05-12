@@ -13,11 +13,13 @@ int main(int argc, char** argv)
   char* algorithm = NULL;
   char* input_file = NULL;
   char* output_file = NULL;
+  bool animate_flag = false;
 
   struct option opts[] = {
     {"algorithm",    required_argument, 0, 'a'},
     {"infile",       required_argument, 0, 'i'},
-    {"outfile",      required_argument, 0, 'o'}
+    {"outfile",      required_argument, 0, 'o'},
+    {"animate",      no_argument,       0, 0}
   };
 
   while ((c = getopt_long(argc, argv, "r:c:a:h", opts, &opt_index)) != -1)
@@ -33,6 +35,9 @@ int main(int argc, char** argv)
       case 'o':
         output_file = optarg;
         break;
+      case 0:
+        animate_flag = true;
+        break;
     }
   }
 
@@ -47,11 +52,11 @@ int main(int argc, char** argv)
 
   if (strcmp(algorithm, "bt") == 0)
   {
-    solver->backtrack();
+    solver->backtrack(animate_flag);
   }
   else if (strcmp(algorithm, "bfs") == 0)
   {
-    solver->breadth_first_search();
+    solver->breadth_first_search(animate_flag);
   }
 
   if (output_file)
