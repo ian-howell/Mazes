@@ -27,6 +27,7 @@ Maze::~Maze()
 
 void Maze::print()
 {
+  printf("%d %d\n", rows, cols);
   for (int i = 0; i < cols + 2; i++)
   {
     printf("#");
