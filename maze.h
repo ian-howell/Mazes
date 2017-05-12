@@ -11,7 +11,7 @@ class Maze
   char** grid;
 
  public:
-  Maze(int row, int col);
+  Maze(int nrow, int ncol);
   Maze(const char* filename);
   ~Maze();
 

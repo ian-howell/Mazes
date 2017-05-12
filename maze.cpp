@@ -2,10 +2,10 @@
 #include <ncurses.h>
 #include "maze.h"
 
-Maze::Maze(int rows, int cols)
+Maze::Maze(int nrows, int ncols)
 {
-  rows = (rows % 2) ? rows : rows - 1;
-  cols = (cols % 2) ? cols : cols - 1;
+  rows = (nrows % 2) ? nrows : nrows - 1;
+  cols = (ncols % 2) ? ncols : ncols - 1;
   grid = new char*[rows];
   for (int i = 0; i < rows; i++)
   {
