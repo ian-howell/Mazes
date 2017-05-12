@@ -44,13 +44,14 @@ def get_solve_call(input_file):
     print("Select a solving algorithm")
     print("1) Recursive Backtracking")
     print("2) Breadth-First Search")
-    solve_alg = check_range(1, 2)
+    print("3) Depth-First Search")
+    solve_alg = check_range(1, 3)
     print("Would you like to animate maze solving (y/n)?")
     animate_solve = True if input(">>>") == 'y' else False
     print("Please enter a filename to save the solved maze to")
     output_file = input(">>>")
 
-    solvers = ['bt', 'bfs']
+    solvers = ['bt', 'bfs', 'dfs']
 
     solve_call = "./solver_driver"
     solve_call += " --algorithm={}".format(solvers[solve_alg-1])

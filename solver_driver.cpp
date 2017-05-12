@@ -58,6 +58,10 @@ int main(int argc, char** argv)
   {
     solver->breadth_first_search(animate_flag);
   }
+  else if (strcmp(algorithm, "dfs") == 0)
+  {
+    solver->depth_first_search(animate_flag);
+  }
 
   if (output_file)
     maze->print(output_file);

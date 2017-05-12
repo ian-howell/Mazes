@@ -6,6 +6,7 @@
 #include <ncurses.h>
 #include <vector>
 #include <queue>
+#include <stack>
 
 Solver::Solver(Maze* maze)
 {
@@ -204,6 +205,97 @@ void Solver::breadth_first_search(bool animate)
         getchar();
         endwin();
       }
+      return;
+    }
+
+    if (grid[u->row][u->col] != 'S')
+      grid[u->row][u->col] = '.';
+    std::vector<Cell> neighbors = get_neighbors(u, maze->get_rows(), maze->get_cols());
+    for (size_t i = 0; i < neighbors.size(); i++)
+    {
+      switch (grid[neighbors[i].row][neighbors[i].col])
+      {
+        case '.':
+        case '#':
+        case ',':
+        case 'S':
+          continue;
+      }
+      if (grid[neighbors[i].row][neighbors[i].col] != 'E')
+        grid[neighbors[i].row][neighbors[i].col] = ',';
+      if (animate)
+      {
+        maze->draw();
+        usleep(DRAW_DELAY);
+      }
+      neighbors[i].parent = u;
+      Cell* v = new Cell;
+      *v = neighbors[i];
+      frontier.push(v);
+    }
+
+    if (u->parent != NULL)
+      to_delete.push(u);
+  }
+
+  if (animate)
+  {
+    getchar();
+    endwin();
+  }
+
+  return;
+}
+
+void Solver::depth_first_search(bool animate)
+{
+  std::stack<Cell*> frontier;
+  std::stack<Cell*> to_delete;
+
+  if (animate)
+  {
+    maze->init_curses();
+    clear();
+  }
+
+  start.parent = NULL;
+  frontier.push(&start);
+
+  Cell* u;
+  while (!frontier.empty())
+  {
+    u = frontier.top(); frontier.pop();
+    if (u->row == end.row && u->col == end.col)
+    {
+      for (Cell* runner = u; runner; runner = runner->parent)
+      {
+        if (grid[runner->row][runner->col] == '.')
+          grid[runner->row][runner->col] = '*';
+        if (animate)
+        {
+          maze->draw();
+          usleep(DRAW_DELAY);
+        }
+      }
+
+      delete u;
+      while(!frontier.empty())
+      {
+        u = frontier.top(); frontier.pop();
+        delete u;
+      }
+      while (!to_delete.empty())
+      {
+        u = to_delete.top(); to_delete.pop();
+        delete u;
+      }
+
+      if (animate)
+      {
+        getchar();
+        endwin();
+      }
+
       return;
     }
 
