@@ -7,9 +7,8 @@
 #include <vector>
 #include <queue>
 
-Solver::Solver(Maze* maze, bool animate_flag)
+Solver::Solver(Maze* maze)
 {
-  do_animate = animate_flag;
   this->maze = maze;
   grid = maze->get_grid();
   find_start_and_end();
@@ -40,12 +39,36 @@ void Solver::find_start_and_end()
   }
 }
 
-bool Solver::backtrack()
+bool Solver::backtrack(bool animate)
 {
-  return backtrack_r(start.row, start.col);
+  bool ret_val;
+
+  if (animate)
+  {
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    curs_set(0);
+
+    start_color();
+    init_pair(1, COLOR_BLACK, COLOR_BLACK);
+    init_pair(2, COLOR_WHITE, COLOR_WHITE);
+    init_pair(3, COLOR_BLUE, COLOR_BLUE);
+    init_pair(4, COLOR_RED, COLOR_RED);
+    init_pair(5, COLOR_GREEN, COLOR_GREEN);
+
+    clear();
+  }
+
+  ret_val = backtrack_r(start.row, start.col, animate);
+
+  endwin();
+
+  return ret_val;
 }
 
-bool Solver::backtrack_r(int row, int col)
+bool Solver::backtrack_r(int row, int col, bool animate)
 {
   int dir = 0;
   do
@@ -62,13 +85,13 @@ bool Solver::backtrack_r(int row, int col)
 
       grid[r][c] = '.';
 
-      if (do_animate)
+      if (animate)
       {
         maze->draw();
         usleep(DRAW_DELAY);
       }
 
-      if (backtrack_r(r, c))
+      if (backtrack_r(r, c, animate))
       {
         return true;
       }
@@ -77,7 +100,7 @@ bool Solver::backtrack_r(int row, int col)
         grid[r][c] = ' ';
         dir++;
 
-        if (do_animate)
+        if (animate)
         {
           maze->draw();
           usleep(DRAW_DELAY);
@@ -133,10 +156,29 @@ bool Solver::is_valid(int row, int col)
   return retval;
 }
 
-void Solver::breadth_first_search()
+void Solver::breadth_first_search(bool animate)
 {
   std::queue<Cell*> frontier;
   std::queue<Cell*> to_delete;
+
+  if (animate)
+  {
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    curs_set(0);
+
+    start_color();
+    init_pair(1, COLOR_BLACK, COLOR_BLACK);
+    init_pair(2, COLOR_WHITE, COLOR_WHITE);
+    init_pair(3, COLOR_BLUE, COLOR_BLUE);
+    init_pair(4, COLOR_RED, COLOR_RED);
+    init_pair(5, COLOR_GREEN, COLOR_GREEN);
+
+    clear();
+  }
+
   start.parent = NULL;
   frontier.push(&start);
 
@@ -150,7 +192,7 @@ void Solver::breadth_first_search()
       for (Cell* runner = u; runner; runner = runner->parent)
       {
         grid[runner->row][runner->col] = '*';
-        if (do_animate)
+        if (animate)
         {
           maze->draw();
           usleep(DRAW_DELAY);
@@ -168,6 +210,9 @@ void Solver::breadth_first_search()
         u = to_delete.front(); to_delete.pop();
         delete u;
       }
+
+      getchar();
+      endwin();
       return;
     }
 
@@ -183,7 +228,7 @@ void Solver::breadth_first_search()
           continue;
       }
       grid[neighbors[i].row][neighbors[i].col] = ',';
-      if (do_animate)
+      if (animate)
       {
         maze->draw();
         usleep(DRAW_DELAY);
@@ -197,6 +242,9 @@ void Solver::breadth_first_search()
     if (u->parent != NULL)
       to_delete.push(u);
   }
+
+  getchar();
+  endwin();
 
   return;
 }

@@ -8,7 +8,6 @@ class Solver
 {
  private:
   char** grid;
-  bool do_animate;
   Cell start;
   Cell end;
 
@@ -16,13 +15,13 @@ class Solver
 
   void find_start_and_end();
   void get_new_cell(int& row, int& col, int dir);
-  bool backtrack_r(int row, int col);
+  bool backtrack_r(int row, int col, bool animate);
   bool is_valid(int row, int col);
 
  public:
-  Solver(Maze* maze, bool animate_flag);
-  bool backtrack();
-  void breadth_first_search();
+  Solver(Maze* maze);
+  bool backtrack(bool animate=true);
+  void breadth_first_search(bool animate=true);
 };
 
 enum
