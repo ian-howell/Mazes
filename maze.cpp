@@ -17,6 +17,27 @@ Maze::Maze(int rows, int cols)
   }
 }
 
+Maze::Maze(const char* filename)
+{
+  FILE* f = fopen(filename, "r");
+  fscanf(f, "%d %d\n", &rows, &cols);
+
+  grid = new char*[this->rows];
+  for (int i = 0; i < this->rows; i++)
+    grid[i] = new char[this->cols];
+
+  char dummy;
+  for (int i = 0; i < rows; i++)
+  {
+    for (int j = 0; j < cols; j++)
+    {
+      fscanf(f, "%c", &grid[i][j]);
+      printf("(%c)", grid[i][j]);
+    }
+    fscanf(f, "%c", &dummy);
+  }
+}
+
 Maze::~Maze()
 {
   // Delete the grid

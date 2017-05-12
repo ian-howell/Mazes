@@ -12,6 +12,7 @@ class Maze
 
  public:
   Maze(int row, int col);
+  Maze(const char* filename);
   ~Maze();
 
   int get_rows() const { return rows; }
