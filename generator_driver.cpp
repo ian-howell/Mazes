@@ -1,12 +1,8 @@
 #include <cstdio>
-#include <unistd.h>
 #include <ncurses.h>
 #include <cstdlib>
-#include <string>
 #include <getopt.h>
 #include "maze.h"
-#include "solver.h"
-#include "player.h"
 #include "generator.h"
 
 int main(int argc, char** argv)
