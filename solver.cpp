@@ -71,7 +71,7 @@ bool Solver::backtrack_r(int row, int col, bool animate)
       if (grid[r][c] == 'E')
         return true;
 
-      grid[r][c] = '.';
+      grid[r][c] = '*';
 
       if (animate)
       {
@@ -79,13 +79,15 @@ bool Solver::backtrack_r(int row, int col, bool animate)
         usleep(DRAW_DELAY);
       }
 
+      grid[r][c] = '.';
+
       if (backtrack_r(r, c, animate))
       {
         return true;
       }
       else
       {
-        grid[r][c] = ' ';
+        grid[r][c] = '*';
         dir++;
 
         if (animate)
@@ -93,6 +95,7 @@ bool Solver::backtrack_r(int row, int col, bool animate)
           maze->draw();
           usleep(DRAW_DELAY);
         }
+        grid[r][c] = ' ';
       }
     }
     else
