@@ -137,7 +137,7 @@ void Maze::draw()
 
 bool Maze::is_pathable(int r, int c)
 {
-  return ((grid[r][c] == ' ') || (grid[r][c] == 'E')) && (is_valid(r, c));
+  return (is_valid(r, c)) && ((grid[r][c] == ' ') || (grid[r][c] == 'E'));
 }
 
 bool Maze::is_valid(int r, int c)
