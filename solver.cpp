@@ -32,7 +32,7 @@ bool Solver::backtrack_r(Cell cell, bool animate)
   {
     int row = neighbors[i].row;
     int col = neighbors[i].col;
-    if (grid[row][col] == 'E')
+    if (neighbors[i] == end)
       return true;
 
     grid[row][col] = '*';
@@ -78,7 +78,7 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
       frontier.pop_back();
     }
 
-    if (u->row == end.row && u->col == end.col)
+    if (*u == end)
     {
       for (Cell* r = u; r; r = r->parent)
       {
