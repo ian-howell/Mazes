@@ -31,6 +31,10 @@ Maze::Maze(const char* filename)
     for (int j = 0; j < cols; j++)
     {
       fscanf(f, "%c", &grid[i][j]);
+      if (grid[i][j] == 'S')
+        start = Cell(i, j, NULL);
+      else if (grid[i][j] == 'E')
+        end = Cell(i, j, NULL);
     }
     fscanf(f, "%c", &dummy);
   }
