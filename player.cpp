@@ -53,31 +53,31 @@ void Player::move(direction dir)
   if ((newcol == col) && (newrow == row))
     return;
 
-  if (maze->at(newrow, newcol) == 'E')
+  if ((*maze)(newrow, newcol) == 'E')
   {
     game_won = true;
-    maze->at(midrow, midcol) = '.';
-    maze->at(row, col) = '.';
+    (*maze)(midrow, midcol) = '.';
+    (*maze)(row, col) = '.';
     return;
   }
-  else if (maze->at(newrow, newcol) == '.')
+  else if ((*maze)(newrow, newcol) == '.')
   {
-    maze->at(midrow, midcol) = ' ';
-    maze->at(row, col) = ' ';
+    (*maze)(midrow, midcol) = ' ';
+    (*maze)(row, col) = ' ';
   }
   else
   {
-    maze->at(midrow, midcol) = '.';
-    maze->at(row, col) = '.';
+    (*maze)(midrow, midcol) = '.';
+    (*maze)(row, col) = '.';
   }
 
   // Print the player in the new location
   row = newrow;
   col = newcol;
-  maze->at(row, col) = 'S';
+  (*maze)(row, col) = 'S';
 }
 
 bool Player::is_valid(int row, int col)
 {
-  return (maze->is_valid(row, col)) && maze->at(row, col) != '#';
+  return (maze->is_valid(row, col)) && (*maze)(row, col) != '#';
 }

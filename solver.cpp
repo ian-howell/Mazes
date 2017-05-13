@@ -34,21 +34,21 @@ bool Solver::backtrack_r(Cell cell, bool animate)
     if (neighbors[i] == end)
       return true;
 
-    maze->at(row, col) = '*';
+    (*maze)(row, col) = '*';
     maybe_draw(animate);
-    maze->at(row, col) = '.';
+    (*maze)(row, col) = '.';
 
     if (backtrack_r(neighbors[i], animate))
     {
-      maze->at(row, col) = '*';
+      (*maze)(row, col) = '*';
       maybe_draw(animate);
       return true;
     }
     else
     {
-      maze->at(row, col) = '*';
+      (*maze)(row, col) = '*';
       maybe_draw(animate);
-      maze->at(row, col) = ' ';
+      (*maze)(row, col) = ' ';
     }
   }
   return false;
@@ -81,8 +81,8 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
     {
       for (Cell* r = u; r; r = r->parent)
       {
-        if (maze->at(r->row, r->col) == '.')
-          maze->at(r->row, r->col) = '*';
+        if ((*maze)(r->row, r->col) == '.')
+          (*maze)(r->row, r->col) = '*';
         maybe_draw(animate);
       }
 
@@ -104,13 +104,13 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
       return;
     }
 
-    if (maze->at(u->row, u->col) != 'S')
-      maze->at(u->row, u->col) = '.';
+    if ((*maze)(u->row, u->col) != 'S')
+      (*maze)(u->row, u->col) = '.';
     std::vector<Cell> neighbors = maze->get_neighbors(u);
     for (size_t i = 0; i < neighbors.size(); i++)
     {
-      if (maze->at(neighbors[i].row, neighbors[i].col) != 'E')
-        maze->at(neighbors[i].row, neighbors[i].col) = ',';
+      if ((*maze)(neighbors[i].row, neighbors[i].col) != 'E')
+        (*maze)(neighbors[i].row, neighbors[i].col) = ',';
       maybe_draw(animate);
       neighbors[i].parent = u;
       Cell* v = new Cell;

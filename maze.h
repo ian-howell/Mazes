@@ -26,8 +26,8 @@ class Maze
   Cell get_start() const { return start; }
   Cell get_end()   const { return end;   }
 
-  /* char** get_grid() const { return grid; } */
-  char& at(const int i, const int j) { return grid[i][j]; }
+  char& operator()(const int i, const int j) { return grid[i][j]; }
+  const char& operator()(const int i, const int j) const { return grid[i][j]; }
 
   void init_curses();
 
