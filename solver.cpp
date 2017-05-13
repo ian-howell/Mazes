@@ -176,33 +176,6 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
   return;
 }
 
-std::vector<Cell> get_neighbors(Cell* cell, const int max_row, const int max_col)
-{
-  std::vector<Cell> neighbors;
-  Cell new_cell;
-  int new_row;
-  int new_col;
-  int offset[4][2] = {{-1, 0},
-    {0, +1},
-    {+1, 0},
-    {0, -1}};
-
-  for (int i = 0; i < 4; i++)
-  {
-    new_row = cell->row + offset[i][0];
-    new_col = cell->col + offset[i][1];
-    if (new_row >= 0 && new_col >= 0 &&
-        new_row < max_row && new_col < max_col)
-    {
-      new_cell.row = new_row;
-      new_cell.col = new_col;
-      neighbors.push_back(new_cell);
-    }
-  }
-
-  return neighbors;
-}
-
 void Solver::player_control()
 {
   Player* player = new Player(maze, 0, 0);

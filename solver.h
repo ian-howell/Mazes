@@ -32,14 +32,4 @@ class Solver
   void player_control();
 };
 
-enum
-{
-  EAST,
-  SOUTH,
-  WEST,
-  NORTH
-};
-
-std::vector<Cell> get_neighbors(Cell* node, const int max_row, const int max_col);
-
 #endif
