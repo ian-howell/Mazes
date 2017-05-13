@@ -22,12 +22,11 @@ void Generator::create_maze(bool animate)
     clear();
   }
 
-  char** grid = maze->get_grid();
   int rows = maze->get_rows();
   int cols = maze->get_cols();
   Cell start(0, 0, NULL);
 
-  grid[start.row][start.col] = 'S';
+  maze->at(start.row, start.col) = 'S';
 
   std::vector<Cell *> frontier;
 
@@ -50,10 +49,10 @@ void Generator::create_maze(bool animate)
     int r = gc->row;
     int c = gc->col;
 
-    if (maze->is_valid(r, c) && grid[r][c] == '#')
+    if (maze->is_valid(r, c) && maze->at(r, c) == '#')
     {
-      grid[child->row][child->col] = ' ';
-      grid[r][c] = 'E';
+      maze->at(child->row, child->col) = ' ';
+      maze->at(r, c) = 'E';
 
       for (int i = -1; i <= 1; i += 2)
       {
@@ -76,7 +75,7 @@ void Generator::create_maze(bool animate)
         usleep(DRAW_DELAY);
       }
 
-      grid[r][c] = ' ';
+      maze->at(r, c) = ' ';
     }
 
     delete child;
@@ -84,7 +83,7 @@ void Generator::create_maze(bool animate)
     (!gc_used) ?  delete gc : grandchildren.push_back(gc);
   }
 
-  grid[rows - 1][cols - 1] = 'E';
+  maze->at(rows - 1, cols - 1) = 'E';
   if (animate)
   {
     maze->draw();

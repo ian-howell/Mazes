@@ -18,8 +18,6 @@ void Player::move(direction dir)
   int newcol = col;
   int newrow = row;
 
-  char** grid = maze->get_grid();
-
   switch (dir)
   {
     case LEFT:
@@ -55,31 +53,31 @@ void Player::move(direction dir)
   if ((newcol == col) && (newrow == row))
     return;
 
-  if (grid[newrow][newcol] == 'E')
+  if (maze->at(newrow, newcol) == 'E')
   {
     game_won = true;
-    grid[midrow][midcol] = '.';
-    grid[row][col] = '.';
+    maze->at(midrow, midcol) = '.';
+    maze->at(row, col) = '.';
     return;
   }
-  else if (grid[newrow][newcol] == '.')
+  else if (maze->at(newrow, newcol) == '.')
   {
-    grid[midrow][midcol] = ' ';
-    grid[row][col] = ' ';
+    maze->at(midrow, midcol) = ' ';
+    maze->at(row, col) = ' ';
   }
   else
   {
-    grid[midrow][midcol] = '.';
-    grid[row][col] = '.';
+    maze->at(midrow, midcol) = '.';
+    maze->at(row, col) = '.';
   }
 
   // Print the player in the new location
   row = newrow;
   col = newcol;
-  grid[row][col] = 'S';
+  maze->at(row, col) = 'S';
 }
 
 bool Player::is_valid(int row, int col)
 {
-  return (maze->is_valid(row, col)) && maze->get_grid()[row][col] != '#';
+  return (maze->is_valid(row, col)) && maze->at(row, col) != '#';
 }

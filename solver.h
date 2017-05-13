@@ -7,7 +7,6 @@
 class Solver
 {
  private:
-  char** grid;
   Cell start;
   Cell end;
 
