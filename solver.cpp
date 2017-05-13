@@ -156,7 +156,7 @@ bool Solver::is_valid(int row, int col)
   return retval;
 }
 
-void Solver::X_first_search(bool bfs, bool animate)
+void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
 {
   std::deque<Cell*> frontier;
   std::deque<Cell*> to_delete;
@@ -173,7 +173,7 @@ void Solver::X_first_search(bool bfs, bool animate)
   Cell* u;
   while (!frontier.empty())
   {
-    if (bfs)
+    if (solve_type == BFS)
     {
       u = frontier.front(); frontier.pop_front();
     }

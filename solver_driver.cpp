@@ -56,11 +56,11 @@ int main(int argc, char** argv)
   }
   else if (strcmp(algorithm, "bfs") == 0)
   {
-    solver->X_first_search(true, animate_flag);
+    solver->X_first_search(Solver::BFS, animate_flag);
   }
   else if (strcmp(algorithm, "dfs") == 0)
   {
-    solver->X_first_search(false, animate_flag);
+    solver->X_first_search(Solver::DFS, animate_flag);
   }
 
   if (output_file)

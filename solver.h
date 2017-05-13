@@ -19,9 +19,19 @@ class Solver
   bool is_valid(int row, int col);
 
  public:
+
+  typedef char SOLVE_TYPE;
+  enum
+  {
+    BFS,
+    DFS,
+    BACKTRACKING,
+    ASTAR
+  };
+
   Solver(Maze* maze);
   bool backtrack(bool animate=true);
-  void X_first_search(bool bfs, bool animate=true);
+  void X_first_search(SOLVE_TYPE solve_type, bool animate=true);
 };
 
 enum
