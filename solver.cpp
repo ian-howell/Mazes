@@ -19,21 +19,9 @@ Solver::Solver(Maze* maze)
 bool Solver::backtrack(bool animate)
 {
   bool ret_val;
-
-  if (animate)
-  {
-    maze->init_curses();
-    clear();
-  }
-
+  maybe_init(animate);
   ret_val = backtrack_r(start, animate);
-
-  if (animate)
-  {
-    getchar();
-    endwin();
-  }
-
+  maybe_endwin(animate);
   return ret_val;
 }
 
@@ -52,11 +40,7 @@ bool Solver::backtrack_r(Cell cell, bool animate)
 
     grid[row][col] = '*';
 
-    if (animate)
-    {
-      maze->draw();
-      usleep(DRAW_DELAY);
-    }
+    maybe_draw(animate);
 
     grid[row][col] = '.';
 
@@ -64,22 +48,14 @@ bool Solver::backtrack_r(Cell cell, bool animate)
     {
       grid[row][col] = '*';
 
-      if (animate)
-      {
-        maze->draw();
-        usleep(DRAW_DELAY);
-      }
+      maybe_draw(animate);
       return true;
     }
     else
     {
       grid[row][col] = '*';
 
-      if (animate)
-      {
-        maze->draw();
-        usleep(DRAW_DELAY);
-      }
+      maybe_draw(animate);
       grid[row][col] = ' ';
     }
   }
@@ -91,12 +67,7 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
   std::deque<Cell*> frontier;
   std::deque<Cell*> to_delete;
 
-  if (animate)
-  {
-    maze->init_curses();
-    clear();
-  }
-
+  maybe_init(animate);
   start.parent = NULL;
   frontier.push_back(&start);
 
@@ -118,11 +89,7 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
       {
         if (grid[runner->row][runner->col] == '.')
           grid[runner->row][runner->col] = '*';
-        if (animate)
-        {
-          maze->draw();
-          usleep(DRAW_DELAY);
-        }
+        maybe_draw(animate);
       }
 
       delete u;
@@ -137,11 +104,7 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
         delete u;
       }
 
-      if (animate)
-      {
-        getchar();
-        endwin();
-      }
+      maybe_endwin(animate);
       return;
     }
 
@@ -152,11 +115,7 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
     {
       if (grid[neighbors[i].row][neighbors[i].col] != 'E')
         grid[neighbors[i].row][neighbors[i].col] = ',';
-      if (animate)
-      {
-        maze->draw();
-        usleep(DRAW_DELAY);
-      }
+      maybe_draw(animate);
       neighbors[i].parent = u;
       Cell* v = new Cell;
       *v = neighbors[i];
@@ -167,12 +126,7 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
       to_delete.push_back(u);
   }
 
-  if (animate)
-  {
-    getchar();
-    endwin();
-  }
-
+  maybe_endwin(animate);
   return;
 }
 
@@ -181,8 +135,7 @@ void Solver::player_control()
   Player* player = new Player(maze, 0, 0);
   bool done = false;
 
-  maze->init_curses();
-  maze->draw();
+  maybe_init();
 
   int c;
   while (!done)
@@ -213,7 +166,36 @@ void Solver::player_control()
     }
   }
   delete player;
-  getch();
-  endwin();
+  maybe_endwin();
+  return;
+}
+
+void Solver::maybe_init(bool animate)
+{
+  if (animate)
+  {
+    maze->init_curses();
+    maze->draw();
+  }
+  return;
+}
+
+void Solver::maybe_endwin(bool animate)
+{
+  if (animate)
+  {
+    getch();
+    endwin();
+  }
+  return;
+}
+
+void Solver::maybe_draw(bool animate)
+{
+  if (animate)
+  {
+    maze->draw();
+    usleep(DRAW_DELAY);
+  }
   return;
 }
