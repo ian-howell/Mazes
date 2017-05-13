@@ -8,62 +8,59 @@
 #include <vector>
 #include <deque>
 
-Solver::Solver(Maze* maze)
+Solver::Solver()
 {
-  this->maze = maze;
-  start = maze->get_start();
-  end = maze->get_end();
+  /* Intentionally left empty */
 }
 
-bool Solver::backtrack(bool animate)
+bool Solver::backtrack(MazePtr maze, bool animate)
 {
   bool ret_val;
-  maybe_init(animate);
-  ret_val = backtrack_r(start, animate);
-  maybe_endwin(animate);
+  maze->maybe_init(animate);
+  ret_val = backtrack_r(maze, maze->get_start(), animate);
+  maze->maybe_endwin(animate);
   return ret_val;
 }
 
-bool Solver::backtrack_r(Cell cell, bool animate)
+bool Solver::backtrack_r(MazePtr maze, CellPtr cell, bool animate)
 {
-  std::vector<Cell> neighbors = maze->get_neighbors(&cell);
+  std::vector<CellPtr> neighbors = maze->get_neighbors(cell);
   for (size_t i = 0; i < neighbors.size(); i++)
   {
-    int row = neighbors[i].row;
-    int col = neighbors[i].col;
-    if (neighbors[i] == end)
+    int row = neighbors[i]->row;
+    int col = neighbors[i]->col;
+    if (*neighbors[i] == *maze->get_end())
       return true;
 
-    (*maze)(row, col) = '*';
-    maybe_draw(animate);
-    (*maze)(row, col) = '.';
+    maze->at(row, col) = '*';
+    maze->maybe_draw(animate);
+    maze->at(row, col) = '.';
 
-    if (backtrack_r(neighbors[i], animate))
+    if (backtrack_r(maze, neighbors[i], animate))
     {
-      (*maze)(row, col) = '*';
-      maybe_draw(animate);
+      maze->at(row, col) = '*';
+      maze->maybe_draw(animate);
       return true;
     }
     else
     {
-      (*maze)(row, col) = '*';
-      maybe_draw(animate);
-      (*maze)(row, col) = ' ';
+      maze->at(row, col) = '*';
+      maze->maybe_draw(animate);
+      maze->at(row, col) = ' ';
     }
   }
   return false;
 }
 
-void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
+void Solver::X_first_search(MazePtr maze, SOLVE_TYPE solve_type, bool animate)
 {
-  std::deque<Cell*> frontier;
-  std::deque<Cell*> to_delete;
+  std::deque<CellPtr> frontier;
 
-  maybe_init(animate);
-  start.parent = NULL;
-  frontier.push_back(&start);
+  maze->maybe_init(animate);
+  CellPtr start = maze->get_start();
+  frontier.push_back(CellPtr(start));
 
-  Cell* u;
+  CellPtr u;
   while (!frontier.empty())
   {
     if (solve_type == BFS)
@@ -77,74 +74,55 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
       frontier.pop_back();
     }
 
-    if (*u == end)
+    if (*u == *maze->get_end())
     {
-      for (Cell* r = u; r; r = r->parent)
+      for (CellPtr r = u; r; r = r->parent)
       {
-        if ((*maze)(r->row, r->col) == '.')
-          (*maze)(r->row, r->col) = '*';
-        maybe_draw(animate);
+        if (maze->at(r->row, r->col) == '.')
+          maze->at(r->row, r->col) = '*';
+        maze->maybe_draw(animate);
       }
 
-      delete u;
-      while(!frontier.empty())
-      {
-        u = frontier.back();
-        frontier.pop_back();
-        delete u;
-      }
-      while (!to_delete.empty())
-      {
-        u = to_delete.back();
-        to_delete.pop_back();
-        delete u;
-      }
-
-      maybe_endwin(animate);
+      maze->maybe_endwin(animate);
       return;
     }
 
-    if ((*maze)(u->row, u->col) != 'S')
-      (*maze)(u->row, u->col) = '.';
-    std::vector<Cell> neighbors = maze->get_neighbors(u);
+    if (maze->at(u->row, u->col) != 'S')
+      maze->at(u->row, u->col) = '.';
+    std::vector<CellPtr> neighbors = maze->get_neighbors(u);
     for (size_t i = 0; i < neighbors.size(); i++)
     {
-      if ((*maze)(neighbors[i].row, neighbors[i].col) != 'E')
-        (*maze)(neighbors[i].row, neighbors[i].col) = ',';
-      maybe_draw(animate);
-      neighbors[i].parent = u;
-      Cell* v = new Cell;
-      *v = neighbors[i];
-      frontier.push_back(v);
+      if (maze->at(neighbors[i]->row, neighbors[i]->col) != 'E')
+        maze->at(neighbors[i]->row, neighbors[i]->col) = ',';
+      maze->maybe_draw(animate);
+      neighbors[i]->parent = u;
+      frontier.push_back(CellPtr(neighbors[i]));
     }
-
-    if (u->parent != NULL)
-      to_delete.push_back(u);
   }
 
-  maybe_endwin(animate);
+  maze->maybe_endwin(animate);
   return;
 }
 
-void Solver::player_control()
+void Solver::player_control(MazePtr maze)
 {
-  Player* player = new Player(maze, 0, 0);
+  Player* player = new Player(0, 0);
   bool done = false;
 
-  maybe_init();
+  maze->maybe_init();
 
   int c;
   while (!done)
   {
     c = wgetch(stdscr);
     if (c == KEY_UP)
-      player->move(UP);
+      player->move(maze, Player::UP);
     else if (c == KEY_DOWN)
-      player->move(DOWN);
+      player->move(maze, Player::DOWN);
     else if (c == KEY_LEFT)
-      player->move(LEFT);
+      player->move(maze, Player::LEFT);
     else if (c == KEY_RIGHT)
-      player->move(RIGHT);
+      player->move(maze, Player::RIGHT);
 
     maze->draw();
 
@@ -156,36 +134,6 @@ void Solver::player_control()
     }
   }
   delete player;
-  maybe_endwin();
-  return;
-}
-
-void Solver::maybe_init(bool animate)
-{
-  if (animate)
-  {
-    maze->init_curses();
-    maze->draw();
-  }
-  return;
-}
-
-void Solver::maybe_endwin(bool animate)
-{
-  if (animate)
-  {
-    getch();
-    endwin();
-  }
-  return;
-}
-
-void Solver::maybe_draw(bool animate)
-{
-  if (animate)
-  {
-    maze->draw();
-    usleep(DRAW_DELAY);
-  }
+  maze->maybe_endwin();
   return;
 }

@@ -67,6 +67,5 @@ int main(int argc, char** argv)
   if (output_file)
     maze->print(output_file);
 
-  printf("uses: %d\n", generator.use_count());
   return 0;
 }

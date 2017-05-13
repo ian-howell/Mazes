@@ -10,33 +10,26 @@
 
 Generator::Generator(int r, int c)
 {
-  rows = r;
-  cols = c;
+  rows = (r % 2) ? r : r - 1;
+  cols = (c % 2) ? c : c - 1;
   srand(time(NULL));
 }
 
 MazePtr Generator::create_maze(bool animate)
 {
   MazePtr maze(new Maze(rows, cols));
-  if (animate)
-  {
-    maze->init_curses();
-    clear();
-  }
+  maze->maybe_init(animate);
 
   CellPtr start(new Cell(0, 0, NULL));
-
   maze->at(start->row, start->col) = 'S';
 
   std::vector<CellPtr> frontier;
-
   // Add the start node's neighbors to the frontier
   frontier.push_back(CellPtr(new Cell(1, 0, start)));
   frontier.push_back(CellPtr(new Cell(0, 1, start)));
 
   CellPtr child;
   CellPtr gc;
-
   while (!frontier.empty())
   {
     int rand_point = rand() % frontier.size();
@@ -60,24 +53,14 @@ MazePtr Generator::create_maze(bool animate)
         if (maze->is_valid(r, c + i))
           frontier.push_back(CellPtr(new Cell(r, c + i, gc)));
       }
-
-      if (animate)
-      {
-        maze->draw();
-        usleep(DRAW_DELAY);
-      }
-
+      maze->maybe_draw(animate);
       maze->at(r, c) = ' ';
     }
   }
 
   maze->at(rows - 1, cols - 1) = 'E';
-  if (animate)
-  {
-    maze->draw();
-    getch();
-    endwin();
-  }
+  maze->maybe_draw(animate);
+  maze->maybe_endwin(animate);
 
   return maze;
 }

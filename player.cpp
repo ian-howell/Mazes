@@ -2,16 +2,14 @@
 #include "player.h"
 #include "maze.h"
 
-Player::Player(Maze* maze, int row, int col)
+Player::Player(int row, int col)
 {
   this->game_won = false;
   this->row = row;
   this->col = col;
-
-  this->maze = maze;
 }
 
-void Player::move(direction dir)
+void Player::move(MazePtr maze, direction dir)
 {
   int midcol = col;
   int midrow = row;
@@ -21,28 +19,28 @@ void Player::move(direction dir)
   switch (dir)
   {
     case LEFT:
-      if (is_valid(row, col - 1))
+      if (is_valid(maze, row, col - 1))
       {
         midcol--;
         newcol -= 2;
       }
       break;
     case RIGHT:
-      if (is_valid(row, col + 1))
+      if (is_valid(maze, row, col + 1))
       {
         midcol++;
         newcol += 2;
       }
       break;
     case UP:
-      if (is_valid(row - 1, col))
+      if (is_valid(maze, row - 1, col))
       {
         midrow--;
         newrow -= 2;
       }
       break;
     case DOWN:
-      if (is_valid(row + 1, col))
+      if (is_valid(maze, row + 1, col))
       {
         midrow++;
         newrow += 2;
@@ -77,7 +75,7 @@ void Player::move(direction dir)
   (*maze)(row, col) = 'S';
 }
 
-bool Player::is_valid(int row, int col)
+bool Player::is_valid(MazePtr maze, int row, int col)
 {
   return (maze->is_valid(row, col)) && (*maze)(row, col) != '#';
 }

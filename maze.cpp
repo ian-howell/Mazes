@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <ncurses.h>
+#include <unistd.h>
 #include "maze.h"
 
 Maze::Maze(int nrows, int ncols)
@@ -32,9 +33,9 @@ Maze::Maze(const char* filename)
     {
       fscanf(f, "%c", &grid[i][j]);
       if (grid[i][j] == 'S')
-        start = Cell(i, j, NULL);
+        start = CellPtr(new Cell(i, j, NULL));
       else if (grid[i][j] == 'E')
-        end = Cell(i, j, NULL);
+        end = CellPtr(new Cell(i, j, NULL));
     }
     fscanf(f, "%c", &dummy);
   }
@@ -135,10 +136,9 @@ void Maze::draw()
   refresh();
 }
 
-std::vector<Cell> Maze::get_neighbors(Cell* cell)
+std::vector<CellPtr> Maze::get_neighbors(CellPtr cell)
 {
-  std::vector<Cell> neighbors;
-  Cell new_cell;
+  std::vector<CellPtr> neighbors;
   int new_row;
   int new_col;
   int offset[4][2] = {
@@ -152,11 +152,7 @@ std::vector<Cell> Maze::get_neighbors(Cell* cell)
     new_row = cell->row + offset[i][0];
     new_col = cell->col + offset[i][1];
     if (is_pathable(new_row, new_col))
-    {
-      new_cell.row = new_row;
-      new_cell.col = new_col;
-      neighbors.push_back(new_cell);
-    }
+      neighbors.push_back(CellPtr(new Cell(new_row, new_col, NULL)));
   }
   return neighbors;
 }
@@ -169,4 +165,34 @@ bool Maze::is_pathable(int r, int c)
 bool Maze::is_valid(int r, int c)
 {
   return r >= 0 && r < rows && c >= 0 && c < cols;
+}
+
+void Maze::maybe_init(bool animate)
+{
+  if (animate)
+  {
+    init_curses();
+    draw();
+  }
+  return;
+}
+
+void Maze::maybe_endwin(bool animate)
+{
+  if (animate)
+  {
+    getch();
+    endwin();
+  }
+  return;
+}
+
+void Maze::maybe_draw(bool animate)
+{
+  if (animate)
+  {
+    draw();
+    usleep(DRAW_DELAY);
+  }
+  return;
 }

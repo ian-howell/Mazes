@@ -18,8 +18,8 @@ class Maze
   int rows;
   int cols;
   char** grid;
-  Cell start;
-  Cell end;
+  CellPtr start;
+  CellPtr end;
 
  public:
   Maze(int nrow, int ncol);
@@ -29,8 +29,8 @@ class Maze
   int get_rows() const { return rows; }
   int get_cols() const { return cols; }
 
-  Cell get_start() const { return start; }
-  Cell get_end()   const { return end;   }
+  CellPtr get_start() const { return start; }
+  CellPtr get_end()   const { return end;   }
 
   char& at (const int i, const int j) { return grid[i][j]; }
 
@@ -38,12 +38,15 @@ class Maze
   const char& operator()(const int i, const int j) const { return grid[i][j]; }
 
   void init_curses();
+  void maybe_init(bool animate=true);
+  void maybe_endwin(bool animate=true);
+  void maybe_draw(bool animate=true);
 
   void print(const char* filename);
 
   void draw();
 
-  std::vector<Cell> get_neighbors(Cell* cell);
+  std::vector<CellPtr> get_neighbors(CellPtr cell);
 
   bool is_pathable(int r, int c);
   bool is_valid(int r, int c);
