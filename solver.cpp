@@ -39,19 +39,29 @@ bool Solver::backtrack(bool animate)
 
 bool Solver::backtrack_r(Cell cell, bool animate)
 {
-  std::vector<Cell> neighbors = get_neighbors(&cell, maze->get_rows(),
-      maze->get_cols());
+  std::vector<Cell> neighbors = maze->get_neighbors(&cell);
   for (size_t i = 0; i < neighbors.size(); i++)
   {
     int row = neighbors[i].row;
     int col = neighbors[i].col;
-    if (maze->is_pathable(row, col))
-    {
-      if (grid[row][col] == 'E')
-      {
-        return true;
-      }
 
+    if (grid[row][col] == 'E')
+    {
+      return true;
+    }
+
+    grid[row][col] = '*';
+
+    if (animate)
+    {
+      maze->draw();
+      usleep(DRAW_DELAY);
+    }
+
+    grid[row][col] = '.';
+
+    if (backtrack_r(neighbors[i], animate))
+    {
       grid[row][col] = '*';
 
       if (animate)
@@ -59,31 +69,18 @@ bool Solver::backtrack_r(Cell cell, bool animate)
         maze->draw();
         usleep(DRAW_DELAY);
       }
+      return true;
+    }
+    else
+    {
+      grid[row][col] = '*';
 
-      grid[row][col] = '.';
-
-      if (backtrack_r(neighbors[i], animate))
+      if (animate)
       {
-        grid[row][col] = '*';
-
-        if (animate)
-        {
-          maze->draw();
-          usleep(DRAW_DELAY);
-        }
-        return true;
+        maze->draw();
+        usleep(DRAW_DELAY);
       }
-      else
-      {
-        grid[row][col] = '*';
-
-        if (animate)
-        {
-          maze->draw();
-          usleep(DRAW_DELAY);
-        }
-        grid[row][col] = ' ';
-      }
+      grid[row][col] = ' ';
     }
   }
   return false;
@@ -150,17 +147,9 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
 
     if (grid[u->row][u->col] != 'S')
       grid[u->row][u->col] = '.';
-    std::vector<Cell> neighbors = get_neighbors(u, maze->get_rows(), maze->get_cols());
+    std::vector<Cell> neighbors = maze->get_neighbors(u);
     for (size_t i = 0; i < neighbors.size(); i++)
     {
-      switch (grid[neighbors[i].row][neighbors[i].col])
-      {
-        case '.':
-        case '#':
-        case ',':
-        case 'S':
-          continue;
-      }
       if (grid[neighbors[i].row][neighbors[i].col] != 'E')
         grid[neighbors[i].row][neighbors[i].col] = ',';
       if (animate)
