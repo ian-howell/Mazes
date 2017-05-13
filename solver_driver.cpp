@@ -4,7 +4,6 @@
 #include <cstring>
 #include "maze.h"
 #include "solver.h"
-#include "player.h"
 
 int main(int argc, char** argv)
 {
@@ -62,58 +61,16 @@ int main(int argc, char** argv)
   {
     solver->X_first_search(Solver::DFS, animate_flag);
   }
+  else if (strcmp(algorithm, "play") == 0)
+  {
+    solver->player_control();
+  }
 
   if (output_file)
     maze->print(output_file);
 
-  /* Player* player = new Player(maze, 0, 0); */
-
-  /* if (MAN_SOLVE) */
-  /* { */
-  /*     start_color(); */
-  /*     noecho(); */
-  /*     cbreak(); */
-
-  /*     refresh(); */
-
-  /*     maze->draw(); */
-
-  /*     int c; */
-
-  /*     while (1) */
-  /*     { */
-  /*         c = wgetch(stdscr); */
-  /*         switch (c) */
-  /*         { */
-  /*             case KEY_UP: */
-  /*                 player->move(UP); */
-  /*                 break; */
-  /*             case KEY_DOWN: */
-  /*                 player->move(DOWN); */
-  /*                 break; */
-  /*             case KEY_LEFT: */
-  /*                 player->move(LEFT); */
-  /*                 break; */
-  /*             case KEY_RIGHT: */
-  /*                 player->move(RIGHT); */
-  /*                 break; */
-  /*         } */
-  /*         /1* player->draw(); *1/ */
-  /*         maze->draw(); */
-
-  /*         if (player->game_won) */
-  /*         { */
-  /*             clear(); */
-  /*             mvwprintw(stdscr, cols / 2, rows / 2, "You win!"); */
-  /*             break; */
-  /*         } */
-  /*     } */
-  /* } */
-  /* getch(); */
-
   delete maze;
   delete solver;
-  /* delete player; */
 
   return 0;
 }

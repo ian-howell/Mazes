@@ -2,6 +2,7 @@
 #include "solver.h"
 #include "cell.h"
 #include "maze.h"
+#include "player.h"
 #include <cstdio>
 #include <ncurses.h>
 #include <vector>
@@ -279,4 +280,46 @@ std::vector<Cell> get_neighbors(Cell* cell, const int max_row, const int max_col
   }
 
   return neighbors;
+}
+
+void Solver::player_control()
+{
+  Player* player = new Player(maze, 0, 0);
+  bool done = false;
+
+  maze->init_curses();
+  maze->draw();
+
+  int c;
+  while (!done)
+  {
+    c = wgetch(stdscr);
+    switch (c)
+    {
+      case KEY_UP:
+        player->move(UP);
+        break;
+      case KEY_DOWN:
+        player->move(DOWN);
+        break;
+      case KEY_LEFT:
+        player->move(LEFT);
+        break;
+      case KEY_RIGHT:
+        player->move(RIGHT);
+        break;
+    }
+    maze->draw();
+
+    if (player->game_won)
+    {
+      clear();
+      mvwprintw(stdscr, maze->get_cols() / 2, maze->get_rows() / 2, "You win!");
+      done = true;
+    }
+  }
+  delete player;
+  getch();
+  endwin();
+  return;
 }

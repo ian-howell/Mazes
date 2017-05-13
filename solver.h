@@ -32,6 +32,7 @@ class Solver
   Solver(Maze* maze);
   bool backtrack(bool animate=true);
   void X_first_search(SOLVE_TYPE solve_type, bool animate=true);
+  void player_control();
 };
 
 enum
