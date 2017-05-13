@@ -32,29 +32,22 @@ bool Solver::backtrack_r(Cell cell, bool animate)
   {
     int row = neighbors[i].row;
     int col = neighbors[i].col;
-
     if (grid[row][col] == 'E')
-    {
       return true;
-    }
 
     grid[row][col] = '*';
-
     maybe_draw(animate);
-
     grid[row][col] = '.';
 
     if (backtrack_r(neighbors[i], animate))
     {
       grid[row][col] = '*';
-
       maybe_draw(animate);
       return true;
     }
     else
     {
       grid[row][col] = '*';
-
       maybe_draw(animate);
       grid[row][col] = ' ';
     }
@@ -76,31 +69,35 @@ void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
   {
     if (solve_type == BFS)
     {
-      u = frontier.front(); frontier.pop_front();
+      u = frontier.front();
+      frontier.pop_front();
     }
-    else
+    else if (solve_type == DFS)
     {
-      u = frontier.back(); frontier.pop_back();
+      u = frontier.back();
+      frontier.pop_back();
     }
 
     if (u->row == end.row && u->col == end.col)
     {
-      for (Cell* runner = u; runner; runner = runner->parent)
+      for (Cell* r = u; r; r = r->parent)
       {
-        if (grid[runner->row][runner->col] == '.')
-          grid[runner->row][runner->col] = '*';
+        if (grid[r->row][r->col] == '.')
+          grid[r->row][r->col] = '*';
         maybe_draw(animate);
       }
 
       delete u;
       while(!frontier.empty())
       {
-        u = frontier.back(); frontier.pop_back();
+        u = frontier.back();
+        frontier.pop_back();
         delete u;
       }
       while (!to_delete.empty())
       {
-        u = to_delete.back(); to_delete.pop_back();
+        u = to_delete.back();
+        to_delete.pop_back();
         delete u;
       }
 
@@ -141,21 +138,15 @@ void Solver::player_control()
   while (!done)
   {
     c = wgetch(stdscr);
-    switch (c)
-    {
-      case KEY_UP:
-        player->move(UP);
-        break;
-      case KEY_DOWN:
-        player->move(DOWN);
-        break;
-      case KEY_LEFT:
-        player->move(LEFT);
-        break;
-      case KEY_RIGHT:
-        player->move(RIGHT);
-        break;
-    }
+    if (c == KEY_UP)
+      player->move(UP);
+    else if (c == KEY_DOWN)
+      player->move(DOWN);
+    else if (c == KEY_LEFT)
+      player->move(LEFT);
+    else if (c == KEY_RIGHT)
+      player->move(RIGHT);
+
     maze->draw();
 
     if (player->game_won)
