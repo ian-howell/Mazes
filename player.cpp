@@ -81,17 +81,5 @@ void Player::move(direction dir)
 
 bool Player::is_valid(int row, int col)
 {
-  bool retval = true;
-
-  if (maze->is_valid(row, col))
-  {
-    if (maze->get_grid()[row][col] == '#')
-      retval = false;
-  }
-  else
-  {
-    retval = false;
-  }
-
-  return retval;
+  return (maze->is_valid(row, col)) && maze->get_grid()[row][col] != '#';
 }
