@@ -9,11 +9,12 @@ Player::Player(Maze* maze, int row, int col)
   this->col = col;
 
   this->maze = maze;
-
 }
 
 void Player::move(direction dir)
 {
+  int midcol = col;
+  int midrow = row;
   int newcol = col;
   int newrow = row;
 
@@ -23,32 +24,54 @@ void Player::move(direction dir)
   {
     case LEFT:
       if (is_valid(row, col - 1))
-        newcol--;
+      {
+        midcol--;
+        newcol -= 2;
+      }
       break;
     case RIGHT:
       if (is_valid(row, col + 1))
-        newcol++;
+      {
+        midcol++;
+        newcol += 2;
+      }
       break;
     case UP:
       if (is_valid(row - 1, col))
-        newrow--;
+      {
+        midrow--;
+        newrow -= 2;
+      }
       break;
     case DOWN:
       if (is_valid(row + 1, col))
-        newrow++;
+      {
+        midrow++;
+        newrow += 2;
+      }
       break;
   }
+
+  if ((newcol == col) && (newrow == row))
+    return;
 
   if (grid[newrow][newcol] == 'E')
   {
     game_won = true;
+    grid[midrow][midcol] = '.';
     grid[row][col] = '.';
     return;
   }
   else if (grid[newrow][newcol] == '.')
+  {
+    grid[midrow][midcol] = ' ';
     grid[row][col] = ' ';
+  }
   else
+  {
+    grid[midrow][midcol] = '.';
     grid[row][col] = '.';
+  }
 
   // Print the player in the new location
   row = newrow;
