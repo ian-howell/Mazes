@@ -28,7 +28,11 @@ bool Solver::backtrack(bool animate)
 
   ret_val = backtrack_r(start.row, start.col, animate);
 
-  endwin();
+  if (animate)
+  {
+    getchar();
+    endwin();
+  }
 
   return ret_val;
 }
