@@ -12,32 +12,8 @@ Solver::Solver(Maze* maze)
 {
   this->maze = maze;
   grid = maze->get_grid();
-  find_start_and_end();
-}
-
-void Solver::find_start_and_end()
-{
-  int max_row = maze->get_rows();
-  int max_col = maze->get_cols();
-  int found = 0;
-  for (int i = 0; i < max_row && found < 2; i++)
-  {
-    for (int j = 0; j < max_col && found < 2; j++)
-    {
-      if (grid[i][j] == 'S')
-      {
-        start.row = i;
-        start.col = j;
-        found++;
-      }
-      if (grid[i][j] == 'E')
-      {
-        end.row = i;
-        end.col = j;
-        found++;
-      }
-    }
-  }
+  start = maze->get_start();
+  end = maze->get_end();
 }
 
 bool Solver::backtrack(bool animate)

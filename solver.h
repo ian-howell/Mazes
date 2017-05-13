@@ -13,7 +13,6 @@ class Solver
 
   Maze* maze;
 
-  void find_start_and_end();
   void get_new_cell(int& row, int& col, int dir);
   bool backtrack_r(int row, int col, bool animate);
   bool is_valid(int row, int col);
