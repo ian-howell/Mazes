@@ -14,7 +14,6 @@ class Solver
   Maze* maze;
 
   bool backtrack_r(Cell cell, bool animate);
-  bool is_valid(int row, int col);
 
  public:
 

@@ -45,7 +45,7 @@ bool Solver::backtrack_r(Cell cell, bool animate)
   {
     int row = neighbors[i].row;
     int col = neighbors[i].col;
-    if (is_valid(row, col))
+    if (maze->is_pathable(row, col))
     {
       if (grid[row][col] == 'E')
       {
@@ -87,28 +87,6 @@ bool Solver::backtrack_r(Cell cell, bool animate)
     }
   }
   return false;
-}
-
-bool Solver::is_valid(int row, int col)
-{
-  bool retval = true;
-
-  if (maze->is_valid(row, col))
-  {
-    switch (grid[row][col])
-    {
-      case '.':
-      case '#':
-      case 'S':
-        retval = false;
-    }
-  }
-  else
-  {
-    retval = false;
-  }
-
-  return retval;
 }
 
 void Solver::X_first_search(SOLVE_TYPE solve_type, bool animate)
