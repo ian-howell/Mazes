@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <cstdlib>
 #include <getopt.h>
+#include <memory>
 #include "maze.h"
 #include "generator.h"
 
@@ -61,14 +62,11 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  Maze* maze = new Maze(rows, cols);
-  Generator* generator = new Generator(maze);
-  generator->create_maze(animate_flag);
+  std::shared_ptr<Generator> generator(new Generator(rows, cols));
+  MazePtr maze = generator->create_maze(animate_flag);
   if (output_file)
     maze->print(output_file);
 
-  delete maze;
-  delete generator;
-
+  printf("uses: %d\n", generator.use_count());
   return 0;
 }

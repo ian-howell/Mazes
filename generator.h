@@ -6,7 +6,8 @@
 class Generator
 {
  private:
-  Maze* maze;
+   int rows;
+   int cols;
 
   /**
    * animate
@@ -16,13 +17,13 @@ class Generator
   void animate();
 
  public:
-  Generator(Maze* maze);
+  Generator(int r, int c);
 
   /**
    * create_maze
    *
    * Uses Prim's algorithm to create a random path through the maze
    */
-  void create_maze(bool animate=false);
+   MazePtr create_maze(bool animate=false);
 };
 #endif

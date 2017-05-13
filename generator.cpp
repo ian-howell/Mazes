@@ -8,36 +8,34 @@
 #include "maze.h"
 #include "generator.h"
 
-Generator::Generator(Maze* maze)
+Generator::Generator(int r, int c)
 {
-  this->maze = maze;
+  rows = r;
+  cols = c;
   srand(time(NULL));
 }
 
-void Generator::create_maze(bool animate)
+MazePtr Generator::create_maze(bool animate)
 {
+  MazePtr maze(new Maze(rows, cols));
   if (animate)
   {
     maze->init_curses();
     clear();
   }
 
-  int rows = maze->get_rows();
-  int cols = maze->get_cols();
-  Cell start(0, 0, NULL);
+  CellPtr start(new Cell(0, 0, NULL));
 
-  (*maze)(start.row, start.col) = 'S';
+  maze->at(start->row, start->col) = 'S';
 
-  std::vector<Cell *> frontier;
+  std::vector<CellPtr> frontier;
 
   // Add the start node's neighbors to the frontier
-  frontier.push_back(new Cell(start.row + 1, start.col, &start));
-  frontier.push_back(new Cell(start.row, start.col + 1, &start));
+  frontier.push_back(CellPtr(new Cell(1, 0, start)));
+  frontier.push_back(CellPtr(new Cell(0, 1, start)));
 
-  Cell* child;
-  Cell* gc;
-  std::vector<Cell *> grandchildren;
-  bool gc_used = false;
+  CellPtr child;
+  CellPtr gc;
 
   while (!frontier.empty())
   {
@@ -49,24 +47,18 @@ void Generator::create_maze(bool animate)
     int r = gc->row;
     int c = gc->col;
 
-    if (maze->is_valid(r, c) && (*maze)(r, c) == '#')
+    if (maze->is_valid(r, c) && maze->at(r, c) == '#')
     {
-      (*maze)(child->row, child->col) = ' ';
-      (*maze)(r, c) = 'E';
+      maze->at(child->row, child->col) = ' ';
+      maze->at(r, c) = 'E';
 
       for (int i = -1; i <= 1; i += 2)
       {
         if (maze->is_valid(r + i, c))
-        {
-          frontier.push_back(new Cell(r + i, c, gc));
-          gc_used = true;
-        }
+          frontier.push_back(CellPtr(new Cell(r + i, c, gc)));
 
         if (maze->is_valid(r, c + i))
-        {
-          frontier.push_back(new Cell(r, c + i, gc));
-          gc_used = true;
-        }
+          frontier.push_back(CellPtr(new Cell(r, c + i, gc)));
       }
 
       if (animate)
@@ -75,26 +67,17 @@ void Generator::create_maze(bool animate)
         usleep(DRAW_DELAY);
       }
 
-      (*maze)(r, c) = ' ';
+      maze->at(r, c) = ' ';
     }
-
-    delete child;
-
-    (!gc_used) ?  delete gc : grandchildren.push_back(gc);
   }
 
-  (*maze)(rows - 1, cols - 1) = 'E';
+  maze->at(rows - 1, cols - 1) = 'E';
   if (animate)
   {
     maze->draw();
-    usleep(DRAW_DELAY);
     getch();
     endwin();
   }
 
-  for (int i = 0; i < (int)grandchildren.size(); i++)
-  {
-    delete grandchildren[i];
-  }
-  return;
+  return maze;
 }

@@ -2,9 +2,15 @@
 #define MAZE_H
 #include "cell.h"
 
+#include <memory>
 #include <vector>
 
 #define DRAW_DELAY 50000
+
+// Forward declarations
+class Maze;
+
+typedef std::shared_ptr<Maze> MazePtr;
 
 class Maze
 {

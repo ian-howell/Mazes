@@ -6,16 +6,18 @@ Cell::Cell()
   /* Intentionally left empty */
 }
 
-Cell::Cell(int row, int col, Cell* parent)
+Cell::Cell(int row, int col, CellPtr parent)
 {
   this->row = row;
   this->col = col;
   this->parent = parent;
 }
 
-Cell* Cell::get_child()
+CellPtr Cell::get_child()
 {
-  return new Cell((row << 1) - parent->row, (col << 1) - parent->col, NULL);
+  return CellPtr(new Cell((row << 1) - parent->row,
+                          (col << 1) - parent->col,
+                          NULL));
 }
 
 bool operator==(const Cell& lhs, const Cell& rhs)
