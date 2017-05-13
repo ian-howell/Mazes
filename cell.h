@@ -11,6 +11,8 @@ class Cell
   Cell();
   Cell(int row, int col, Cell *parent);
   Cell* get_child();
+
+  friend bool operator==(const Cell& lhs, const Cell& rhs);
 };
 
 #endif

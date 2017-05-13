@@ -17,3 +17,8 @@ Cell* Cell::get_child()
 {
   return new Cell((row << 1) - parent->row, (col << 1) - parent->col, NULL);
 }
+
+bool operator==(const Cell& lhs, const Cell& rhs)
+{
+  return (lhs.row == rhs.row) && (lhs.col == rhs.col);
+}
