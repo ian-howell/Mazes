@@ -26,7 +26,7 @@ bool Solver::backtrack(bool animate)
     clear();
   }
 
-  ret_val = backtrack_r(start.row, start.col, animate);
+  ret_val = backtrack_r(start, animate);
 
   if (animate)
   {
@@ -37,24 +37,22 @@ bool Solver::backtrack(bool animate)
   return ret_val;
 }
 
-bool Solver::backtrack_r(int row, int col, bool animate)
+bool Solver::backtrack_r(Cell cell, bool animate)
 {
-  int dir = 0;
-  do
+  std::vector<Cell> neighbors = get_neighbors(&cell, maze->get_rows(),
+      maze->get_cols());
+  for (size_t i = 0; i < neighbors.size(); i++)
   {
-    int r = row;
-    int c = col;
-
-    get_new_cell(r, c, dir);
-
-    if (is_valid(r, c))
+    int row = neighbors[i].row;
+    int col = neighbors[i].col;
+    if (is_valid(row, col))
     {
-      if (grid[r][c] == 'E')
+      if (grid[row][col] == 'E')
       {
         return true;
       }
 
-      grid[r][c] = '*';
+      grid[row][col] = '*';
 
       if (animate)
       {
@@ -62,11 +60,11 @@ bool Solver::backtrack_r(int row, int col, bool animate)
         usleep(DRAW_DELAY);
       }
 
-      grid[r][c] = '.';
+      grid[row][col] = '.';
 
-      if (backtrack_r(r, c, animate))
+      if (backtrack_r(neighbors[i], animate))
       {
-        grid[r][c] = '*';
+        grid[row][col] = '*';
 
         if (animate)
         {
@@ -77,42 +75,18 @@ bool Solver::backtrack_r(int row, int col, bool animate)
       }
       else
       {
-        grid[r][c] = '*';
-        dir++;
+        grid[row][col] = '*';
 
         if (animate)
         {
           maze->draw();
           usleep(DRAW_DELAY);
         }
-        grid[r][c] = ' ';
+        grid[row][col] = ' ';
       }
     }
-    else
-    {
-      dir++;
-    }
-  } while (dir < 4);
-  return false;
-}
-
-void Solver::get_new_cell(int& row, int& col, int dir)
-{
-  switch(dir)
-  {
-    case NORTH:
-      row--;
-      break;
-    case EAST:
-      col++;
-      break;
-    case SOUTH:
-      row++;
-      break;
-    case WEST:
-      col--;
-      break;
   }
+  return false;
 }
 
 bool Solver::is_valid(int row, int col)

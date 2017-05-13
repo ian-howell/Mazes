@@ -13,8 +13,7 @@ class Solver
 
   Maze* maze;
 
-  void get_new_cell(int& row, int& col, int dir);
-  bool backtrack_r(int row, int col, bool animate);
+  bool backtrack_r(Cell cell, bool animate);
   bool is_valid(int row, int col);
 
  public:
