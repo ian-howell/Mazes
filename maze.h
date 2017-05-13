@@ -32,6 +32,7 @@ class Maze
 
   void draw();
 
+  bool is_pathable(int r, int c);
   bool is_valid(int r, int c);
 };
 #endif
