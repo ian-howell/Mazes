@@ -135,6 +135,32 @@ void Maze::draw()
   refresh();
 }
 
+std::vector<Cell> Maze::get_neighbors(Cell* cell)
+{
+  std::vector<Cell> neighbors;
+  Cell new_cell;
+  int new_row;
+  int new_col;
+  int offset[4][2] = {
+    {-1, 0},
+    {0, +1},
+    {+1, 0},
+    {0, -1}
+  };
+  for (int i = 0; i < 4; i++)
+  {
+    new_row = cell->row + offset[i][0];
+    new_col = cell->col + offset[i][1];
+    if (is_pathable(new_row, new_col))
+    {
+      new_cell.row = new_row;
+      new_cell.col = new_col;
+      neighbors.push_back(new_cell);
+    }
+  }
+  return neighbors;
+}
+
 bool Maze::is_pathable(int r, int c)
 {
   return (is_valid(r, c)) && ((grid[r][c] == ' ') || (grid[r][c] == 'E'));

@@ -2,6 +2,8 @@
 #define MAZE_H
 #include "cell.h"
 
+#include <vector>
+
 #define DRAW_DELAY 50000
 
 class Maze
@@ -31,6 +33,8 @@ class Maze
   void print(const char* filename);
 
   void draw();
+
+  std::vector<Cell> get_neighbors(Cell* cell);
 
   bool is_pathable(int r, int c);
   bool is_valid(int r, int c);
