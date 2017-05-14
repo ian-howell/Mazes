@@ -108,7 +108,6 @@ void Solver::player_control(MazePtr maze)
 {
   Player* player = new Player(0, 0);
   bool done = false;
-
   maze->maybe_init();
 
   int c;
@@ -116,22 +115,14 @@ void Solver::player_control(MazePtr maze)
   {
     c = wgetch(stdscr);
     if (c == KEY_UP)
-      player->move(maze, Player::UP);
+      done = player->move(maze, Player::UP);
     else if (c == KEY_DOWN)
-      player->move(maze, Player::DOWN);
+      done = player->move(maze, Player::DOWN);
     else if (c == KEY_LEFT)
-      player->move(maze, Player::LEFT);
+      done = player->move(maze, Player::LEFT);
     else if (c == KEY_RIGHT)
-      player->move(maze, Player::RIGHT);
-
+      done = player->move(maze, Player::RIGHT);
     maze->draw();
-
-    if (player->game_won())
-    {
-      clear();
-      mvwprintw(stdscr, maze->get_cols() / 2, maze->get_rows() / 2, "You win!");
-      done = true;
-    }
   }
   delete player;
   maze->maybe_endwin();

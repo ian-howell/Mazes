@@ -4,12 +4,11 @@
 
 Player::Player(int row, int col)
 {
-  this->win_flag = false;
   this->row = row;
   this->col = col;
 }
 
-void Player::move(MazePtr maze, direction dir)
+bool Player::move(MazePtr maze, direction dir)
 {
   int midcol = col;
   int midrow = row;
@@ -49,14 +48,13 @@ void Player::move(MazePtr maze, direction dir)
   }
 
   if ((newcol == col) && (newrow == row))
-    return;
+    return false;
 
   if (maze->at(newrow, newcol) == 'E')
   {
-    win_flag = true;
     maze->at(midrow, midcol) = '.';
     maze->at(row, col) = '.';
-    return;
+    return true;
   }
   else if (maze->at(newrow, newcol) == '.')
   {
@@ -73,6 +71,8 @@ void Player::move(MazePtr maze, direction dir)
   row = newrow;
   col = newcol;
   maze->at(row, col) = 'S';
+
+  return false;
 }
 
 bool Player::is_valid(MazePtr maze, int row, int col)
