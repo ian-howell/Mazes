@@ -51,31 +51,31 @@ void Player::move(MazePtr maze, direction dir)
   if ((newcol == col) && (newrow == row))
     return;
 
-  if ((*maze)(newrow, newcol) == 'E')
+  if (maze->at(newrow, newcol) == 'E')
   {
     win_flag = true;
-    (*maze)(midrow, midcol) = '.';
-    (*maze)(row, col) = '.';
+    maze->at(midrow, midcol) = '.';
+    maze->at(row, col) = '.';
     return;
   }
-  else if ((*maze)(newrow, newcol) == '.')
+  else if (maze->at(newrow, newcol) == '.')
   {
-    (*maze)(midrow, midcol) = ' ';
-    (*maze)(row, col) = ' ';
+    maze->at(midrow, midcol) = ' ';
+    maze->at(row, col) = ' ';
   }
   else
   {
-    (*maze)(midrow, midcol) = '.';
-    (*maze)(row, col) = '.';
+    maze->at(midrow, midcol) = '.';
+    maze->at(row, col) = '.';
   }
 
   // Print the player in the new location
   row = newrow;
   col = newcol;
-  (*maze)(row, col) = 'S';
+  maze->at(row, col) = 'S';
 }
 
 bool Player::is_valid(MazePtr maze, int row, int col)
 {
-  return (maze->is_valid(row, col)) && (*maze)(row, col) != '#';
+  return (maze->is_valid(row, col)) && maze->at(row, col) != '#';
 }
