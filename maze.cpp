@@ -7,14 +7,14 @@ Maze::Maze(int nrows, int ncols)
 {
   rows = (nrows % 2) ? nrows : nrows - 1;
   cols = (ncols % 2) ? ncols : ncols - 1;
-  grid = new char*[rows];
   for (int i = 0; i < rows; i++)
   {
-    grid[i] = new char[cols];
+    std::vector<char> temp_row;
     for (int j = 0; j < cols; j++)
     {
-      grid[i][j] = '#';
+      temp_row.push_back('#');
     }
+    grid.push_back(temp_row);
   }
 }
 
@@ -23,35 +23,33 @@ Maze::Maze(const char* filename)
   FILE* f = fopen(filename, "r");
   fscanf(f, "%d %d\n", &rows, &cols);
 
-  grid = new char*[rows];
-
   char dummy;
   for (int i = 0; i < rows; i++)
   {
-    grid[i] = new char[cols];
+    std::vector<char> temp_row;
     for (int j = 0; j < cols; j++)
     {
-      fscanf(f, "%c", &grid[i][j]);
-      if (grid[i][j] == 'S')
+      // Read in a character
+      fscanf(f, "%c", &dummy);
+      temp_row.push_back(dummy);
+
+      if (dummy == 'S')
         start = CellPtr(new Cell(i, j, NULL));
-      else if (grid[i][j] == 'E')
+      else if (dummy == 'E')
         end = CellPtr(new Cell(i, j, NULL));
     }
+    // Read in the new line
     fscanf(f, "%c", &dummy);
+
+    // Store the new row in the grid
+    grid.push_back(temp_row);
   }
   fclose(f);
 }
 
 Maze::~Maze()
 {
-  // Delete the grid
-  for (int i = 0; i < rows; i++)
-  {
-    delete [] grid[i];
-    grid[i] = nullptr;
-  }
-  delete [] grid;
-  grid = nullptr;
+  /* Intentionally left empty */
 }
 
 void Maze::init_curses()

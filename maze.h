@@ -12,12 +12,14 @@ class Maze;
 
 typedef std::shared_ptr<Maze> MazePtr;
 
+typedef std::vector<std::vector<char>> GridPtr;
+
 class Maze
 {
  private:
   int rows;
   int cols;
-  char** grid;
+  GridPtr grid;
   CellPtr start;
   CellPtr end;
 
