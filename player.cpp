@@ -4,7 +4,7 @@
 
 Player::Player(int row, int col)
 {
-  this->game_won = false;
+  this->win_flag = false;
   this->row = row;
   this->col = col;
 }
@@ -53,7 +53,7 @@ void Player::move(MazePtr maze, direction dir)
 
   if ((*maze)(newrow, newcol) == 'E')
   {
-    game_won = true;
+    win_flag = true;
     (*maze)(midrow, midcol) = '.';
     (*maze)(row, col) = '.';
     return;

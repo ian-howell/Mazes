@@ -126,7 +126,7 @@ void Solver::player_control(MazePtr maze)
 
     maze->draw();
 
-    if (player->game_won)
+    if (player->game_won())
     {
       clear();
       mvwprintw(stdscr, maze->get_cols() / 2, maze->get_rows() / 2, "You win!");
