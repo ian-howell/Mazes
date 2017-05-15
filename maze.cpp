@@ -190,7 +190,9 @@ void Maze::maybe_draw(bool animate)
   if (animate)
   {
     draw();
-    usleep(DRAW_DELAY);
+    usleep(draw_delay);
   }
   return;
 }
+
+int Maze::draw_delay = DRAW_DELAY;

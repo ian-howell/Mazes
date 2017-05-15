@@ -18,10 +18,11 @@ int main(int argc, char** argv)
     {"algorithm",    required_argument, 0, 'a'},
     {"infile",       required_argument, 0, 'i'},
     {"outfile",      required_argument, 0, 'o'},
-    {"animate",      no_argument,       0, 0}
+    {"animate",      no_argument,       0, 0},
+    {"speed",        required_argument, 0, 's'}
   };
 
-  while ((c = getopt_long(argc, argv, "r:c:a:h", opts, &opt_index)) != -1)
+  while ((c = getopt_long(argc, argv, "a:i:o:s:h", opts, &opt_index)) != -1)
   {
     switch (c)
     {
@@ -33,6 +34,9 @@ int main(int argc, char** argv)
         break;
       case 'o':
         output_file = optarg;
+        break;
+      case 's':
+        Maze::draw_delay = 1000 * std::stoi(optarg);
         break;
       case 0:
         animate_flag = true;
