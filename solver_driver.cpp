@@ -61,6 +61,10 @@ int main(int argc, char** argv)
   {
     solver->X_first_search(maze, Solver::DFS, animate_flag);
   }
+  else if (strcmp(algorithm, "astar") == 0)
+  {
+    solver->astar(maze, animate_flag);
+  }
   else if (strcmp(algorithm, "play") == 0)
   {
     solver->player_control(maze);
