@@ -1,5 +1,4 @@
 #include "cell.h"
-#define NULL 0
 
 Cell::Cell()
 {
