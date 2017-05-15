@@ -8,21 +8,11 @@
 
 int main(int argc, char** argv)
 {
-  int rows = 10;
-  int cols = 10;
+  int rows = -1;
+  int cols = -1;
   char* algorithm = NULL;
   char* output_file = NULL;
   bool animate_flag = false;
-
-  // Get the screen dimensions
-  initscr();
-  getmaxyx(stdscr, rows, cols);
-  endwin();
-
-  // Normalize the dimensions so there is a border between the edge of
-  // the screen and the maze walls
-  rows -= 2;
-  cols -= 2;
 
   int c;
   int opt_index = 0;
@@ -65,6 +55,21 @@ int main(int argc, char** argv)
     fprintf(stderr, "Must specify an algorithm (prims)\n");
     return 0;
   }
+
+  // Get the screen dimensions (in case the user didn't enter any)
+  if (rows < 0 || cols < 0)
+  {
+    int max_rows, max_cols;
+    initscr();
+    getmaxyx(stdscr, max_rows, max_cols);
+    endwin();
+
+    // Normalize the dimensions so there is a border between the edge of
+    // the screen and the maze walls
+    rows = (rows < 0) ? max_rows - 2 : rows;
+    cols = (cols < 0) ? max_cols - 2 : cols;
+  }
+
 
   std::shared_ptr<Generator> generator(new Generator(rows, cols));
   MazePtr maze = generator->create_maze(animate_flag);
