@@ -5,6 +5,7 @@
 #include <memory>
 #include "maze.h"
 #include "generator.h"
+#include <string>
 
 int main(int argc, char** argv)
 {

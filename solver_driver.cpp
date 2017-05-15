@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <getopt.h>
 #include <cstring>
+#include <iostream>
 #include "maze.h"
 #include "solver.h"
 
