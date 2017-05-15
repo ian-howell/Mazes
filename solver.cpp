@@ -95,7 +95,6 @@ void Solver::X_first_search(MazePtr maze, SOLVE_TYPE solve_type, bool animate)
       if (maze->at(neighbors[i]->row, neighbors[i]->col) != 'E')
         maze->at(neighbors[i]->row, neighbors[i]->col) = ',';
       maze->maybe_draw(animate);
-      neighbors[i]->parent = u;
       frontier.push_back(CellPtr(neighbors[i]));
     }
   }

@@ -150,7 +150,7 @@ std::vector<CellPtr> Maze::get_neighbors(CellPtr cell)
     new_row = cell->row + offset[i][0];
     new_col = cell->col + offset[i][1];
     if (is_pathable(new_row, new_col))
-      neighbors.push_back(CellPtr(new Cell(new_row, new_col, NULL)));
+      neighbors.push_back(CellPtr(new Cell(new_row, new_col, cell)));
   }
   return neighbors;
 }
