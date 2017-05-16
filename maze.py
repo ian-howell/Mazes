@@ -1,12 +1,16 @@
 #!/usr/bin/python3
 
 import subprocess
+import os.path
+import os
 
 def main():
     print("*=========================================*")
     print("*          MAZE GENERATOR/SOLVER          *")
     print("*=========================================*")
     print()
+
+    check_for_binaries()
 
     generate_call, unsolved = get_generation_call()
     solve_call = get_solve_call(unsolved)
@@ -105,8 +109,30 @@ def yes_or_no():
             return val[0] == 'y'
 
 
+def check_for_binaries():
+    generator_exists = os.path.isfile("./generator_driver")
+    solver_exists = os.path.isfile("./solver_driver")
+    if not (generator_exists and solver_exists):
+        print("At least one of the necessary binaries does not exist")
+        print("Attempt to resolve?")
+        if yes_or_no():
+            make_command = "make > /dev/null"
+            FNULL = open(os.devnull, 'w')
+            subprocess.call(make_command.split(), stdout=FNULL, stderr=FNULL)
+
+            generator_exists = os.path.isfile("./generator_driver")
+            solver_exists = os.path.isfile("./solver_driver")
+            if not (generator_exists and solver_exists):
+                print("Could not resolve. Try running make?")
+                raise Exception("Please consult repo owner")
+            else:
+                print("\n=== Successfully built binaries ===\n")
+
+
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
         print("\rGoodbye!")
+    except Exception as e:
+        print(e)
