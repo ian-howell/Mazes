@@ -26,7 +26,9 @@ def get_generation_call():
     cols = check_range(0, 200)
     print("Select a generation algorithm:")
     print("1) Randomized Prim's")
-    generation_alg = check_range(1, 1)
+    print("2) Randomized Depth-First Search")
+    generation_alg = check_range(1, 2)
+
     print("Would you like to animate maze generation (y/n)?")
     # animate_generation = True if input(">>>") == 'y' else False
     animate_generation = yes_or_no()
@@ -39,7 +41,7 @@ def get_generation_call():
     print("Please enter a filename to save the unsolved maze to")
     filename = input(">>>")
 
-    generators = ['prims']
+    generators = ['prims', 'dfs']
 
     generate_call = "./generator_driver"
     generate_call += " --algorithm={}".format(generators[generation_alg-1])
