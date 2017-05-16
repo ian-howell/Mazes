@@ -48,7 +48,7 @@ class Maze
 
   void draw();
 
-  std::vector<CellPtr> get_neighbors(CellPtr cell);
+  std::vector<CellPtr> get_neighbors(CellPtr cell, bool walls=false);
 
   bool is_pathable(int r, int c);
   bool is_valid(int r, int c);

@@ -45,14 +45,10 @@ MazePtr Generator::prims(bool animate)
       maze->at(child->row, child->col) = ' ';
       maze->at(r, c) = 'E';
 
-      for (int i = -1; i <= 1; i += 2)
-      {
-        if (maze->is_valid(r + i, c))
-          frontier.push_back(CellPtr(new Cell(r + i, c, gc)));
+      std::vector<CellPtr> neighbors = maze->get_neighbors(gc, true);
+      for (int i = 0; i < neighbors.size(); i++)
+        frontier.push_back(neighbors[i]);
 
-        if (maze->is_valid(r, c + i))
-          frontier.push_back(CellPtr(new Cell(r, c + i, gc)));
-      }
       maze->maybe_draw(animate);
       maze->at(r, c) = ' ';
     }
