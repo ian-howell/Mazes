@@ -9,13 +9,6 @@ class Generator
    int rows;
    int cols;
 
-  /**
-   * animate
-   *
-   * Color the maze, then print it to the screen
-   */
-  void animate();
-
  public:
   Generator(int r, int c);
 
