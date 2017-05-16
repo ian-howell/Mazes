@@ -43,6 +43,7 @@ class Maze
   void maybe_init(bool animate=true);
   void maybe_endwin(bool animate=true);
   void maybe_draw(bool animate=true);
+  void maybe_message(const char* msg, bool animate=true);
 
   void print(const char* filename);
 

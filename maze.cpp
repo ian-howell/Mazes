@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <ncurses.h>
 #include <unistd.h>
+#include <cstring>
 #include "maze.h"
 
 Maze::Maze(int nrows, int ncols)
@@ -199,6 +200,16 @@ void Maze::maybe_draw(bool animate)
   {
     draw();
     usleep(draw_delay);
+  }
+  return;
+}
+
+void Maze::maybe_message(const char* msg, bool animate)
+{
+  if (animate)
+  {
+    mvwprintw(stdscr, rows+1, 0, msg);
+    refresh();
   }
   return;
 }
