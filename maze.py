@@ -22,15 +22,16 @@ def main():
 def get_generation_call():
     print("How many rows (0 for maximum)?")
     rows = check_range(0, 100)
+
     print("How many cols (0 for maximum)?")
     cols = check_range(0, 200)
+
     print("Select a generation algorithm:")
     print("1) Randomized Prim's")
     print("2) Randomized Depth-First Search")
     generation_alg = check_range(1, 2)
 
     print("Would you like to animate maze generation (y/n)?")
-    # animate_generation = True if input(">>>") == 'y' else False
     animate_generation = yes_or_no()
 
     speed = 0
@@ -39,7 +40,7 @@ def get_generation_call():
         speed = check_range(0, 10000);
 
     print("Please enter a filename to save the unsolved maze to")
-    filename = input(">>>")
+    filename = get_filename("unsolved.txt")
 
     generators = ['prims', 'dfs']
 
@@ -62,6 +63,7 @@ def get_solve_call(input_file):
     print("4) Depth-First Search")
     print("5) A*")
     solve_alg = check_range(1, 5)
+
     speed = 0
     if solve_alg != 1:
         print("Would you like to animate maze solving (y/n)?")
@@ -74,7 +76,7 @@ def get_solve_call(input_file):
         animate_solve = True
 
     print("Please enter a filename to save the solved maze to")
-    output_file = input(">>>")
+    output_file = get_filename("solved.txt")
 
     solvers = ['play', 'bt', 'bfs', 'dfs', 'astar']
 
@@ -90,20 +92,25 @@ def get_solve_call(input_file):
 
 def check_range(lower, upper):
     while True:
+        val = input(">>>")
+        if not val:
+            return lower
         try:
-            val = int(input(">>>"))
+            val = int(val)
             if (val < lower) or (val > upper):
-                raise TypeError()
+                raise ValueError()
             return val
-        except TypeError:
-            error_msg = "ERROR: Please choose a number"
-            error_msg += " between {} and {}".format(lower, upper)
-            print(error_msg)
+        except ValueError:
+                error_msg = "ERROR: Please choose a number"
+                error_msg += " between {} and {}".format(lower, upper)
+                print(error_msg)
 
 
 def yes_or_no():
     while True:
         val = input(">>>")
+        if not val:
+            return True
         if val.lower()[0] not in 'yn':
             error_msg = "ERROR: Please choose [y]es or [n]o "
             print(error_msg)
@@ -130,6 +137,13 @@ def check_for_binaries():
             else:
                 print("\n=== Successfully built binaries ===\n")
 
+
+def get_filename(default):
+    val = input(">>>")
+    if not val:
+        return default
+    else:
+        return val
 
 if __name__ == "__main__":
     try:
