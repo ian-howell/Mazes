@@ -3,6 +3,7 @@
 #include <vector>
 #include <unistd.h>
 #include <stdio.h>
+#include <stack>
 
 #include "cell.h"
 #include "maze.h"
@@ -54,6 +55,57 @@ MazePtr Generator::prims(bool animate)
     }
   }
 
+  maze->at(rows - 1, cols - 1) = 'E';
+  maze->maybe_draw(animate);
+  maze->maybe_endwin(animate);
+
+  return maze;
+}
+
+MazePtr Generator::dfs(bool animate)
+{
+  MazePtr maze(new Maze(rows, cols));
+  maze->maybe_init(animate);
+
+  CellPtr start(new Cell(0, 0, NULL));
+  maze->at(start->row, start->col) = 'S';
+  maze->maybe_draw(animate);
+
+  std::stack<CellPtr> frontier;
+  // Add the start node's neighbors to the frontier (in random order)
+  std::vector<CellPtr> neighbors = maze->get_neighbors(start, true);
+  while (neighbors.size() > 0)
+  {
+    int rand_point = rand() % neighbors.size();
+    frontier.push(neighbors[rand_point]);
+    neighbors.erase(neighbors.begin() + rand_point);
+  }
+
+  while (!frontier.empty())
+  {
+    CellPtr child = frontier.top();
+    frontier.pop();
+
+    CellPtr gc = child->get_child();
+    int r = gc->row;
+    int c = gc->col;
+
+    if (maze->is_valid(r, c) && maze->at(r, c) == '#')
+    {
+      maze->at(child->row, child->col) = ' ';
+      maze->at(r, c) = 'E';
+      maze->maybe_draw(animate);
+      maze->at(r, c) = ' ';
+
+      std::vector<CellPtr> neighbors = maze->get_neighbors(gc, true);
+      while (neighbors.size() > 0)
+      {
+        int rand_point = rand() % neighbors.size();
+        frontier.push(neighbors[rand_point]);
+        neighbors.erase(neighbors.begin() + rand_point);
+      }
+    }
+  }
   maze->at(rows - 1, cols - 1) = 'E';
   maze->maybe_draw(animate);
   maze->maybe_endwin(animate);

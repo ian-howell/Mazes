@@ -25,5 +25,7 @@ class Generator
    * Uses Prim's algorithm to create a random path through the maze
    */
    MazePtr prims(bool animate=false);
+
+   MazePtr dfs(bool animate=false);
 };
 #endif

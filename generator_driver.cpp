@@ -6,6 +6,7 @@
 #include "maze.h"
 #include "generator.h"
 #include <string>
+#include <cstring>
 
 int main(int argc, char** argv)
 {
@@ -73,7 +74,17 @@ int main(int argc, char** argv)
 
 
   std::shared_ptr<Generator> generator(new Generator(rows, cols));
-  MazePtr maze = generator->prims(animate_flag);
+  MazePtr maze;
+
+  if (strcmp(algorithm, "prims") == 0)
+  {
+    maze = generator->prims(animate_flag);
+  }
+  else if (strcmp(algorithm, "dfs") == 0)
+  {
+    maze = generator->dfs(animate_flag);
+  }
+
   if (output_file)
     maze->print(output_file);
 
