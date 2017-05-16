@@ -40,7 +40,7 @@ def get_generation_call():
     generate_call += " --algorithm={}".format(generators[generation_alg-1])
     generate_call += " --file={}".format(filename)
     generate_call += " --animate" if animate_generation else ""
-    generate_call += " --speed={}".format(speed) if speed > 0 else "0"
+    generate_call += " --speed={}".format(speed if speed > 0 else "0")
     generate_call += " --rows={}".format(rows) if rows > 0 else ""
     generate_call += " --cols={}".format(cols) if cols > 0 else ""
 
@@ -73,7 +73,7 @@ def get_solve_call(input_file):
     solve_call = "./solver_driver"
     solve_call += " --algorithm={}".format(solvers[solve_alg-1])
     solve_call += " --animate" if animate_solve else ""
-    solve_call += " --speed={}".format(speed) if speed > 0 else "0"
+    solve_call += " --speed={}".format(speed if speed > 0 else "0")
     solve_call += " --infile={}".format(input_file)
     solve_call += " --outfile={}".format(output_file)
 
