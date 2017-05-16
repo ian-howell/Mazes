@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 
 
   std::shared_ptr<Generator> generator(new Generator(rows, cols));
-  MazePtr maze = generator->create_maze(animate_flag);
+  MazePtr maze = generator->prims(animate_flag);
   if (output_file)
     maze->print(output_file);
 

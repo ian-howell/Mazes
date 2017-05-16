@@ -20,10 +20,10 @@ class Generator
   Generator(int r, int c);
 
   /**
-   * create_maze
+   * prims
    *
    * Uses Prim's algorithm to create a random path through the maze
    */
-   MazePtr create_maze(bool animate=false);
+   MazePtr prims(bool animate=false);
 };
 #endif

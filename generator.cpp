@@ -15,7 +15,7 @@ Generator::Generator(int r, int c)
   srand(time(NULL));
 }
 
-MazePtr Generator::create_maze(bool animate)
+MazePtr Generator::prims(bool animate)
 {
   MazePtr maze(new Maze(rows, cols));
   maze->maybe_init(animate);
