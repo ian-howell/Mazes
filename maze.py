@@ -81,14 +81,16 @@ def get_solve_call(input_file):
 
 
 def check_range(lower, upper):
-    val = int(input(">>>"))
-
-    error_msg = "ERROR: Please choose a number"
-    error_msg += " between {} and {}".format(lower, upper)
-    while (val < lower) or (val > upper):
-        print(error_msg)
-        val = int(input(">>>"))
-    return val
+    while True:
+        try:
+            val = int(input(">>>"))
+            if (val < lower) or (val > upper):
+                raise
+            return val
+        except:
+            error_msg = "ERROR: Please choose a number"
+            error_msg += " between {} and {}".format(lower, upper)
+            print(error_msg)
 
 
 if __name__ == "__main__":
