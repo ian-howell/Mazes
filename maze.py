@@ -55,16 +55,15 @@ def get_solve_call(input_file):
     print("4) Depth-First Search")
     print("5) A*")
     solve_alg = check_range(1, 5)
+    speed = 0
     if solve_alg != 1:
         print("Would you like to animate maze solving (y/n)?")
         animate_solve = True if input(">>>") == 'y' else False
+        if animate_solve:
+            print("Enter animation speed (delay in milliseconds)")
+            speed = int(input(">>>"))
     else:
-        animate_solve = False
-
-    speed = 0
-    if animate_solve:
-        print("Enter animation speed (delay in milliseconds)")
-        speed = int(input(">>>"))
+        animate_solve = True
 
     print("Please enter a filename to save the solved maze to")
     output_file = input(">>>")
