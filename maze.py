@@ -17,19 +17,20 @@ def main():
 
 def get_generation_call():
     print("How many rows (0 for maximum)?")
-    rows = int(input(">>>"))
+    rows = check_range(0, 100)
     print("How many cols (0 for maximum)?")
-    cols = int(input(">>>"))
+    cols = check_range(0, 200)
     print("Select a generation algorithm:")
     print("1) Randomized Prim's")
     generation_alg = check_range(1, 1)
     print("Would you like to animate maze generation (y/n)?")
-    animate_generation = True if input(">>>") == 'y' else False
+    # animate_generation = True if input(">>>") == 'y' else False
+    animate_generation = yes_or_no()
 
     speed = 0
     if animate_generation:
         print("Enter animation speed (delay in milliseconds)")
-        speed = int(input(">>>"))
+        speed = check_range(0, 10000);
 
     print("Please enter a filename to save the unsolved maze to")
     filename = input(">>>")
@@ -58,10 +59,11 @@ def get_solve_call(input_file):
     speed = 0
     if solve_alg != 1:
         print("Would you like to animate maze solving (y/n)?")
-        animate_solve = True if input(">>>") == 'y' else False
+        # animate_solve = True if input(">>>") == 'y' else False
+        animate_solve = yes_or_no()
         if animate_solve:
             print("Enter animation speed (delay in milliseconds)")
-            speed = int(input(">>>"))
+            speed = check_range(0, 10000);
     else:
         animate_solve = True
 
@@ -85,13 +87,26 @@ def check_range(lower, upper):
         try:
             val = int(input(">>>"))
             if (val < lower) or (val > upper):
-                raise
+                raise TypeError()
             return val
-        except:
+        except TypeError:
             error_msg = "ERROR: Please choose a number"
             error_msg += " between {} and {}".format(lower, upper)
             print(error_msg)
 
 
+def yes_or_no():
+    while True:
+        val = input(">>>")
+        if val.lower()[0] not in 'yn':
+            error_msg = "ERROR: Please choose [y]es or [n]o "
+            print(error_msg)
+        else:
+            return val[0] == 'y'
+
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\rGoodbye!")
