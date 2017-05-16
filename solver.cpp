@@ -212,14 +212,19 @@ bool Solver::astar(MazePtr maze, bool animate)
 
 int Solver::manhattan_distance(CellPtr first, CellPtr second)
 {
-  int drow = std::abs(first->row - second->row);
-  int dcol = std::abs(first->col - second->col);
+  // on macOS, g++ and clang++ gets very confused when you're trying
+  // to use std::abs when also including cmath.
+  // see here: http://stackoverflow.com/questions/1374037/ambiguous-overload-call-to-absdouble
+  int drow = std::abs(static_cast<float>(first->row - second->row));
+  int dcol = std::abs(static_cast<float>(first->col - second->col));
   return (drow + dcol);
 }
 
 int Solver::real_distance(CellPtr first, CellPtr second)
 {
-  int drow = std::abs(first->row - second->row);
-  int dcol = std::abs(first->col - second->col);
+  // If you're wondering why the `static_cast`, read the
+  // manhattan_distance method
+  int drow = std::abs(static_cast<float>(first->row - second->row));
+  int dcol = std::abs(static_cast<float>(first->col - second->col));
   return std::sqrt(std::pow(drow, 2) + std::pow(dcol, 2));
 }
