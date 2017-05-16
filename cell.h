@@ -19,6 +19,7 @@ class Cell
   CellPtr get_child();
 
   friend bool operator==(const Cell& lhs, const Cell& rhs);
+  friend bool operator!=(const Cell& lhs, const Cell& rhs);
 };
 
 #endif
