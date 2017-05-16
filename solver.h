@@ -27,6 +27,8 @@ class Solver
   void X_first_search(MazePtr maze, SOLVE_TYPE solve_type, bool animate=true);
   void player_control(MazePtr maze);
   bool astar(MazePtr maze, bool animate=true);
+
+  void finished(MazePtr maze, bool animate=true);
 };
 
 #endif

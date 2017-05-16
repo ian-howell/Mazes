@@ -22,6 +22,7 @@ bool Solver::backtrack(MazePtr maze, bool animate)
   bool ret_val;
   maze->maybe_init(animate);
   ret_val = backtrack_r(maze, maze->get_start(), animate);
+  finished(maze, animate);
   maze->maybe_endwin(animate);
   return ret_val;
 }
@@ -87,6 +88,7 @@ void Solver::X_first_search(MazePtr maze, SOLVE_TYPE solve_type, bool animate)
         maze->maybe_draw(animate);
       }
 
+      finished(maze, animate);
       maze->maybe_endwin(animate);
       return;
     }
@@ -103,6 +105,7 @@ void Solver::X_first_search(MazePtr maze, SOLVE_TYPE solve_type, bool animate)
     }
   }
 
+  finished(maze, animate);
   maze->maybe_endwin(animate);
   return;
 }
@@ -128,6 +131,7 @@ void Solver::player_control(MazePtr maze)
     maze->draw();
   }
   delete player;
+  finished(maze);
   maze->maybe_endwin();
   return;
 }
@@ -174,6 +178,7 @@ bool Solver::astar(MazePtr maze, bool animate)
         }
       }
 
+      finished(maze, animate);
       maze->maybe_endwin(animate);
       return true;
     }
@@ -206,6 +211,7 @@ bool Solver::astar(MazePtr maze, bool animate)
       }
     }
   }
+  finished(maze, animate);
   maze->maybe_endwin(animate);
   return false;
 }
@@ -227,4 +233,11 @@ int Solver::real_distance(CellPtr first, CellPtr second)
   int drow = std::abs(static_cast<float>(first->row - second->row));
   int dcol = std::abs(static_cast<float>(first->col - second->col));
   return std::sqrt(std::pow(drow, 2) + std::pow(dcol, 2));
+}
+
+void Solver::finished(MazePtr maze, bool animate)
+{
+  const char* msg = "Finished solving. Press any key to continue...";
+  maze->maybe_message(msg, animate);
+  return;
 }
