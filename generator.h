@@ -20,5 +20,7 @@ class Generator
    MazePtr prims(bool animate=false);
 
    MazePtr dfs(bool animate=false);
+
+   void finished(MazePtr maze, bool animate=false);
 };
 #endif

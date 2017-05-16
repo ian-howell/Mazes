@@ -56,7 +56,9 @@ MazePtr Generator::prims(bool animate)
   }
 
   maze->at(rows - 1, cols - 1) = 'E';
+
   maze->maybe_draw(animate);
+  finished(maze, animate);
   maze->maybe_endwin(animate);
 
   return maze;
@@ -107,8 +109,17 @@ MazePtr Generator::dfs(bool animate)
     }
   }
   maze->at(rows - 1, cols - 1) = 'E';
+
   maze->maybe_draw(animate);
+  finished(maze, animate);
   maze->maybe_endwin(animate);
 
   return maze;
+}
+
+void Generator::finished(MazePtr maze, bool animate)
+{
+  const char* msg = "Finished generation. Press any key to continue...";
+  maze->maybe_message(msg, animate);
+  return;
 }
