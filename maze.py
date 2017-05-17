@@ -29,7 +29,8 @@ def get_generation_call():
     print("Select a generation algorithm:")
     print("1) Randomized Prim's")
     print("2) Randomized Depth-First Search")
-    generation_alg = check_range(1, 2)
+    print("2) Randomized Kruskal's")
+    generation_alg = check_range(1, 3)
 
     print("Would you like to animate maze generation (y/n)?")
     animate_generation = yes_or_no()
@@ -42,7 +43,7 @@ def get_generation_call():
     print("Please enter a filename to save the unsolved maze to")
     filename = get_filename("unsolved.txt")
 
-    generators = ['prims', 'dfs']
+    generators = ['prims', 'dfs', 'kruskal']
 
     generate_call = "./generator_driver"
     generate_call += " --algorithm={}".format(generators[generation_alg-1])
