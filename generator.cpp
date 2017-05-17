@@ -8,6 +8,7 @@
 #include "cell.h"
 #include "maze.h"
 #include "generator.h"
+#include "union_find.h"
 
 Generator::Generator(int r, int c)
 {
@@ -110,6 +111,92 @@ MazePtr Generator::dfs(bool animate)
   }
   maze->at(rows - 1, cols - 1) = 'E';
 
+  maze->maybe_draw(animate);
+  finished(maze, animate);
+  maze->maybe_endwin(animate);
+
+  return maze;
+}
+
+MazePtr Generator::kruskal(bool animate)
+{
+  MazePtr maze(new Maze(rows, cols));
+  maze->maybe_init(animate);
+
+  // Add all the edges to a list
+  std::vector<CellPtr> nodes;
+  int count = 0;
+  for (int i = 0; i < rows; i += 2)
+  {
+    for (int j = 0; j < cols; j += 2)
+    {
+      nodes.push_back(CellPtr(new Cell(i, j, NULL)));
+    }
+  }
+
+  int node_rows = rows / 2 + 1;
+  int node_cols = cols / 2 + 1;
+
+  // Add all the edges
+  using edge_t = std::pair<int, int>;
+  std::vector<edge_t> edges;
+  for (int r = 0; r < node_rows; r++)
+  {
+    for (int c = 0; c < node_cols; c++)
+    {
+      int this_cell = c + (r*node_cols);
+      int right_cell = (c+1) + (r*node_cols);
+      int lower_cell = c + ((r+1)*node_cols);
+
+      if (nodes[this_cell]->col != cols-1)
+        edges.push_back(std::make_pair(this_cell, right_cell));
+      if (nodes[this_cell]->row != rows-1)
+        edges.push_back(std::make_pair(this_cell, lower_cell));
+    }
+  }
+
+  // Make each node a set containing only itself
+  int num_nodes = nodes.size();
+  std::vector<UnionFindSet> sets;
+  for (int i = 0; i < num_nodes; i++)
+    sets.push_back(UnionFindSet(i));
+
+  int total_edges = 0;
+  while (total_edges < num_nodes-1)
+  {
+    // Get a random edge from the list of edges
+    int rand_point = rand() % edges.size();
+    edge_t next_edge = edges[rand_point];
+    edges.erase(edges.begin() + rand_point);
+
+    // Find the representative of the set of each node for this edge
+    int x = find(sets, next_edge.first);
+    int y = find(sets, next_edge.second);
+
+    // If the nodes are not in the same set, join them
+    if (x != y)
+    {
+      int first_row = nodes[next_edge.first]->row;
+      int first_col = nodes[next_edge.first]->col;
+      int second_row = nodes[next_edge.second]->row;
+      int second_col = nodes[next_edge.second]->col;
+      int mid_row = (first_row + second_row) / 2;
+      int mid_col = (first_col + second_col) / 2;
+
+      maze->at(first_row, first_col) = 'E';
+      maze->at(second_row, second_col) = 'E';
+      maze->at(mid_row, mid_col) = 'E';
+      maze->maybe_draw(animate);
+      maze->at(first_row, first_col) = ' ';
+      maze->at(second_row, second_col) = ' ';
+      maze->at(mid_row, mid_col) = ' ';
+      join(sets, x, y);
+      total_edges++;
+    }
+  }
+
+  maze->at(0, 0) = 'S';
+  maze->at(rows - 1, cols - 1) = 'E';
   maze->maybe_draw(animate);
   finished(maze, animate);
   maze->maybe_endwin(animate);

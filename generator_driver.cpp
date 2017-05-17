@@ -84,6 +84,10 @@ int main(int argc, char** argv)
   {
     maze = generator->dfs(animate_flag);
   }
+  else if (strcmp(algorithm, "kruskal") == 0)
+  {
+    maze = generator->kruskal(animate_flag);
+  }
 
   if (output_file)
     maze->print(output_file);

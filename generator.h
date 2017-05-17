@@ -21,6 +21,8 @@ class Generator
 
    MazePtr dfs(bool animate=false);
 
+   MazePtr kruskal(bool animate=false);
+
    void finished(MazePtr maze, bool animate=false);
 };
 #endif

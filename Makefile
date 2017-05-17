@@ -8,7 +8,7 @@ SOURCES = $(wildcard *.cpp)
 HEADERS = $(wildcard *.h)
 
 MAZE_OBJECTS = maze.o cell.o
-GENERATOR_OBJECTS = generator.o generator_driver.o
+GENERATOR_OBJECTS = generator.o generator_driver.o union_find.o
 SOLVER_OBJECTS = solver.o player.o solver_driver.o
 
 default: all
