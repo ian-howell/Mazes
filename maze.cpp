@@ -55,6 +55,32 @@ Maze::~Maze()
   /* Intentionally left empty */
 }
 
+void Maze::set_start(int r, int c)
+{
+  if (is_pathable(r, c))
+  {
+    // Get rid of old start character
+    if (start != nullptr)
+      grid[start->row][start->col] = ' ';
+
+    start = CellPtr(new Cell(r, c, NULL));
+    grid[r][c] = 'S';
+  }
+}
+
+void Maze::set_end(int r, int c)
+{
+  if (is_pathable(r, c))
+  {
+    // Get rid of old end character
+    if (end != nullptr)
+      grid[end->row][end->col] = ' ';
+
+    end = CellPtr(new Cell(r, c, NULL));
+    grid[r][c] = 'E';
+  }
+}
+
 void Maze::init_curses()
 {
   initscr();

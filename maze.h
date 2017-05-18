@@ -34,6 +34,9 @@ class Maze
   CellPtr get_start() const { return start; }
   CellPtr get_end()   const { return end;   }
 
+  void set_start(int r, int c);
+  void set_end(int r, int c);
+
   char& at (const int i, const int j) { return grid[i][j]; }
 
   char& operator()(const int i, const int j) { return grid[i][j]; }
