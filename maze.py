@@ -29,7 +29,7 @@ def get_generation_call():
     print("Select a generation algorithm:")
     print("1) Randomized Prim's")
     print("2) Randomized Depth-First Search")
-    print("2) Randomized Kruskal's")
+    print("3) Randomized Kruskal's")
     generation_alg = check_range(1, 3)
 
     print("Would you like to animate maze generation (y/n)?")
