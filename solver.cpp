@@ -19,6 +19,7 @@ Solver::Solver()
 
 void Solver::solve(MazePtr maze, solve_t algorithm, bool animate)
 {
+  maze->maybe_init(animate);
   switch(algorithm)
   {
     case BFS:
@@ -35,16 +36,15 @@ void Solver::solve(MazePtr maze, solve_t algorithm, bool animate)
       player_control(maze);
       break;
   }
+  mouse_control(maze, animate);
+  maze->maybe_endwin(animate);
   return;
 }
 
 bool Solver::backtrack(MazePtr maze, bool animate)
 {
   bool ret_val;
-  maze->maybe_init(animate);
   ret_val = backtrack_r(maze, maze->get_start(), animate);
-  mouse_control(maze, animate);
-  maze->maybe_endwin(animate);
   return ret_val;
 }
 
@@ -82,7 +82,6 @@ void Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
 {
   std::deque<CellPtr> frontier;
 
-  maze->maybe_init(animate);
   CellPtr start = maze->get_start();
   frontier.push_back(CellPtr(start));
 
@@ -109,8 +108,6 @@ void Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
         maze->maybe_draw(animate);
       }
 
-      mouse_control(maze, animate);
-      maze->maybe_endwin(animate);
       return;
     }
 
@@ -126,8 +123,6 @@ void Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
     }
   }
 
-  mouse_control(maze, animate);
-  maze->maybe_endwin(animate);
   return;
 }
 
@@ -135,7 +130,6 @@ void Solver::player_control(MazePtr maze)
 {
   Player* player = new Player(0, 0);
   bool done = false;
-  maze->maybe_init();
 
   int c;
   while (!done)
@@ -152,15 +146,11 @@ void Solver::player_control(MazePtr maze)
     maze->draw();
   }
   delete player;
-  mouse_control(maze);
-  maze->maybe_endwin();
   return;
 }
 
 bool Solver::astar(MazePtr maze, bool animate)
 {
-  maze->maybe_init(animate);
-
   // Describe a pair (for the comparison function)
   using my_pair_t = std::pair<CellPtr, int>;
   // Comparison function
@@ -199,8 +189,6 @@ bool Solver::astar(MazePtr maze, bool animate)
         }
       }
 
-      mouse_control(maze, animate);
-      maze->maybe_endwin(animate);
       return true;
     }
 
@@ -232,8 +220,6 @@ bool Solver::astar(MazePtr maze, bool animate)
       }
     }
   }
-  mouse_control(maze, animate);
-  maze->maybe_endwin(animate);
   return false;
 }
 
