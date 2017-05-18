@@ -213,7 +213,7 @@ bool Solver::astar(MazePtr maze)
       {
         int distance = manhattan_distance(neighbors[i], maze->get_end());
         /* int distance = real_distance(current_node.first, neighbors[i]); */
-        frontier.push(std::make_pair(neighbors[i], distance));
+        frontier.push(std::make_pair(neighbors[i], distance + new_cost));
         cost_so_far[neighbors[i]] = new_cost;
 
         if (maze->at(neighbors[i]->row, neighbors[i]->col) != 'E')
