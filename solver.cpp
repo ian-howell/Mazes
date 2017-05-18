@@ -43,9 +43,7 @@ void Solver::solve(MazePtr maze, solve_t algorithm, bool animate)
 
 bool Solver::backtrack(MazePtr maze, bool animate)
 {
-  bool ret_val;
-  ret_val = backtrack_r(maze, maze->get_start(), animate);
-  return ret_val;
+  return backtrack_r(maze, maze->get_start(), animate);
 }
 
 bool Solver::backtrack_r(MazePtr maze, CellPtr cell, bool animate)
@@ -78,7 +76,7 @@ bool Solver::backtrack_r(MazePtr maze, CellPtr cell, bool animate)
   return false;
 }
 
-void Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
+bool Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
 {
   std::deque<CellPtr> frontier;
 
@@ -108,7 +106,7 @@ void Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
         maze->maybe_draw(animate);
       }
 
-      return;
+      return true;
     }
 
     if (maze->at(u->row, u->col) != 'S')
@@ -123,7 +121,8 @@ void Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
     }
   }
 
-  return;
+  // No path was found
+  return false;
 }
 
 void Solver::player_control(MazePtr maze)

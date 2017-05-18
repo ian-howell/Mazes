@@ -24,7 +24,7 @@ class Solver
 
  private:
   bool backtrack(MazePtr maze, bool animate=true);
-  void X_first_search(MazePtr maze, solve_t solve_type, bool animate=true);
+  bool X_first_search(MazePtr maze, solve_t solve_type, bool animate=true);
   void player_control(MazePtr maze);
   bool astar(MazePtr maze, bool animate=true);
 
