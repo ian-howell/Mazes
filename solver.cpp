@@ -59,7 +59,7 @@ bool Solver::backtrack_r(MazePtr maze, CellPtr cell)
     if (*neighbors[i] == *maze->get_end())
       return true;
 
-    maze->at(row, col) = '*';
+    maze->at(row, col) = ',';
     maze->draw(Maze::draw_delay);
     maze->at(row, col) = '.';
 
@@ -71,7 +71,7 @@ bool Solver::backtrack_r(MazePtr maze, CellPtr cell)
     }
     else
     {
-      maze->at(row, col) = '*';
+      maze->at(row, col) = ',';
       maze->draw(Maze::draw_delay);
       maze->at(row, col) = ' ';
     }
