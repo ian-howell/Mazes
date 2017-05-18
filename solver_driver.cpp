@@ -14,13 +14,15 @@ int main(int argc, char** argv)
   char* input_file = NULL;
   char* output_file = NULL;
   bool animate_flag = false;
+  bool diag_flag = false;
 
   struct option opts[] = {
     {"algorithm",    required_argument, 0, 'a'},
     {"infile",       required_argument, 0, 'i'},
     {"outfile",      required_argument, 0, 'o'},
     {"animate",      no_argument,       0, 0},
-    {"speed",        required_argument, 0, 's'}
+    {"speed",        required_argument, 0, 's'},
+    {"diag",         no_argument,       0, 'd'}
   };
 
   while ((c = getopt_long(argc, argv, "a:i:o:s:h", opts, &opt_index)) != -1)
@@ -39,6 +41,9 @@ int main(int argc, char** argv)
       case 's':
         Maze::draw_delay = 1000 * std::stoi(optarg);
         break;
+      case 'd':
+        diag_flag = true;
+        break;
       case 0:
         animate_flag = true;
         break;
@@ -52,7 +57,7 @@ int main(int argc, char** argv)
   }
 
   MazePtr maze(new Maze(input_file, animate_flag));
-  std::shared_ptr<Solver> solver(new Solver);
+  std::shared_ptr<Solver> solver(new Solver(diag_flag));
   Solver::solve_t solve_type = Solver::BACKTRACKING;
 
   if (strcmp(algorithm, "bt") == 0)

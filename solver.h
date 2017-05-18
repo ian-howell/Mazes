@@ -18,7 +18,7 @@ class Solver
     PLAY
   };
 
-  Solver();
+  Solver(bool diag=false);
 
   void solve(MazePtr maze, solve_t algorithm, bool animate=true);
   void mouse_control(MazePtr maze, solve_t algorithm, bool animate=true);
@@ -32,6 +32,8 @@ class Solver
   bool backtrack_r(MazePtr maze, CellPtr cell);
   int manhattan_distance(CellPtr first, CellPtr second);
   int real_distance(CellPtr first, CellPtr second);
+
+  bool allow_diag;
 };
 
 #endif
