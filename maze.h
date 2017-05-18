@@ -55,6 +55,7 @@ class Maze
 
   bool is_pathable(int r, int c);
   bool is_valid(int r, int c);
+  bool is_wall(int r, int c);
 
   void clear();
 

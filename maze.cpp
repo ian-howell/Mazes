@@ -207,7 +207,7 @@ std::vector<CellPtr> Maze::get_neighbors(CellPtr cell, bool walls)
     }
     else
     {
-      if (is_valid(new_row, new_col) && grid[new_row][new_col] == '#')
+      if (is_wall(new_row, new_col))
         neighbors.push_back(CellPtr(new Cell(new_row, new_col, cell)));
     }
   }
@@ -222,6 +222,11 @@ bool Maze::is_pathable(int r, int c)
 bool Maze::is_valid(int r, int c)
 {
   return r >= 0 && r < rows && c >= 0 && c < cols;
+}
+
+bool Maze::is_wall(int r, int c)
+{
+  return is_valid(r, c) && grid[r][c] == '#';
 }
 
 void Maze::end_curses()
