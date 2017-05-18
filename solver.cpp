@@ -263,13 +263,16 @@ void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
     row = event.y-1;
     col = event.x-1;
 
+    // Remove the detritus from the maze before checking if this space is valid
+    // Note that this call will not display the cleared maze
+    maze->clear();
     if (maze->is_pathable(row, col))
     {
-      maze->clear();
       // Move the start cell
       maze->set_start(row, col);
+      // Need to redraw where the end is incase it has been overwritten
+      maze->set_end(maze->get_end()->row, maze->get_end()->col);
       solve(maze, algorithm);
-      maze->draw();
     }
   }
   return;
