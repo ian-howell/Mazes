@@ -43,7 +43,7 @@ def get_generation_call():
     print("Please enter a filename to save the unsolved maze to")
     filename = get_filename("unsolved.txt")
 
-    generators = ['prims', 'dfs', 'kruskal']
+    generators = ['prims', 'dfs', 'kruskals']
 
     generate_call = "./generator_driver"
     generate_call += " --algorithm={}".format(generators[generation_alg-1])

@@ -5,24 +5,27 @@
 
 class Generator
 {
- private:
-   int rows;
-   int cols;
-
-   void finished(MazePtr maze, bool animate=false);
-
  public:
+  typedef char generate_t;
+  enum
+  {
+    DFS,
+    PRIMS,
+    KRUSKALS
+  };
+
   Generator(int r, int c);
 
-  /**
-   * prims
-   *
-   * Uses Prim's algorithm to create a random path through the maze
-   */
-   MazePtr prims(bool animate=false);
+  MazePtr generate(generate_t algorithm, bool animate=true);
 
-   MazePtr dfs(bool animate=false);
+ private:
+  int rows;
+  int cols;
 
-   MazePtr kruskal(bool animate=false);
+  void prims(MazePtr maze, bool animate);
+  void dfs(MazePtr maze, bool animate);
+  void kruskals(MazePtr maze, bool animate);
+
+  void finished(MazePtr maze, bool animate);
 };
 #endif

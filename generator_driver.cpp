@@ -74,20 +74,16 @@ int main(int argc, char** argv)
 
 
   std::shared_ptr<Generator> generator(new Generator(rows, cols));
-  MazePtr maze;
+  Generator::generate_t generate_type = Generator::DFS;
 
-  if (strcmp(algorithm, "prims") == 0)
-  {
-    maze = generator->prims(animate_flag);
-  }
-  else if (strcmp(algorithm, "dfs") == 0)
-  {
-    maze = generator->dfs(animate_flag);
-  }
-  else if (strcmp(algorithm, "kruskal") == 0)
-  {
-    maze = generator->kruskal(animate_flag);
-  }
+  if (strcmp(algorithm, "dfs") == 0)
+    generate_type = Generator::DFS;
+  else if (strcmp(algorithm, "prims") == 0)
+    generate_type = Generator::PRIMS;
+  else if (strcmp(algorithm, "kruskals") == 0)
+    generate_type = Generator::KRUSKALS;
+
+  MazePtr maze = generator->generate(generate_type, animate_flag);
 
   if (output_file)
     maze->print(output_file);

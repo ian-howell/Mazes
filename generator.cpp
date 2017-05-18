@@ -17,11 +17,33 @@ Generator::Generator(int r, int c)
   srand(time(NULL));
 }
 
-MazePtr Generator::prims(bool animate)
+MazePtr Generator::generate(generate_t algorithm, bool animate)
 {
   MazePtr maze(new Maze(rows, cols, animate));
   maze->init_curses();
+  switch(algorithm)
+  {
+    case DFS:
+      dfs(maze, animate);
+      break;
+    case PRIMS:
+      prims(maze, animate);
+      break;
+    case KRUSKALS:
+      kruskals(maze, animate);
+      break;
+  }
 
+  const char* msg = "Finished generation. Press any key to continue...";
+  maze->message(msg);
+  if (animate)
+    getch();
+  maze->end_curses();
+  return maze;
+}
+
+void Generator::prims(MazePtr maze, bool animate)
+{
   CellPtr start(new Cell(0, 0, NULL));
   maze->at(start->row, start->col) = 'S';
 
@@ -57,22 +79,13 @@ MazePtr Generator::prims(bool animate)
   }
 
   maze->at(rows - 1, cols - 1) = 'E';
-
   maze->draw();
-  const char* msg = "Finished generation. Press any key to continue...";
-  maze->message(msg);
-  if (animate)
-    getch();
-  maze->end_curses();
 
-  return maze;
+  return;
 }
 
-MazePtr Generator::dfs(bool animate)
+void Generator::dfs(MazePtr maze, bool animate)
 {
-  MazePtr maze(new Maze(rows, cols, animate));
-  maze->init_curses();
-
   CellPtr start(new Cell(0, 0, NULL));
   maze->at(start->row, start->col) = 'S';
   maze->draw(Maze::draw_delay);
@@ -115,20 +128,12 @@ MazePtr Generator::dfs(bool animate)
   maze->at(rows - 1, cols - 1) = 'E';
 
   maze->draw();
-  const char* msg = "Finished generation. Press any key to continue...";
-  maze->message(msg);
-  if (animate)
-    getch();
-  maze->end_curses();
 
-  return maze;
+  return;
 }
 
-MazePtr Generator::kruskal(bool animate)
+void Generator::kruskals(MazePtr maze, bool animate)
 {
-  MazePtr maze(new Maze(rows, cols, animate));
-  maze->init_curses();
-
   // Add all the edges to a list
   std::vector<CellPtr> nodes;
   int count = 0;
@@ -204,11 +209,5 @@ MazePtr Generator::kruskal(bool animate)
   maze->at(0, 0) = 'S';
   maze->at(rows - 1, cols - 1) = 'E';
   maze->draw();
-  const char* msg = "Finished generation. Press any key to continue...";
-  maze->message(msg);
-  if (animate)
-    getch();
-  maze->end_curses();
-
-  return maze;
+  return;
 }
