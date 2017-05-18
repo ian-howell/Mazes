@@ -257,8 +257,8 @@ void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
   int col;
   bool done = false;
   MEVENT event;
-  c = getch();
-  if ((c == KEY_MOUSE) && (getmouse(&event) == OK))
+  /* c = getch(); */
+  while ((!done) && (getch() == KEY_MOUSE) && (getmouse(&event) == OK))
   {
     row = event.y-1;
     col = event.x-1;
@@ -273,6 +273,7 @@ void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
       // Need to redraw where the end is incase it has been overwritten
       maze->set_end(maze->get_end()->row, maze->get_end()->col);
       solve(maze, algorithm);
+      done = true;
     }
   }
   return;
