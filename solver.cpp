@@ -51,7 +51,7 @@ bool Solver::backtrack_r(MazePtr maze, CellPtr cell)
   if (*cell == *maze->get_end())
     return true;
 
-  std::vector<CellPtr> neighbors = maze->get_neighbors(cell);
+  std::vector<CellPtr> neighbors = maze->get_neighbors(cell, Maze::FLOOR);
   for (size_t i = 0; i < neighbors.size(); i++)
   {
     int row = neighbors[i]->row;
@@ -114,7 +114,7 @@ bool Solver::X_first_search(MazePtr maze, solve_t solve_type)
 
     if (maze->at(u->row, u->col) != 'S')
       maze->at(u->row, u->col) = '.';
-    std::vector<CellPtr> neighbors = maze->get_neighbors(u);
+    std::vector<CellPtr> neighbors = maze->get_neighbors(u, Maze::FLOOR);
     for (size_t i = 0; i < neighbors.size(); i++)
     {
       if (maze->at(neighbors[i]->row, neighbors[i]->col) != 'E')
@@ -200,7 +200,8 @@ bool Solver::astar(MazePtr maze)
       maze->draw(Maze::draw_delay);
     }
 
-    std::vector<CellPtr> neighbors = maze->get_neighbors(current_node.first);
+    std::vector<CellPtr> neighbors = maze->get_neighbors(current_node.first,
+        Maze::FLOOR);
     for (int i = 0; i < neighbors.size(); i++)
     {
       // Path cost = 1

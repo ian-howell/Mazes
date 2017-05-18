@@ -185,31 +185,33 @@ void Maze::draw(int delay)
   }
 }
 
-std::vector<CellPtr> Maze::get_neighbors(CellPtr cell, bool walls)
+std::vector<CellPtr> Maze::get_neighbors(CellPtr cell, cell_t cell_type,
+    bool diag)
 {
   std::vector<CellPtr> neighbors;
   int new_row;
   int new_col;
-  int offset[4][2] = {
-    {-1, 0},
-    {0, +1},
-    {+1, 0},
-    {0, -1}
+  int offset[8][2] = {
+    {-1, 0},  // UP
+    {+1, 0},  // DOWN
+    {0, +1},  // RIGHT
+    {0, -1},  // LEFT
+
+    /* Only used if diag is set */
+    {-1, -1}, // UP-LEFT
+    {-1, +1}, // UP-RIGHT
+    {+1, +1}, // DOWN-RIGHT
+    {+1, -1}, // DOWN-LEFT
   };
-  for (int i = 0; i < 4; i++)
+  int limit = diag ? 8 : 4;
+  for (int i = 0; i < limit; i++)
   {
     new_row = cell->row + offset[i][0];
     new_col = cell->col + offset[i][1];
-    if (!walls)
-    {
-      if (is_pathable(new_row, new_col))
-        neighbors.push_back(CellPtr(new Cell(new_row, new_col, cell)));
-    }
-    else
-    {
-      if (is_wall(new_row, new_col))
-        neighbors.push_back(CellPtr(new Cell(new_row, new_col, cell)));
-    }
+    bool valid_floor = (cell_type == FLOOR) && is_pathable(new_row, new_col);
+    bool valid_wall = (cell_type == WALL) && (is_wall(new_row, new_col));
+    if (valid_floor || valid_wall)
+      neighbors.push_back(CellPtr(new Cell(new_row, new_col, cell)));
   }
   return neighbors;
 }

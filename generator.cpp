@@ -69,7 +69,7 @@ void Generator::prims(MazePtr maze, bool animate)
       maze->at(child->row, child->col) = ' ';
       maze->at(r, c) = 'E';
 
-      std::vector<CellPtr> neighbors = maze->get_neighbors(gc, true);
+      std::vector<CellPtr> neighbors = maze->get_neighbors(gc, Maze::WALL);
       for (int i = 0; i < neighbors.size(); i++)
         frontier.push_back(neighbors[i]);
 
@@ -92,7 +92,7 @@ void Generator::dfs(MazePtr maze, bool animate)
 
   std::stack<CellPtr> frontier;
   // Add the start node's neighbors to the frontier (in random order)
-  std::vector<CellPtr> neighbors = maze->get_neighbors(start, true);
+  std::vector<CellPtr> neighbors = maze->get_neighbors(start, Maze::WALL);
   while (neighbors.size() > 0)
   {
     int rand_point = rand() % neighbors.size();
@@ -116,7 +116,7 @@ void Generator::dfs(MazePtr maze, bool animate)
       maze->draw(Maze::draw_delay);
       maze->at(r, c) = ' ';
 
-      std::vector<CellPtr> neighbors = maze->get_neighbors(gc, true);
+      std::vector<CellPtr> neighbors = maze->get_neighbors(gc, Maze::WALL);
       while (neighbors.size() > 0)
       {
         int rand_point = rand() % neighbors.size();

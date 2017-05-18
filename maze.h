@@ -25,6 +25,13 @@ class Maze
   bool animate_flag;
 
  public:
+  typedef char cell_t;
+  enum
+  {
+    WALL,
+    FLOOR
+  };
+
   Maze(int nrow, int ncol, bool animate=false);
   Maze(const char* filename, bool animate=false);
   ~Maze();
@@ -51,7 +58,8 @@ class Maze
 
   void draw(int delay=0);
 
-  std::vector<CellPtr> get_neighbors(CellPtr cell, bool walls=false);
+  std::vector<CellPtr> get_neighbors(CellPtr cell, cell_t cell_type,
+      bool diag=false);
 
   bool is_pathable(int r, int c);
   bool is_valid(int r, int c);
