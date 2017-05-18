@@ -9,6 +9,8 @@ class Generator
    int rows;
    int cols;
 
+   void finished(MazePtr maze, bool animate=false);
+
  public:
   Generator(int r, int c);
 
@@ -22,7 +24,5 @@ class Generator
    MazePtr dfs(bool animate=false);
 
    MazePtr kruskal(bool animate=false);
-
-   void finished(MazePtr maze, bool animate=false);
 };
 #endif
