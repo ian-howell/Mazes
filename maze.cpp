@@ -208,6 +208,10 @@ void Maze::maybe_message(const char* msg, bool animate)
 {
   if (animate)
   {
+    // Clear the "message buffer"
+    wmove(stdscr, rows+1, 0);
+    clrtoeol();
+
     mvwprintw(stdscr, rows+1, 0, msg);
     refresh();
   }
