@@ -48,6 +48,9 @@ bool Solver::backtrack(MazePtr maze)
 
 bool Solver::backtrack_r(MazePtr maze, CellPtr cell)
 {
+  if (*cell == *maze->get_end())
+    return true;
+
   std::vector<CellPtr> neighbors = maze->get_neighbors(cell);
   for (size_t i = 0; i < neighbors.size(); i++)
   {
