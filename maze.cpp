@@ -218,4 +218,21 @@ void Maze::maybe_message(const char* msg, bool animate)
   return;
 }
 
+void Maze::clear()
+{
+  for (int i = 0; i < rows; i++)
+  {
+    for (int j = 0; j < cols; j++)
+    {
+      if (grid[i][j] != '#')
+      {
+        grid[i][j] = ' ';
+      }
+    }
+  }
+  grid[start->row][start->col] = 'S';
+  grid[end->row][end->col] = 'E';
+  return;
+}
+
 int Maze::draw_delay = DRAW_DELAY;

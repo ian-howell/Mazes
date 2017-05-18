@@ -54,6 +54,8 @@ class Maze
   bool is_pathable(int r, int c);
   bool is_valid(int r, int c);
 
+  void clear();
+
   static int draw_delay;
 };
 #endif
