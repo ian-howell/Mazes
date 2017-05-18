@@ -11,7 +11,7 @@ class Solver
   bool backtrack_r(MazePtr maze, CellPtr cell, bool animate);
   int manhattan_distance(CellPtr first, CellPtr second);
   int real_distance(CellPtr first, CellPtr second);
-  void finished(MazePtr maze, bool animate=true);
+  void mouse_control(MazePtr maze, bool animate=true);
 
  public:
   typedef char SOLVE_TYPE;

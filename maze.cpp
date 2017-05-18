@@ -87,6 +87,7 @@ void Maze::init_curses()
   cbreak();
   noecho();
   keypad(stdscr, TRUE);
+  mousemask(BUTTON1_CLICKED, NULL);
   curs_set(0);
 
   start_color();
@@ -216,7 +217,6 @@ void Maze::maybe_endwin(bool animate)
 {
   if (animate)
   {
-    getch();
     endwin();
   }
   return;

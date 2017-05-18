@@ -22,7 +22,7 @@ bool Solver::backtrack(MazePtr maze, bool animate)
   bool ret_val;
   maze->maybe_init(animate);
   ret_val = backtrack_r(maze, maze->get_start(), animate);
-  finished(maze, animate);
+  mouse_control(maze, animate);
   maze->maybe_endwin(animate);
   return ret_val;
 }
@@ -88,7 +88,7 @@ void Solver::X_first_search(MazePtr maze, SOLVE_TYPE solve_type, bool animate)
         maze->maybe_draw(animate);
       }
 
-      finished(maze, animate);
+      mouse_control(maze, animate);
       maze->maybe_endwin(animate);
       return;
     }
@@ -105,7 +105,7 @@ void Solver::X_first_search(MazePtr maze, SOLVE_TYPE solve_type, bool animate)
     }
   }
 
-  finished(maze, animate);
+  mouse_control(maze, animate);
   maze->maybe_endwin(animate);
   return;
 }
@@ -131,7 +131,7 @@ void Solver::player_control(MazePtr maze)
     maze->draw();
   }
   delete player;
-  finished(maze);
+  mouse_control(maze);
   maze->maybe_endwin();
   return;
 }
@@ -178,7 +178,7 @@ bool Solver::astar(MazePtr maze, bool animate)
         }
       }
 
-      finished(maze, animate);
+      mouse_control(maze, animate);
       maze->maybe_endwin(animate);
       return true;
     }
@@ -211,7 +211,7 @@ bool Solver::astar(MazePtr maze, bool animate)
       }
     }
   }
-  finished(maze, animate);
+  mouse_control(maze, animate);
   maze->maybe_endwin(animate);
   return false;
 }
@@ -235,9 +235,35 @@ int Solver::real_distance(CellPtr first, CellPtr second)
   return std::sqrt(std::pow(drow, 2) + std::pow(dcol, 2));
 }
 
-void Solver::finished(MazePtr maze, bool animate)
+void Solver::mouse_control(MazePtr maze, bool animate)
 {
-  const char* msg = "Finished solving. Press any key to continue...";
-  maze->maybe_message(msg, animate);
+  // Only run this function if ncurses is running
+  if (!animate)
+    return;
+
+  maze->maybe_draw();
+  const char* msg = "Finished solving, Click anywhere to solve from that point, "
+    "or press any other key to end";
+  maze->maybe_message(msg);
+
+  int c;
+  int row;
+  int col;
+  bool done = false;
+  MEVENT event;
+  c = getch();
+  if ((c == KEY_MOUSE) && (getmouse(&event) == OK))
+  {
+    row = event.y-1;
+    col = event.x-1;
+
+    if (maze->is_pathable(row, col))
+    {
+      maze->clear();
+      // Move the start cell
+      maze->set_start(row, col);
+      // TODO: Solve
+    }
+  }
   return;
 }

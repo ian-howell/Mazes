@@ -206,7 +206,11 @@ MazePtr Generator::kruskal(bool animate)
 
 void Generator::finished(MazePtr maze, bool animate)
 {
-  const char* msg = "Finished generation. Press any key to continue...";
-  maze->maybe_message(msg, animate);
+  if (animate)
+  {
+    const char* msg = "Finished generation. Press any key to continue...";
+    maze->maybe_message(msg);
+    getch();
+  }
   return;
 }
