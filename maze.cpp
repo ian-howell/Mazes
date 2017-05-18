@@ -101,6 +101,7 @@ void Maze::init_curses()
     init_pair(4, COLOR_RED, COLOR_RED);
     init_pair(5, COLOR_GREEN, COLOR_GREEN);
     init_pair(6, COLOR_CYAN, COLOR_CYAN);
+    init_pair(7, COLOR_YELLOW, COLOR_YELLOW);
   }
 }
 
@@ -152,7 +153,9 @@ void Maze::draw(int delay)
           attron(COLOR_PAIR(5));
         else if (grid[i][j] == 'S')
           attron(COLOR_PAIR(3));
-        else if (grid[i][j] == ',' || grid[i][j] == '*')
+        else if (grid[i][j] == ',')
+          attron(COLOR_PAIR(7));
+        else if (grid[i][j] == '*')
           attron(COLOR_PAIR(6));
         else
           attron(COLOR_PAIR(4));
@@ -165,6 +168,7 @@ void Maze::draw(int delay)
         attroff(COLOR_PAIR(4));
         attroff(COLOR_PAIR(5));
         attroff(COLOR_PAIR(6));
+        attroff(COLOR_PAIR(7));
       }
     }
     refresh();
