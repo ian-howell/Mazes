@@ -253,11 +253,10 @@ void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
   maze->init_curses();
 
   maze->draw();
-  const char* msg = "Click anywhere to solve from that point, "
+  const char* msg = "Click to move start, ctrl-click to move finish, "
     "or press any other key to end";
   maze->message(msg);
 
-  int c;
   int row;
   int col;
   bool done = false;
@@ -272,14 +271,25 @@ void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
     maze->clear();
     if (maze->is_pathable(row, col))
     {
-      // Move the start cell
-      maze->set_start(row, col);
-      // Need to redraw where the end is incase it has been overwritten
-      maze->set_end(maze->get_end()->row, maze->get_end()->col);
-      solve(maze, algorithm);
+      if (event.bstate == BUTTON1_CLICKED)
+      {
+        // Move the start cell
+        maze->set_start(row, col);
+        // Need to redraw where the end is incase it has been overwritten
+        maze->set_end(maze->get_end()->row, maze->get_end()->col);
+      }
+      else if (event.bstate == (BUTTON1_CLICKED | BUTTON_CTRL))
+      {
+        // Move the end cell
+        maze->set_end(row, col);
+        // Need to redraw where the start is incase it has been overwritten
+        maze->set_start(maze->get_start()->row, maze->get_start()->col);
+      }
       done = true;
+      solve(maze, algorithm);
     }
   }
+
   maze->end_curses();
   return;
 }
