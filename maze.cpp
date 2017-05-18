@@ -17,6 +17,8 @@ Maze::Maze(int nrows, int ncols)
     }
     grid.push_back(temp_row);
   }
+  start = nullptr;
+  end = nullptr;
 }
 
 Maze::Maze(const char* filename)
