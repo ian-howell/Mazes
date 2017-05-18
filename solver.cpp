@@ -36,7 +36,7 @@ void Solver::solve(MazePtr maze, solve_t algorithm, bool animate)
       player_control(maze);
       break;
   }
-  mouse_control(maze, animate);
+  mouse_control(maze, algorithm, animate);
   maze->end_curses();
   return;
 }
@@ -241,7 +241,7 @@ int Solver::real_distance(CellPtr first, CellPtr second)
   return std::sqrt(std::pow(drow, 2) + std::pow(dcol, 2));
 }
 
-void Solver::mouse_control(MazePtr maze, bool animate)
+void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
 {
   // Only run this function if ncurses is running
   if (!animate)
@@ -268,7 +268,8 @@ void Solver::mouse_control(MazePtr maze, bool animate)
       maze->clear();
       // Move the start cell
       maze->set_start(row, col);
-      // TODO: Solve
+      solve(maze, algorithm);
+      maze->draw();
     }
   }
   return;

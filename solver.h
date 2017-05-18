@@ -31,7 +31,7 @@ class Solver
   bool backtrack_r(MazePtr maze, CellPtr cell);
   int manhattan_distance(CellPtr first, CellPtr second);
   int real_distance(CellPtr first, CellPtr second);
-  void mouse_control(MazePtr maze, bool animate=true);
+  void mouse_control(MazePtr maze, solve_t algorithm, bool animate=true);
 };
 
 #endif
