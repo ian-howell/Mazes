@@ -19,34 +19,34 @@ Solver::Solver()
 
 void Solver::solve(MazePtr maze, solve_t algorithm, bool animate)
 {
-  maze->maybe_init(animate);
+  maze->init_curses();
   switch(algorithm)
   {
     case BFS:
     case DFS:
-      X_first_search(maze, algorithm, animate);
+      X_first_search(maze, algorithm);
       break;
     case BACKTRACKING:
-      backtrack(maze, animate);
+      backtrack(maze);
       break;
     case ASTAR:
-      astar(maze, animate);
+      astar(maze);
       break;
     case PLAY:
       player_control(maze);
       break;
   }
   mouse_control(maze, animate);
-  maze->maybe_endwin(animate);
+  maze->end_curses();
   return;
 }
 
-bool Solver::backtrack(MazePtr maze, bool animate)
+bool Solver::backtrack(MazePtr maze)
 {
-  return backtrack_r(maze, maze->get_start(), animate);
+  return backtrack_r(maze, maze->get_start());
 }
 
-bool Solver::backtrack_r(MazePtr maze, CellPtr cell, bool animate)
+bool Solver::backtrack_r(MazePtr maze, CellPtr cell)
 {
   std::vector<CellPtr> neighbors = maze->get_neighbors(cell);
   for (size_t i = 0; i < neighbors.size(); i++)
@@ -57,26 +57,26 @@ bool Solver::backtrack_r(MazePtr maze, CellPtr cell, bool animate)
       return true;
 
     maze->at(row, col) = '*';
-    maze->maybe_draw(animate);
+    maze->draw(Maze::draw_delay);
     maze->at(row, col) = '.';
 
-    if (backtrack_r(maze, neighbors[i], animate))
+    if (backtrack_r(maze, neighbors[i]))
     {
       maze->at(row, col) = '*';
-      maze->maybe_draw(animate);
+      maze->draw(Maze::draw_delay);
       return true;
     }
     else
     {
       maze->at(row, col) = '*';
-      maze->maybe_draw(animate);
+      maze->draw(Maze::draw_delay);
       maze->at(row, col) = ' ';
     }
   }
   return false;
 }
 
-bool Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
+bool Solver::X_first_search(MazePtr maze, solve_t solve_type)
 {
   std::deque<CellPtr> frontier;
 
@@ -103,7 +103,7 @@ bool Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
       {
         if (maze->at(r->row, r->col) == '.')
           maze->at(r->row, r->col) = '*';
-        maze->maybe_draw(animate);
+        maze->draw(Maze::draw_delay);
       }
 
       return true;
@@ -116,7 +116,7 @@ bool Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
     {
       if (maze->at(neighbors[i]->row, neighbors[i]->col) != 'E')
         maze->at(neighbors[i]->row, neighbors[i]->col) = ',';
-      maze->maybe_draw(animate);
+      maze->draw(Maze::draw_delay);
       frontier.push_back(CellPtr(neighbors[i]));
     }
   }
@@ -148,7 +148,7 @@ void Solver::player_control(MazePtr maze)
   return;
 }
 
-bool Solver::astar(MazePtr maze, bool animate)
+bool Solver::astar(MazePtr maze)
 {
   // Describe a pair (for the comparison function)
   using my_pair_t = std::pair<CellPtr, int>;
@@ -184,7 +184,7 @@ bool Solver::astar(MazePtr maze, bool animate)
         if (maze->at(r->row, r->col) == '.')
         {
           maze->at(r->row, r->col) = '*';
-          maze->maybe_draw(animate);
+          maze->draw(Maze::draw_delay);
         }
       }
 
@@ -194,7 +194,7 @@ bool Solver::astar(MazePtr maze, bool animate)
     if (maze->at(current_node.first->row, current_node.first->col) != 'S')
     {
       maze->at(current_node.first->row, current_node.first->col) = '.';
-      maze->maybe_draw(animate);
+      maze->draw(Maze::draw_delay);
     }
 
     std::vector<CellPtr> neighbors = maze->get_neighbors(current_node.first);
@@ -214,7 +214,7 @@ bool Solver::astar(MazePtr maze, bool animate)
         if (maze->at(neighbors[i]->row, neighbors[i]->col) != 'E')
         {
           maze->at(neighbors[i]->row, neighbors[i]->col) = ',';
-          maze->maybe_draw(animate);
+          maze->draw(Maze::draw_delay);
         }
       }
     }
@@ -247,10 +247,10 @@ void Solver::mouse_control(MazePtr maze, bool animate)
   if (!animate)
     return;
 
-  maze->maybe_draw();
+  maze->draw();
   const char* msg = "Finished solving, Click anywhere to solve from that point, "
     "or press any other key to end";
-  maze->maybe_message(msg);
+  maze->message(msg);
 
   int c;
   int row;

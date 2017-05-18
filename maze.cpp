@@ -4,7 +4,8 @@
 #include <cstring>
 #include "maze.h"
 
-Maze::Maze(int nrows, int ncols)
+Maze::Maze(int nrows, int ncols, bool animate) :
+  animate_flag(animate)
 {
   rows = (nrows % 2) ? nrows : nrows - 1;
   cols = (ncols % 2) ? ncols : ncols - 1;
@@ -21,7 +22,8 @@ Maze::Maze(int nrows, int ncols)
   end = nullptr;
 }
 
-Maze::Maze(const char* filename)
+Maze::Maze(const char* filename, bool animate) :
+  animate_flag(animate)
 {
   FILE* f = fopen(filename, "r");
   fscanf(f, "%d %d\n", &rows, &cols);
@@ -83,21 +85,23 @@ void Maze::set_end(int r, int c)
 
 void Maze::init_curses()
 {
-  initscr();
-  cbreak();
-  noecho();
-  keypad(stdscr, TRUE);
-  mousemask(BUTTON1_CLICKED, NULL);
-  curs_set(0);
+  if (animate_flag)
+  {
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    mousemask(BUTTON1_CLICKED, NULL);
+    curs_set(0);
 
-  start_color();
-  init_pair(1, COLOR_BLACK, COLOR_BLACK);
-  init_pair(2, COLOR_WHITE, COLOR_WHITE);
-  init_pair(3, COLOR_BLUE, COLOR_BLUE);
-  init_pair(4, COLOR_RED, COLOR_RED);
-  init_pair(5, COLOR_GREEN, COLOR_GREEN);
-  init_pair(6, COLOR_CYAN, COLOR_CYAN);
-
+    start_color();
+    init_pair(1, COLOR_BLACK, COLOR_BLACK);
+    init_pair(2, COLOR_WHITE, COLOR_WHITE);
+    init_pair(3, COLOR_BLUE, COLOR_BLUE);
+    init_pair(4, COLOR_RED, COLOR_RED);
+    init_pair(5, COLOR_GREEN, COLOR_GREEN);
+    init_pair(6, COLOR_CYAN, COLOR_CYAN);
+  }
 }
 
 void Maze::print(const char* filename)
@@ -132,36 +136,40 @@ void Maze::print(const char* filename)
   return;
 }
 
-void Maze::draw()
+void Maze::draw(int delay)
 {
-  for (int i = 0; i < rows; i++)
+  if (animate_flag)
   {
-    for (int j = 0; j < cols; j++)
+    for (int i = 0; i < rows; i++)
     {
-      if (grid[i][j] == '#')
-        attron(COLOR_PAIR(1));
-      else if (grid[i][j] == ' ')
-        attron(COLOR_PAIR(2));
-      else if (grid[i][j] == '.')
-        attron(COLOR_PAIR(5));
-      else if (grid[i][j] == 'S')
-        attron(COLOR_PAIR(3));
-      else if (grid[i][j] == ',' || grid[i][j] == '*')
-        attron(COLOR_PAIR(6));
-      else
-        attron(COLOR_PAIR(4));
+      for (int j = 0; j < cols; j++)
+      {
+        if (grid[i][j] == '#')
+          attron(COLOR_PAIR(1));
+        else if (grid[i][j] == ' ')
+          attron(COLOR_PAIR(2));
+        else if (grid[i][j] == '.')
+          attron(COLOR_PAIR(5));
+        else if (grid[i][j] == 'S')
+          attron(COLOR_PAIR(3));
+        else if (grid[i][j] == ',' || grid[i][j] == '*')
+          attron(COLOR_PAIR(6));
+        else
+          attron(COLOR_PAIR(4));
 
-      mvwprintw(stdscr, i + 1, j + 1, "%c", grid[i][j]);
+        mvwprintw(stdscr, i + 1, j + 1, "%c", grid[i][j]);
 
-      attroff(COLOR_PAIR(1));
-      attroff(COLOR_PAIR(2));
-      attroff(COLOR_PAIR(3));
-      attroff(COLOR_PAIR(4));
-      attroff(COLOR_PAIR(5));
-      attroff(COLOR_PAIR(6));
+        attroff(COLOR_PAIR(1));
+        attroff(COLOR_PAIR(2));
+        attroff(COLOR_PAIR(3));
+        attroff(COLOR_PAIR(4));
+        attroff(COLOR_PAIR(5));
+        attroff(COLOR_PAIR(6));
+      }
     }
+    refresh();
+    usleep(draw_delay);
   }
-  refresh();
 }
 
 std::vector<CellPtr> Maze::get_neighbors(CellPtr cell, bool walls)
@@ -203,38 +211,18 @@ bool Maze::is_valid(int r, int c)
   return r >= 0 && r < rows && c >= 0 && c < cols;
 }
 
-void Maze::maybe_init(bool animate)
+void Maze::end_curses()
 {
-  if (animate)
-  {
-    init_curses();
-    draw();
-  }
-  return;
-}
-
-void Maze::maybe_endwin(bool animate)
-{
-  if (animate)
+  if (animate_flag)
   {
     endwin();
   }
   return;
 }
 
-void Maze::maybe_draw(bool animate)
+void Maze::message(const char* msg)
 {
-  if (animate)
-  {
-    draw();
-    usleep(draw_delay);
-  }
-  return;
-}
-
-void Maze::maybe_message(const char* msg, bool animate)
-{
-  if (animate)
+  if (animate_flag)
   {
     // Clear the "message buffer"
     wmove(stdscr, rows+1, 0);

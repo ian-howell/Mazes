@@ -19,8 +19,8 @@ Generator::Generator(int r, int c)
 
 MazePtr Generator::prims(bool animate)
 {
-  MazePtr maze(new Maze(rows, cols));
-  maze->maybe_init(animate);
+  MazePtr maze(new Maze(rows, cols, animate));
+  maze->init_curses();
 
   CellPtr start(new Cell(0, 0, NULL));
   maze->at(start->row, start->col) = 'S';
@@ -51,28 +51,31 @@ MazePtr Generator::prims(bool animate)
       for (int i = 0; i < neighbors.size(); i++)
         frontier.push_back(neighbors[i]);
 
-      maze->maybe_draw(animate);
+      maze->draw(Maze::draw_delay);
       maze->at(r, c) = ' ';
     }
   }
 
   maze->at(rows - 1, cols - 1) = 'E';
 
-  maze->maybe_draw(animate);
-  finished(maze, animate);
-  maze->maybe_endwin(animate);
+  maze->draw();
+  const char* msg = "Finished generation. Press any key to continue...";
+  maze->message(msg);
+  if (animate)
+    getch();
+  maze->end_curses();
 
   return maze;
 }
 
 MazePtr Generator::dfs(bool animate)
 {
-  MazePtr maze(new Maze(rows, cols));
-  maze->maybe_init(animate);
+  MazePtr maze(new Maze(rows, cols, animate));
+  maze->init_curses();
 
   CellPtr start(new Cell(0, 0, NULL));
   maze->at(start->row, start->col) = 'S';
-  maze->maybe_draw(animate);
+  maze->draw(Maze::draw_delay);
 
   std::stack<CellPtr> frontier;
   // Add the start node's neighbors to the frontier (in random order)
@@ -97,7 +100,7 @@ MazePtr Generator::dfs(bool animate)
     {
       maze->at(child->row, child->col) = ' ';
       maze->at(r, c) = 'E';
-      maze->maybe_draw(animate);
+      maze->draw(Maze::draw_delay);
       maze->at(r, c) = ' ';
 
       std::vector<CellPtr> neighbors = maze->get_neighbors(gc, true);
@@ -111,17 +114,20 @@ MazePtr Generator::dfs(bool animate)
   }
   maze->at(rows - 1, cols - 1) = 'E';
 
-  maze->maybe_draw(animate);
-  finished(maze, animate);
-  maze->maybe_endwin(animate);
+  maze->draw();
+  const char* msg = "Finished generation. Press any key to continue...";
+  maze->message(msg);
+  if (animate)
+    getch();
+  maze->end_curses();
 
   return maze;
 }
 
 MazePtr Generator::kruskal(bool animate)
 {
-  MazePtr maze(new Maze(rows, cols));
-  maze->maybe_init(animate);
+  MazePtr maze(new Maze(rows, cols, animate));
+  maze->init_curses();
 
   // Add all the edges to a list
   std::vector<CellPtr> nodes;
@@ -186,7 +192,7 @@ MazePtr Generator::kruskal(bool animate)
       maze->at(first_row, first_col) = 'E';
       maze->at(second_row, second_col) = 'E';
       maze->at(mid_row, mid_col) = 'E';
-      maze->maybe_draw(animate);
+      maze->draw(Maze::draw_delay);
       maze->at(first_row, first_col) = ' ';
       maze->at(second_row, second_col) = ' ';
       maze->at(mid_row, mid_col) = ' ';
@@ -197,20 +203,12 @@ MazePtr Generator::kruskal(bool animate)
 
   maze->at(0, 0) = 'S';
   maze->at(rows - 1, cols - 1) = 'E';
-  maze->maybe_draw(animate);
-  finished(maze, animate);
-  maze->maybe_endwin(animate);
+  maze->draw();
+  const char* msg = "Finished generation. Press any key to continue...";
+  maze->message(msg);
+  if (animate)
+    getch();
+  maze->end_curses();
 
   return maze;
-}
-
-void Generator::finished(MazePtr maze, bool animate)
-{
-  if (animate)
-  {
-    const char* msg = "Finished generation. Press any key to continue...";
-    maze->maybe_message(msg);
-    getch();
-  }
-  return;
 }

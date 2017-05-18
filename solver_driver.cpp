@@ -51,7 +51,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  MazePtr maze(new Maze(input_file));
+  MazePtr maze(new Maze(input_file, animate_flag));
   std::shared_ptr<Solver> solver(new Solver);
   Solver::solve_t solve_type;
 

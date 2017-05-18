@@ -22,10 +22,11 @@ class Maze
   GridPtr grid;
   CellPtr start;
   CellPtr end;
+  bool animate_flag;
 
  public:
-  Maze(int nrow, int ncol);
-  Maze(const char* filename);
+  Maze(int nrow, int ncol, bool animate=false);
+  Maze(const char* filename, bool animate=false);
   ~Maze();
 
   int get_rows() const { return rows; }
@@ -43,14 +44,12 @@ class Maze
   const char& operator()(const int i, const int j) const { return grid[i][j]; }
 
   void init_curses();
-  void maybe_init(bool animate=true);
-  void maybe_endwin(bool animate=true);
-  void maybe_draw(bool animate=true);
-  void maybe_message(const char* msg, bool animate=true);
+  void end_curses();
+  void message(const char* msg);
 
   void print(const char* filename);
 
-  void draw();
+  void draw(int delay=0);
 
   std::vector<CellPtr> get_neighbors(CellPtr cell, bool walls=false);
 
