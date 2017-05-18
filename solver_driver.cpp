@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 
   MazePtr maze(new Maze(input_file, animate_flag));
   std::shared_ptr<Solver> solver(new Solver);
-  Solver::solve_t solve_type;
+  Solver::solve_t solve_type = Solver::BACKTRACKING;
 
   if (strcmp(algorithm, "bt") == 0)
     solve_type = Solver::BACKTRACKING;
