@@ -145,20 +145,29 @@ void Maze::draw(int delay)
     {
       for (int j = 0; j < cols; j++)
       {
-        if (grid[i][j] == '#')
-          attron(COLOR_PAIR(1));
-        else if (grid[i][j] == ' ')
-          attron(COLOR_PAIR(2));
-        else if (grid[i][j] == '.')
-          attron(COLOR_PAIR(5));
-        else if (grid[i][j] == 'S')
-          attron(COLOR_PAIR(3));
-        else if (grid[i][j] == ',')
-          attron(COLOR_PAIR(7));
-        else if (grid[i][j] == '*')
-          attron(COLOR_PAIR(6));
-        else
-          attron(COLOR_PAIR(4));
+        switch(grid[i][j])
+        {
+          case '#':
+            attron(COLOR_PAIR(1));
+            break;
+          case ' ':
+            attron(COLOR_PAIR(2));
+            break;
+          case '.':
+            attron(COLOR_PAIR(5));
+            break;
+          case 'S':
+            attron(COLOR_PAIR(3));
+            break;
+          case ',':
+            attron(COLOR_PAIR(7));
+            break;
+          case '*':
+            attron(COLOR_PAIR(6));
+            break;
+          default:
+            attron(COLOR_PAIR(4));
+        }
 
         mvwprintw(stdscr, i + 1, j + 1, "%c", grid[i][j]);
 
