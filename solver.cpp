@@ -17,6 +17,27 @@ Solver::Solver()
   /* Intentionally left empty */
 }
 
+void Solver::solve(MazePtr maze, solve_t algorithm, bool animate)
+{
+  switch(algorithm)
+  {
+    case BFS:
+    case DFS:
+      X_first_search(maze, algorithm, animate);
+      break;
+    case BACKTRACKING:
+      backtrack(maze, animate);
+      break;
+    case ASTAR:
+      astar(maze, animate);
+      break;
+    case PLAY:
+      player_control(maze);
+      break;
+  }
+  return;
+}
+
 bool Solver::backtrack(MazePtr maze, bool animate)
 {
   bool ret_val;
@@ -57,7 +78,7 @@ bool Solver::backtrack_r(MazePtr maze, CellPtr cell, bool animate)
   return false;
 }
 
-void Solver::X_first_search(MazePtr maze, SOLVE_TYPE solve_type, bool animate)
+void Solver::X_first_search(MazePtr maze, solve_t solve_type, bool animate)
 {
   std::deque<CellPtr> frontier;
 

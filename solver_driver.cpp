@@ -53,27 +53,20 @@ int main(int argc, char** argv)
 
   MazePtr maze(new Maze(input_file));
   std::shared_ptr<Solver> solver(new Solver);
+  Solver::solve_t solve_type;
 
   if (strcmp(algorithm, "bt") == 0)
-  {
-    solver->backtrack(maze, animate_flag);
-  }
+    solve_type = Solver::BACKTRACKING;
   else if (strcmp(algorithm, "bfs") == 0)
-  {
-    solver->X_first_search(maze, Solver::BFS, animate_flag);
-  }
+    solve_type = Solver::BFS;
   else if (strcmp(algorithm, "dfs") == 0)
-  {
-    solver->X_first_search(maze, Solver::DFS, animate_flag);
-  }
+    solve_type = Solver::DFS;
   else if (strcmp(algorithm, "astar") == 0)
-  {
-    solver->astar(maze, animate_flag);
-  }
+    solve_type = Solver::ASTAR;
   else if (strcmp(algorithm, "play") == 0)
-  {
-    solver->player_control(maze);
-  }
+    solve_type = Solver::PLAY;
+
+  solver->solve(maze, solve_type, animate_flag);
 
   if (output_file)
     maze->print(output_file);
