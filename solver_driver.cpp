@@ -66,7 +66,7 @@ int main(int argc, char** argv)
   else if (strcmp(algorithm, "play") == 0)
     solve_type = Solver::PLAY;
 
-  solver->solve(maze, solve_type, animate_flag);
+  solver->mouse_control(maze, solve_type, animate_flag);
 
   if (output_file)
     maze->print(output_file);

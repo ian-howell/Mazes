@@ -250,8 +250,10 @@ void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
   if (!animate)
     return;
 
+  maze->init_curses();
+
   maze->draw();
-  const char* msg = "Finished solving, Click anywhere to solve from that point, "
+  const char* msg = "Click anywhere to solve from that point, "
     "or press any other key to end";
   maze->message(msg);
 
@@ -260,7 +262,6 @@ void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
   int col;
   bool done = false;
   MEVENT event;
-  /* c = getch(); */
   while ((!done) && (getch() == KEY_MOUSE) && (getmouse(&event) == OK))
   {
     row = event.y-1;
@@ -279,5 +280,6 @@ void Solver::mouse_control(MazePtr maze, solve_t algorithm, bool animate)
       done = true;
     }
   }
+  maze->end_curses();
   return;
 }
