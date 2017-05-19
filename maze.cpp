@@ -223,7 +223,7 @@ std::vector<CellPtr> Maze::get_neighbors(CellPtr cell, cell_t cell_type,
 
 bool Maze::is_pathable(int r, int c)
 {
-  return (is_valid(r, c)) && ((grid[r][c] == ' ') || (grid[r][c] == 'E'));
+  return (is_valid(r, c)) && (grid[r][c] != '#') && (grid[r][c] != '.');
 }
 
 bool Maze::is_valid(int r, int c)
