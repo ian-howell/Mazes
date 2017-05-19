@@ -30,8 +30,8 @@ class Solver
   bool astar(MazePtr maze);
 
   bool backtrack_r(MazePtr maze, CellPtr cell);
-  int manhattan_distance(CellPtr first, CellPtr second);
-  int real_distance(CellPtr first, CellPtr second);
+  double manhattan_distance(CellPtr first, CellPtr second);
+  double real_distance(CellPtr first, CellPtr second);
 
   bool allow_diag;
 };

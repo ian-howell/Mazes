@@ -155,7 +155,7 @@ void Solver::player_control(MazePtr maze)
 bool Solver::astar(MazePtr maze)
 {
   // Describe a pair (for the comparison function)
-  using my_pair_t = std::pair<CellPtr, int>;
+  using my_pair_t = std::pair<CellPtr, double>;
   // Comparison function
   auto cmp = [] (const my_pair_t& left, const my_pair_t& right)
   {return left.second > right.second;};
@@ -168,7 +168,7 @@ bool Solver::astar(MazePtr maze)
   frontier.push(std::make_pair(maze->get_start(), 0));
 
   // Keep track of the cost to a given node at any given time
-  using cell_map_t = std::map<CellPtr, int>;
+  using cell_map_t = std::map<CellPtr, double>;
   cell_map_t cost_so_far;
 
   // Add the current cost to get to the start to the list of current costs
@@ -205,8 +205,13 @@ bool Solver::astar(MazePtr maze)
         Maze::FLOOR, allow_diag);
     for (int i = 0; i < neighbors.size(); i++)
     {
-      // Path cost = 1
-      int new_cost = cost_so_far[current_node.first] + 1;
+      bool different_row = (current_node.first->row != neighbors[i]->row);
+      bool different_col = (current_node.first->col != neighbors[i]->col);
+      double new_cost;
+      if (different_row && different_col) // diagonal
+        new_cost = cost_so_far[current_node.first] + 1.4;
+      else
+        new_cost = cost_so_far[current_node.first] + 1;
 
       // If we haven't visited this node, or the new cost is better, add it
       if (!cost_so_far.count(neighbors[i]) || new_cost < cost_so_far[neighbors[i]])
@@ -227,22 +232,22 @@ bool Solver::astar(MazePtr maze)
   return false;
 }
 
-int Solver::manhattan_distance(CellPtr first, CellPtr second)
+double Solver::manhattan_distance(CellPtr first, CellPtr second)
 {
   // on macOS, g++ and clang++ gets very confused when you're trying
   // to use std::abs when also including cmath.
   // see here: http://stackoverflow.com/questions/1374037/ambiguous-overload-call-to-absdouble
-  int drow = std::abs(static_cast<float>(first->row - second->row));
-  int dcol = std::abs(static_cast<float>(first->col - second->col));
+  double drow = std::abs(static_cast<double>(first->row - second->row));
+  double dcol = std::abs(static_cast<double>(first->col - second->col));
   return (drow + dcol);
 }
 
-int Solver::real_distance(CellPtr first, CellPtr second)
+double Solver::real_distance(CellPtr first, CellPtr second)
 {
   // If you're wondering why the `static_cast`, read the
   // manhattan_distance method
-  int drow = std::abs(static_cast<float>(first->row - second->row));
-  int dcol = std::abs(static_cast<float>(first->col - second->col));
+  double drow = std::abs(static_cast<double>(first->row - second->row));
+  double dcol = std::abs(static_cast<double>(first->col - second->col));
   return std::sqrt(std::pow(drow, 2) + std::pow(dcol, 2));
 }
 
