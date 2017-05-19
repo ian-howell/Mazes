@@ -39,6 +39,8 @@ class Maze
   int get_rows() const { return rows; }
   int get_cols() const { return cols; }
 
+  int get_index(CellPtr cell) const;
+
   CellPtr get_start() const { return start; }
   CellPtr get_end()   const { return end;   }
 

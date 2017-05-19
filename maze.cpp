@@ -57,6 +57,11 @@ Maze::~Maze()
   /* Intentionally left empty */
 }
 
+int Maze::get_index(CellPtr cell) const
+{
+  return cell->col + (cell->row * cols);
+}
+
 void Maze::set_start(int r, int c)
 {
   if (is_pathable(r, c))
