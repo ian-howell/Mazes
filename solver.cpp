@@ -168,11 +168,11 @@ bool Solver::astar(MazePtr maze)
   frontier.push(std::make_pair(maze->get_start(), 0));
 
   // Keep track of the cost to a given node at any given time
-  using cell_map_t = std::map<CellPtr, double>;
+  using cell_map_t = std::map<int, double>;
   cell_map_t cost_so_far;
 
   // Add the current cost to get to the start to the list of current costs
-  cost_so_far[maze->get_start()] = 0;
+  cost_so_far[maze->get_index(maze->get_start())] = 0;
 
   while (!frontier.empty())
   {
@@ -209,17 +209,18 @@ bool Solver::astar(MazePtr maze)
       bool different_col = (current_node.first->col != neighbors[i]->col);
       double new_cost;
       if (different_row && different_col) // diagonal
-        new_cost = cost_so_far[current_node.first] + 1.4;
+        new_cost = cost_so_far[maze->get_index(current_node.first)] + 1.4;
       else
-        new_cost = cost_so_far[current_node.first] + 1;
+        new_cost = cost_so_far[maze->get_index(current_node.first)] + 1;
 
       // If we haven't visited this node, or the new cost is better, add it
-      if (!cost_so_far.count(neighbors[i]) || new_cost < cost_so_far[neighbors[i]])
+      int neighbor_idx = maze->get_index(neighbors[i]);
+      if (!cost_so_far.count(neighbor_idx) || new_cost < cost_so_far[neighbor_idx])
       {
         int distance = manhattan_distance(neighbors[i], maze->get_end());
         /* int distance = real_distance(current_node.first, neighbors[i]); */
         frontier.push(std::make_pair(neighbors[i], distance + new_cost));
-        cost_so_far[neighbors[i]] = new_cost;
+        cost_so_far[neighbor_idx] = new_cost;
 
         if (maze->at(neighbors[i]->row, neighbors[i]->col) != 'E')
         {
