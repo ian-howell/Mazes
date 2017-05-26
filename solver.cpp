@@ -37,7 +37,8 @@ void Solver::solve(MazePtr maze, solve_t algorithm, bool animate)
       player_control(maze);
       break;
   }
-  mouse_control(maze, algorithm, animate);
+  if (algorithm != PLAY)
+    mouse_control(maze, algorithm, animate);
   maze->end_curses();
   return;
 }
@@ -133,10 +134,12 @@ void Solver::player_control(MazePtr maze)
 {
   Player* player = new Player(0, 0);
   bool done = false;
+  maze->draw();
 
   int c;
   while (!done)
   {
+    maze->message("Move with the arrow keys, or press q to quit");
     c = wgetch(stdscr);
     if (c == KEY_UP)
       done = player->move(maze, Player::UP);
@@ -146,8 +149,12 @@ void Solver::player_control(MazePtr maze)
       done = player->move(maze, Player::LEFT);
     else if (c == KEY_RIGHT)
       done = player->move(maze, Player::RIGHT);
+    else if (c == 'q')
+      done = true;
     maze->draw();
   }
+  if (done)
+    maze->message("Success!");
   delete player;
   return;
 }
