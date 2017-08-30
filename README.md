@@ -71,6 +71,26 @@ have loops.
 </p>
 
 ### Randomized Depth-First Search
+[Depth-First Search (DFS)](https://en.wikipedia.org/wiki/Depth-first_search) is
+a algorithm normally used to traverse the nodes in a graph. Like Prim's
+Algorithm, it is initialized with a starting point. DFS then pushes all of the
+connecting nodes on top of a
+[stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)). It then pops
+off the top node from the stack, adds _its_ connecting nodes, and then repeats
+the process until there are no more nodes on the stack. Normally, DFS will use
+a uniform process when adding neighbors to the stack (For example, it might add
+neighbors in a clockwise pattern: top, right, bottom, left). In the case of
+maze generating, we need an element of randomness, so the neighbors will be
+randomly selected to be added to the stack.
+
+If we again consider the console to be a fully corrected graph, we can send DFS
+through the grid, turning each visited node into a part of the maze. Due to the
+nature of the stack data structure, DFS will seem to run along a path until it
+runs out of space, at which point it will backtrack to an earlier point, then
+run until it hits another dead-end. This will cause mazes to have very long
+corridors, and a very low branching factor, so DFS mazes tend to have long
+paths to the finish, but the solution is very easy to find.
+
 <p align="center">
   <img src="media/dfsgen.gif" alt="Randomized Depth-First Search for generating mazes" />
 </p>
