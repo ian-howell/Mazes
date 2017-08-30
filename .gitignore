@@ -1,5 +1,5 @@
-# Sample files
-*.gif
+# Raw unedited GIF files
+*_raw.gif
 
 # Object files
 *.o
