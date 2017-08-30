@@ -48,25 +48,25 @@ attempt to navigate through the maze manually.
 The following details the machinations of each algorithm.
 
 ### Randomized Prim's
-![Randomized Prim's Algorithm for generating mazes](/media/primgen.gif?raw=true
+![Randomized Prim's Algorithm for generating mazes](media/primgen.gif?raw=true
 "Randomized Prim's")
 
 ### Randomized Depth-First Search
-![Randomized Depth-First Search for generating mazes](/media/dfsgen.gif?raw=true
+![Randomized Depth-First Search for generating mazes](media/dfsgen.gif?raw=true
 "Randomized Depth-First Search")
 
 ### Randomized Kruskal's Algorithm
-![Randomized Kruskal's Algorithm for generating mazes](/media/kruskalgen.gif?raw=true
+![Randomized Kruskal's Algorithm for generating mazes](media/kruskalgen.gif?raw=true
 "Randomized Kruskal's Algorithm")
 
 ### Breadth-First Search
-![Breadth-First Search for solving mazes](/media/bfssolve.gif?raw=true
+![Breadth-First Search for solving mazes](media/bfssolve.gif?raw=true
 "Breadth-First Search")
 
 ### Depth-First Search
-![Depth-First Search for solving mazes](/media/dfssolve.gif?raw=true
+![Depth-First Search for solving mazes](media/dfssolve.gif?raw=true
 "Depth-First Search")
 
 ### A\*
-![A\* for solving mazes](/media/astarsolve.gif?raw=true
+![A\* for solving mazes](media/astarsolve.gif?raw=true
 "A\*")
