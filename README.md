@@ -47,14 +47,14 @@ attempt to navigate through the maze manually.
 
 The following details the machinations of each algorithm.
 
-### Randomized Prim's [Prim's
-Algorithm](https://en.wikipedia.org/wiki/Prim%27s_algorithm) is a graphing
-algorithm used to find [Minimum Spanning Trees
+### Randomized Prim's
+[Prim's Algorithm](https://en.wikipedia.org/wiki/Prim%27s_algorithm) is a
+graphing algorithm used to find [Minimum Spanning Trees
 (MST)](https://en.wikipedia.org/wiki/Minimum_spanning_tree). The algorithm
 starts by picking a given node in the graph, with which it begins the MST. It
 then finds the shortest edge from the MST to a node that is _not_ in the MST,
 and adds that node. It continues this process until all nodes are in the MST.
-The process of finding the shortest edge can (and frequently is) be optimized
+The process of finding the shortest edge can be (and frequently is) optimized
 by using a [Priority Queue](https://en.wikipedia.org/wiki/Priority_queue).
 
 If we consider the console to be a fully connected graph, then we can slightly
