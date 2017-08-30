@@ -56,5 +56,17 @@ The following details the machinations of each algorithm.
 "Randomized Depth-First Search")
 
 ### Randomized Kruskal's Algorithm
-![Randomized Kruskal's Algorithm for generating mazes](/media/kruskalsgen.gif?raw=true
+![Randomized Kruskal's Algorithm for generating mazes](/media/kruskalgen.gif?raw=true
 "Randomized Kruskal's Algorithm")
+
+### Breadth-First Search
+![Breadth-First Search for solving mazes](/media/bfssolve.gif?raw=true
+"Breadth-First Search")
+
+### Depth-First Search
+![Depth-First Search for solving mazes](/media/dfssolve.gif?raw=true
+"Depth-First Search")
+
+### A\*
+![A\* for solving mazes](/media/astarsolve.gif?raw=true
+"A\*")
