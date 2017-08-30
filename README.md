@@ -66,25 +66,31 @@ cut a complete maze from the grid. One of the properties of an MST is that
 there are no cycles, therefore mazes generated with Prim's Algorithm with not
 have loops.
 
-![Randomized Prim's Algorithm for generating mazes](media/primgen.gif?raw=true
-"Randomized Prim's")
+<p align="center">
+  <img src="media/primgen.gif" alt="Randomized Prim's Algorithm for generating mazes" />
+</p>
 
 ### Randomized Depth-First Search
-![Randomized Depth-First Search for generating mazes](media/dfsgen.gif?raw=true
-"Randomized Depth-First Search")
+<p align="center">
+  <img src="media/dfsgen.gif" alt="Randomized Depth-First Search for generating mazes" />
+</p>
 
 ### Randomized Kruskal's Algorithm
-![Randomized Kruskal's Algorithm for generating mazes](media/kruskalgen.gif?raw=true
-"Randomized Kruskal's Algorithm")
+<p align="center">
+  <img src="media/kruskalgen.gif" alt="Randomized Kruskal's Algorithm for generating mazes" />
+</p>
 
 ### Breadth-First Search
-![Breadth-First Search for solving mazes](media/bfssolve.gif?raw=true
-"Breadth-First Search")
+<p align="center">
+  <img src="media/bfssolve.gif" alt="Breadth-First Search for solving mazes" />
+</p>
 
 ### Depth-First Search
-![Depth-First Search for solving mazes](media/dfssolve.gif?raw=true
-"Depth-First Search")
+<p align="center">
+  <img src="media/dfssolve.gif" alt="Depth-First Search for solving mazes" />
+</p>
 
 ### A\*
-![A\* for solving mazes](media/astarsolve.gif?raw=true
-"A\*")
+<p align="center">
+  <img src="media/astarsolve.gif" alt="A\* for solving mazes" />
+</p>
