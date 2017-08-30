@@ -47,7 +47,25 @@ attempt to navigate through the maze manually.
 
 The following details the machinations of each algorithm.
 
-### Randomized Prim's
+### Randomized Prim's [Prim's
+Algorithm](https://en.wikipedia.org/wiki/Prim%27s_algorithm) is a graphing
+algorithm used to find [Minimum Spanning Trees
+(MST)](https://en.wikipedia.org/wiki/Minimum_spanning_tree). The algorithm
+starts by picking a given node in the graph, with which it begins the MST. It
+then finds the shortest edge from the MST to a node that is _not_ in the MST,
+and adds that node. It continues this process until all nodes are in the MST.
+The process of finding the shortest edge can (and frequently is) be optimized
+by using a [Priority Queue](https://en.wikipedia.org/wiki/Priority_queue).
+
+If we consider the console to be a fully connected graph, then we can slightly
+modify this algorithm to create randomized mazes. Since the distance from a
+node will always be `1`, we aren't able to pick the shortest edge (nor do we
+want to). Instead, we will just randomly choose one of the edges that touches
+the MST. This will result in a slowly spreading algorithm which will eventually
+cut a complete maze from the grid. One of the properties of an MST is that
+there are no cycles, therefore mazes generated with Prim's Algorithm with not
+have loops.
+
 ![Randomized Prim's Algorithm for generating mazes](media/primgen.gif?raw=true
 "Randomized Prim's")
 
