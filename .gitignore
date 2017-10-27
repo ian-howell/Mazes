@@ -13,3 +13,6 @@ depend
 
 # Text files, such as inputs and outputs
 *.txt
+
+# Tags
+tags
