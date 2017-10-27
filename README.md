@@ -155,10 +155,10 @@ needs to know where the end point is. As A\* visits nodes, it assigns a
 distance `d(start, v)` from that node to the start point. It also assigns a
 value from a [heuristic] function `h(v)`. In the case of finding paths in
 square-like mazes, the heuristic used is the [Manhattan Distance]. Once it has
-those two values, they are summed and assigned to the node `f(v) = d(start, v)
-+ h(v)`. The node is then thrown into a priority queue. The algorithm
-progresses by dequeing nodes from the priority queue until either the end point
-is discovered, or there are no more nodes to explore.
+those two values, they are summed and assigned to the node `f(v) = d(start, v) + h(v)`.
+The node is then thrown into a priority queue. The algorithm progresses by
+dequeing nodes from the priority queue until either the end point is
+discovered, or there are no more nodes to explore.
 
 <p align="center">
   <img src="media/astarsolve.gif" alt="A\* for solving mazes" />
