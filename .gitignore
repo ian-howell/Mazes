@@ -1,15 +1,12 @@
 # Raw unedited GIF files
 *_raw.gif
 
-# Object files
-*.o
+# Artifacts
+/build/
 
 # Binary
 generator_driver
 solver_driver
-
-# Dependencies
-depend
 
 # Text files, such as inputs and outputs
 *.txt

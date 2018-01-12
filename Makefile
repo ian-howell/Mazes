@@ -4,41 +4,42 @@ CXX = /usr/bin/g++
 CXXFLAGS = -g -Wall -w -pedantic-errors -Wextra -Wconversion -std=c++11
 LINKER = -lncurses
 
-SOURCES = $(wildcard *.cpp)
-HEADERS = $(wildcard *.h)
+SOURCES = $(wildcard src/*.cpp)
+HEADERS = $(wildcard include/*.h)
 
-MAZE_OBJECTS = maze.o cell.o
-GENERATOR_OBJECTS = generator.o generator_driver.o union_find.o
-SOLVER_OBJECTS = solver.o player.o solver_driver.o
+BUILD = build
+
+INCLUDE = -Iinclude
+
+MAZE_OBJECTS = $(BUILD)/maze.o $(BUILD)/cell.o
+GENERATOR_OBJECTS = $(BUILD)/generator.o $(BUILD)/generator_driver.o $(BUILD)/union_find.o
+SOLVER_OBJECTS = $(BUILD)/solver.o $(BUILD)/player.o $(BUILD)/solver_driver.o
+
+DEPS := $(OBJECTS:%.o=%.d)
 
 default: all
 all: solver_driver generator_driver
 
-%.o: %.cpp
+-include $(DEPS)
+
+$(BUILD)/%.o: src/%.cpp
 	@echo "Compiling $<"
-	@$(CXX) $(CXXFLAGS) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -c $< $(INCLUDE) -o $@
 
 generator_driver: $(GENERATOR_OBJECTS) $(MAZE_OBJECTS)
 	@echo "Building $@"
-	@$(CXX) $(CXXFLAGS) $^ $(LINKER) -o $@
+	@$(CXX) $(CXXFLAGS) $^ $(LINKER) $(INCLUDE) -o $@
 	@echo "Finished building generator_driver"
 
 solver_driver: $(SOLVER_OBJECTS) $(MAZE_OBJECTS)
 	@echo "Building $@"
-	@$(CXX) $(CXXFLAGS) $^ $(LINKER) -o $@
+	@$(CXX) $(CXXFLAGS) $^ $(LINKER) $(INCLUDE) -o $@
 	@echo "Finished building solver_driver"
 
 clean:
 	-@rm -f core
 	-@rm -f solver_driver
 	-@rm -f generator_driver
-	-@rm -f depend
 	-@rm -f $(SOLVER_OBJECTS)
 	-@rm -f $(GENERATOR_OBJECTS)
 	-@rm -f $(MAZE_OBJECTS)
-
-depend: $(SOURCES) $(HEADERS)
-	@echo "Generating dependencies"
-	@$(CXX) -std=c++11 -MM *.cpp > $@
-
--include depend
