@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all clean directories
 
 CXX = /usr/bin/g++
 CXXFLAGS = -g -Wall -w -pedantic-errors -Wextra -Wconversion -std=c++11
@@ -18,7 +18,7 @@ SOLVER_OBJECTS = $(BUILD)/solver.o $(BUILD)/player.o $(BUILD)/solver_driver.o
 DEPS := $(OBJECTS:%.o=%.d)
 
 default: all
-all: solver_driver generator_driver
+all: directories solver_driver generator_driver
 
 -include $(DEPS)
 
@@ -35,6 +35,11 @@ solver_driver: $(SOLVER_OBJECTS) $(MAZE_OBJECTS)
 	@echo "Building $@"
 	@$(CXX) $(CXXFLAGS) $^ $(LINKER) $(INCLUDE) -o $@
 	@echo "Finished building solver_driver"
+
+directories: $(BUILD)
+
+$(BUILD):
+	mkdir -p $(BUILD)
 
 clean:
 	-@rm -f core
